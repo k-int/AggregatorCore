@@ -25,7 +25,15 @@ class UploadController {
 
         // Firstly we need to select an appropriate handler for the com.k_int.aggregator.event.upload event
         if ( handlerSelectionService ) {
-          def handlers_to_invoke = handlerSelectionService.selectHandlersFor("com.k_int.aggregator.event.upload",event_properties)
+          def handler_to_invoke = handlerSelectionService.selectHandlersFor("com.k_int.aggregator.event.upload",event_properties)
+          if ( handler_to_invoke != null ) {
+            handlerSelectionService.executeHandler(handler_to_invoke,event_properties);
+          }
+          else {
+            response.code = '-3';
+            response.status = 'Internal Error';
+            response.message = 'Unable to locate handler';
+          }
         }
         else {
           response.code = '-2';

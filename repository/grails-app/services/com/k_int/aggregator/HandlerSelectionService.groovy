@@ -1,11 +1,13 @@
 package com.k_int.aggregator
 
-class HandlerSelectionService {
+import org.springframework.context.*
+
+class HandlerSelectionService implements ApplicationContextAware {
 
     static scope = "singleton"
     static transactional = true
 
-    def events = [:]
+    def ApplicationContext applicationContext
 
     @javax.annotation.PostConstruct
     def init() {
@@ -45,6 +47,21 @@ class HandlerSelectionService {
 
       if ( selected_handler != null ) {
         println "After evaluation, selected handler for this event is ${selected_handler.name}"
+      }
+
+      selected_handler
+    }
+
+    def executeHandler(handler, props) {
+       println "Request to execute handler ${handler.name}...."
+
+      if ( handler instanceof ServiceEventHandler ) {
+        println "ServiceEventHandler..."
+        def bean = applicationContext.getBean(handler.targetBeanId)
+        println "Got hold of ${bean}"
+      }
+      else {
+        println "Not implemented yet"
       }
     }
 }
