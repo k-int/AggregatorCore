@@ -11,6 +11,14 @@ class UploadController {
       response
     }
 
+    def validateUploadDir(path) {
+      File f = new File(path);
+      if ( ! f.exists() ) {
+        println "Creating upload directory path"
+        f.mkdirs();
+      }
+    }
+
     def save = { 
       println "Save...."
       def response = ["code": 0]
@@ -19,11 +27,19 @@ class UploadController {
       if ( file != null ) {
         def content_type = file.contentType
 
+        validateUploadDir("./filestore");
+
         // bytes byte[] = file.getBytes()
+        println "Storring uploaded file in temporary storage...."
+        def temp_file_name = "./filestore/"+java.util.UUID.randomUUID().toString()+".xml";
+        def temp_file = new File(temp_file_name);
+
+        // Copy the upload file to a temporary space
+        file.transferTo(temp_file);
 
         // Set up the propeties for the upload event, in this case event=com.k_int.aggregator.event.upload and mimetype=<mimetype>
         // We are looking for any handlers willing to accept this event given the appropriate properties
-        def event_properties = ["content_type":content_type, "file":file]
+        def event_properties = ["content_type":content_type, "file":temp_file]
 
         // Firstly we need to select an appropriate handler for the com.k_int.aggregator.event.upload event
         if ( handlerSelectionService ) {
