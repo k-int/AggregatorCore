@@ -58,7 +58,15 @@ class HandlerSelectionService implements ApplicationContextAware {
       if ( handler instanceof ServiceEventHandler ) {
         println "ServiceEventHandler..."
         def bean = applicationContext.getBean(handler.targetBeanId)
-        println "Got hold of ${bean}"
+
+        if ( bean != null ) {
+          println "Got hold of ${bean}... Calling ${handler.targetMethodName}"
+          bean."${handler.targetMethodName}"(props)
+          println "Call complete"
+        }
+        else {
+          println "Unable to identify bean with name ${handler.targetBeanId}"
+        }
       }
       else {
         println "Not implemented yet"
