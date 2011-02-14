@@ -85,3 +85,18 @@ log4j = {
 
     warn   'org.mortbay.log'
 }
+
+security { 
+    shiro { 
+        authc.required = false 
+        filter.config = """
+[filters] 
+# HTTP Basic authentication 
+authcBasic = org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter 
+authcBasic.applicationName = Aggregator API
+[urls] 
+# /upload/** = authcBasic 
+/upload = authcBasic 
+""" 
+    } 
+} 
