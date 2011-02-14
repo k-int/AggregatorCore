@@ -16,7 +16,7 @@ class HandlerSelectionService implements ApplicationContextAware {
 
     def selectHandlersFor(base_event, properties) {
       
-      println "Locating handlers for ${base_event}, ${properties}"
+      println "Locating handlers for ${base_event}..."
 
       // Load the events
       def possible_handlers = EventHandler.findAllByEventCodeAndActive(base_event,true)
