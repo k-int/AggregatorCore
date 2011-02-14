@@ -39,13 +39,13 @@ class UploadController {
 
         // Set up the propeties for the upload event, in this case event=com.k_int.aggregator.event.upload and mimetype=<mimetype>
         // We are looking for any handlers willing to accept this event given the appropriate properties
-        def event_properties = ["content_type":content_type, "file":temp_file]
+        def event_properties = ["content_type":content_type, "file":temp_file, "response":response]
 
         // Firstly we need to select an appropriate handler for the com.k_int.aggregator.event.upload event
         if ( handlerSelectionService ) {
           def handler_to_invoke = handlerSelectionService.selectHandlersFor("com.k_int.aggregator.event.upload",event_properties)
           if ( handler_to_invoke != null ) {
-            handlerSelectionService.executeHandler(handler_to_invoke,event_properties);
+            handlerSelectionService.executeHandler(handler_to_invoke,event_properties)
           }
           else {
             response.code = '-3';
