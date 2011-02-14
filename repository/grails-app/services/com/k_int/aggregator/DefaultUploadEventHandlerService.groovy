@@ -61,6 +61,10 @@ class DefaultUploadEventHandlerService {
 
           }
 
+          props.response.code = '2';
+          props.response.status = "No handlers available for XML documents using root element namespace ${root_element_namespace}"
+          props.response.message = "The document is queued until a handler is available. Deposit event id is ${props.upload_event_token}"
+
         }
 
         // Finally, if the system is configured to do so, push the uploaded item onto the pending queue.
