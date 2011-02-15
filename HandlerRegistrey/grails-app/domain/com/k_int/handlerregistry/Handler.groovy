@@ -11,5 +11,7 @@ class Handler {
 
   static constraints = {
     preconditions joinTable:[name:'handler_preconditions', key:'handler_id', column:'precondition', type:"text"]
+    liveRevision(nullable:true)
   }
+
 }

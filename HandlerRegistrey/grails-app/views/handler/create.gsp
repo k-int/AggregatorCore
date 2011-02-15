@@ -3,10 +3,17 @@
 <%@ page import="com.k_int.handlerregistry.Handler" %>
 <html>
     <head>
+        <g:javascript library="jquery"/>
+        <jqui:resources/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'handler.label', default: 'Handler')}" />
         <title><g:message code="default.create.label" args="[entityName]" /></title>
+        <script language="JavaScript">
+          function addPrecondition() {
+            alert("addPrecondition");
+          }
+        </script>
     </head>
     <body>
         <div class="nav">
@@ -24,9 +31,13 @@
             </div>
             </g:hasErrors>
             <g:form action="save" >
+
+                <g:hiddenField id="preconditionCount" name="numPreconditions" value="${handlerInstance?.preconditions?.size()}"/>
+
                 <div class="dialog">
                     <table>
                         <tbody>
+                            
 
                             <tr class="prop">
                                 <td valign="top" class="name">
@@ -42,7 +53,13 @@
                                     <label for="preconditions"><g:message code="handler.preconditions.label" default="Preconditions" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: handlerInstance, field: 'preconditions', 'errors')}">
-                                    
+                                    There are currently ${handlerInstance?.preconditions?.size()} Preconditions defined.
+                                    <ul id="PreconditionUL">
+                                      <g:each in="${handlerInstance?.preconditions}" status="i" var="precondition">
+                                        <li>One for each precondition ${precondition}</li>
+                                      </g:each>
+                                    </ul>
+                                    <input type="button" name="Add Precondition" onClick="javascript:addPrecondition();"/>
                                 </td>
                             </tr>
                         
