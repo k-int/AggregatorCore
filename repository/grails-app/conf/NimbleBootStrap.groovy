@@ -47,24 +47,24 @@ class NimbleBootStrap {
     // Execute any custom Nimble related BootStrap for your application below
 
     // Create example User account
-    def user = InstanceGenerator.user()
-    user.username = "user"
-    user.pass = 'useR123!'
-    user.passConfirm = 'useR123!'
-    user.enabled = true
+    //def user = InstanceGenerator.user()
+    //user.username = "user"
+    //user.pass = 'useR123!'
+    //user.passConfirm = 'useR123!'
+    //user.enabled = true
 
-    def userProfile = InstanceGenerator.profile()
-    userProfile.fullName = "Test User"
-    userProfile.owner = user
-    user.profile = userProfile
+    //def userProfile = InstanceGenerator.profile()
+    //userProfile.fullName = "Test User"
+    //userProfile.owner = user
+    //user.profile = userProfile
 
-    def savedUser = userService.createUser(user)
-    if (savedUser.hasErrors()) {
-      savedUser.errors.each {
-        log.error(it)
-      }
-      throw new RuntimeException("Error creating example user")
-    }
+    //def savedUser = userService.createUser(user)
+    //if (savedUser.hasErrors()) {
+    //  savedUser.errors.each {
+    //    log.error(it)
+    //  }
+    //  throw new RuntimeException("Error creating example user")
+    //}
 
     // Create example Administrative account
     def admins = Role.findByName(AdminsService.ADMIN_ROLE)

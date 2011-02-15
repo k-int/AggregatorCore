@@ -1,13 +1,18 @@
 package com.k_int.aggr3
 
 import com.k_int.aggregator.*;
+import org.apache.shiro.SecurityUtils
 
 class UploadController {
 
     def handlerSelectionService
 
     def index = { 
-      println "Index...."
+
+      def user = User.get(SecurityUtils.getSubject()?.getPrincipal()) 
+
+      println "Index.... User: ${SecurityUtils.getSubject()?.getPrincipal()} -- ${user}"
+
       // Empty response object
       def response = ["code":"0"]
       response
@@ -22,7 +27,11 @@ class UploadController {
     }
 
     def save = { 
-      println "Save...."
+      println "Save.... User: ${SecurityUtils.getSubject()?.getPrincipal()}"
+
+      // This is a secured resource... get user details
+      def user = User.get(SecurityUtils.getSubject()?.getPrincipal()) 
+
       def response = ["code": 0]
 
       def file = request.getFile("upload")
@@ -43,13 +52,13 @@ class UploadController {
         file.transferTo(temp_file);
 
         println "Create deposit event ${deposit_token}"
-        DepositEvent de = new DepositEvent(depositToken:deposit_token, status:'1')
+        DepositEvent de = new DepositEvent(depositToken:deposit_token, status:'1',uploadUser:user)
         if ( de.save() ) {
           println "Created..."
 
           // Set up the propeties for the upload event, in this case event=com.k_int.aggregator.event.upload and mimetype=<mimetype>
           // We are looking for any handlers willing to accept this event given the appropriate properties
-          def event_properties = ["content_type":content_type, "file":temp_file, "response":response, "upload_event_token":deposit_token]
+          def event_properties = ["content_type":content_type, "file":temp_file, "response":response, "upload_event_token":deposit_token, "user":user]
 
           // Firstly we need to select an appropriate handler for the com.k_int.aggregator.event.upload event
           if ( handlerSelectionService ) {
