@@ -4,10 +4,10 @@ class Handler {
 
   String name
   List revisions = []
-  String[] preconditions
+  List preconditions = []
   HandlerRevision liveRevision
 
-  static hasMany = [  revisions : HandlerRevision, preconditions:String ]
+  static hasMany = [  revisions : HandlerRevision, preconditions : String ]
 
   static constraints = {
     preconditions joinTable:[name:'handler_preconditions', key:'handler_id', column:'precondition', type:"text"]

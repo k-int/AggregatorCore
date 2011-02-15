@@ -9,12 +9,17 @@ hibernate {
     cache.use_query_cache = true
     cache.provider_class = 'net.sf.ehcache.hibernate.EhCacheProvider'
 }
+
 // environment specific settings
 environments {
     development {
         dataSource {
-            dbCreate = "create-drop" // one of 'create', 'create-drop','update'
-            url = "jdbc:hsqldb:mem:devDB"
+            driverClassName = "com.mysql.jdbc.Driver"
+            dbCreate = "create-drop"           // "create"
+            username = "k-int"
+            password = "k-int"
+            url = "jdbc:mysql://localhost/a2dev?autoReconnect=true&amp;characterEncoding=utf8"
+
         }
     }
     test {
