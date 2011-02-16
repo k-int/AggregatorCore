@@ -44,10 +44,16 @@ class UploadController {
       }
 
       // Validate the presence of a data provider
-      if ( provider == null ) {
+      if ( ( provider == null ) || ( provider == '' ) ) {
         println "Aborting save, no provider present"
+        response.code = '-3';
+        response.status = 'No data provider';
+        response.message = 'No data provider';
         render(view:"index",model:response)
         return
+      }
+      else {
+        println "Using provider code ${provider}"
       }
       
       // If provider present, but doesn't exist, does user have permission to dynamically create?
@@ -55,6 +61,16 @@ class UploadController {
 
       if ( provider_object == null ) {
         println "Unable to locate provider with code ${provider}"
+        if ( org.apache.shiro.SecurityUtils.subject.isPermitted('provider:create' ) ) {
+          println "User has create provider permission.. Creating ${provider} provider"
+        }
+        else {
+          response.code = '-4';
+          response.status = 'Error'
+          response.message = 'An unknown provider was specified, and the logged in user does not have create provider permission';
+          render(view:"index",model:response)
+          return
+        }
       }
       
       // Validate user permission to deposit on behalf of that provider
@@ -98,7 +114,7 @@ class UploadController {
               // response.code should be 0 == Processed, 1==In process, 2==Queued or Some other Error
             }
             else {
-              response.code = '2';
+              response.code = '-2';
               response.status = 'No handler available. Deposit is queued pending system configuration';
               response.message = 'Unable to locate handler';
             }
