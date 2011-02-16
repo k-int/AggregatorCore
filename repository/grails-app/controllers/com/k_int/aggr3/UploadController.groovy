@@ -32,14 +32,30 @@ class UploadController {
       // This is a secured resource... get user details
       def user = User.get(SecurityUtils.getSubject()?.getPrincipal()) 
 
-      def provider = null;
+      def provider = params.owner;
       def response = ["code": 0]
       def file = request.getFile("upload")
 
+      println "Validating provider : ${provider}"
+
+      // If none present, does the user have a default?
+      if ( ( provider == null ) || ( provider == '' ) ) {
+        provider = user?.defaultProvider?.code
+      }
+
       // Validate the presence of a data provider
-        // If none present, does the user have a default?
-        // If provider present, but doesn't exist, does user have permission to dynamically create?
-      provider = "test";
+      if ( provider == null ) {
+        println "Aborting save, no provider present"
+        render(view:"index",model:response)
+        return
+      }
+      
+      // If provider present, but doesn't exist, does user have permission to dynamically create?
+      def provider_object = DataProvider.findByCode(provider)
+
+      if ( provider_object == null ) {
+        println "Unable to locate provider with code ${provider}"
+      }
       
       // Validate user permission to deposit on behalf of that provider
       if ( org.apache.shiro.SecurityUtils.subject.isPermitted('resource:deposit:222') ) {
