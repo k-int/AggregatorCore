@@ -26,6 +26,9 @@ class UploadController {
       def response = ["code": 0]
 
       def file = request.getFile("upload")
+
+      // Validate the presence of a data provider
+
       if ( file != null ) {
         def content_type = file.contentType
 
