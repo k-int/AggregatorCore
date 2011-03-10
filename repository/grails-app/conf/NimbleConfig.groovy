@@ -93,6 +93,17 @@ nimble {
     	user = "com.k_int.aggregator.User"
     	profile = "com.k_int.aggregator.Profile"
     }
+
+    passwords {
+        mustcontain {
+            lowercase = false
+            uppercase = false
+            numbers = false
+            symbols = false
+        }
+        minlength = 7
+    }
+
 }
 
 environments {

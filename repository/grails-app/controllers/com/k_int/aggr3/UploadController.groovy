@@ -3,9 +3,22 @@ package com.k_int.aggr3
 import com.k_int.aggregator.*;
 import org.apache.shiro.SecurityUtils
 
+import grails.plugins.nimble.InstanceGenerator
+import grails.plugins.nimble.core.LevelPermission
+import grails.plugins.nimble.core.Role
+import grails.plugins.nimble.core.Group
+import grails.plugins.nimble.core.AdminsService
+import grails.plugins.nimble.core.UserService
+
+
 class UploadController {
 
+    def grailsApplication
     def handlerSelectionService
+
+    def nimbleService
+    def userService
+    def adminsService
 
     def index = { 
 
@@ -31,8 +44,10 @@ class UploadController {
 
       // This is a secured resource... get user details
       def user = User.get(SecurityUtils.getSubject()?.getPrincipal()) 
+      def effective_user = user;
 
       def provider = params.owner;
+      def on_behalf_of = params.on_behalf_of;
       def response = ["code": 0]
       def file = request.getFile("upload")
 
@@ -56,9 +71,10 @@ class UploadController {
         println "Using provider code ${provider}"
       }
       
-      // If provider present, but doesn't exist, does user have permission to dynamically create?
+      // Try and look up the provider
       def provider_object = DataProvider.findByCode(provider)
-
+      
+      // If provider present in request, but doesn't exist in db, does user have permission to dynamically create?
       if ( provider_object == null ) {
         println "Unable to locate provider with code ${provider}"
         if ( org.apache.shiro.SecurityUtils.subject.isPermitted('provider:create' ) ) {
@@ -68,6 +84,27 @@ class UploadController {
           response.code = '-4';
           response.status = 'Error'
           response.message = 'An unknown provider was specified, and the logged in user does not have create provider permission';
+          render(view:"index",model:response)
+          return
+        }
+      }
+
+      // Is the upload an administrator on behalf of a particular user. If so, validate
+      if ( on_behalf_of != null ) {
+        if ( org.apache.shiro.SecurityUtils.subject.hasRole(AdminsService.ADMIN_ROLE) ) {
+          println "Request for on_behalf_of and user has admin perms..."
+          effective_user = User.findByUsername(on_behalf_of)
+          if ( ( effective_user == null ) && ( params.create_user == 'Y' ) ) {
+            // The effective user doesn't exist. If the request contains create_user=Y then we will create one
+            println "Creating missing user account for ${on_behalf_of}"
+            createUser(on_behalf_of,'**changeme**',params.user_full_name)
+          }
+        }
+        else {
+          println "Request contained on_behalf_of parameter, but authenticated user has no administrative permission"
+          response.code = '-4';
+          response.status = 'error'
+          response.message = 'on_behalf_of not available for this user'
           render(view:"index",model:response)
           return
         }
@@ -149,4 +186,29 @@ class UploadController {
 
       render(view:"index",model:response)
     }
+
+
+  def createUser(username,password,name) {
+    // Create example User account
+    def user = InstanceGenerator.user()
+    user.username = username;
+    user.pass = password;
+    user.passConfirm = password;
+    user.enabled = true
+
+    def userProfile = InstanceGenerator.profile()
+    userProfile.fullName = name
+    userProfile.owner = user
+    user.profile = userProfile
+
+    def savedUser = userService.createUser(user)
+
+    if (savedUser.hasErrors()) {
+      savedUser.errors.each {
+        log.error(it)
+      }
+      throw new RuntimeException("Error creating example user")
+    }
+  }
+
 }
