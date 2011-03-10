@@ -1,10 +1,15 @@
 package com.k_int.aggregator
 
-class DefaultUploadEventHandlerService {
+import org.springframework.context.*
+
+class DefaultUploadEventHandlerService implements ApplicationContextAware {
 
     static transactional = true
 
     def handlerSelectionService
+
+    def ApplicationContext applicationContext
+
 
     @javax.annotation.PostConstruct
     def init() {
@@ -71,9 +76,18 @@ class DefaultUploadEventHandlerService {
       }
       else {
         // Handler found, invoke it,
-        // then clean up the temp file.
-        println "Delete temp file"
-        temp_file.delete();
+        if ( schema_handler instanceof ScriptletEventHandler  ) { 
+          println "Located handler information - Scriptlet event handler"
+        }
+        else if ( schema_handler instanceof ServiceEventHandler  ) {
+          println "Located handler information - Service event handler : ${schema_handler.targetBeanId}"
+          def bean = applicationContext.getBean(schema_handler.targetBeanId)
+          println "Calling handler method ${schema_handler.targetMethodName}"
+          bean."${schema_handler.targetMethodName}"()
+        }
+
+        // println "Delete temp file"
+        // temp_file.delete();
       }
     }
 }
