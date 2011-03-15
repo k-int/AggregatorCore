@@ -22,13 +22,12 @@ class BootStrap {
                                                                                                         active:true,
                                                                                                         preconditions:['p.content_type=="application/xml" || p.content_type=="text/xml"']).save()
 
-      def ecd_handler = EventHandler.findByName("ECDHandler") ?: new ServiceEventHandler(name:'ECDDepositHandler',
-                                                                                         eventCode:'com.k_int.aggregator.event.upload',
-                                                                                         targetBeanId:'builtInHandlers',
-                                                                                         targetMethodName:'handleECD',
-                                                                                         active:true,
-                                                                                         preconditions:['p.content_type=="application/xml" || p.content_type=="text/xml"']).save()
-
+      def ecd_deposit_handler = EventHandler.findByName("ECDHandler") ?: new ServiceEventHandler(name:'ECDHandler',
+                                                                                                 eventCode:'com.k_int.aggregator.event.upload.xml',
+                                                                                                 targetBeanId:'builtInHandlersService',
+                                                                                                 targetMethodName:'handleECD',
+                                                                                                 active:true,
+                                                                                                 preconditions:['p.rootElementNamespace=="http://dcsf.gov.uk/XMLSchema/Childcare"']).save()
     }
 
     def destroy = {
