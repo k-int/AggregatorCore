@@ -4,10 +4,17 @@ import grails.test.*
 import org.springframework.mock.web.MockMultipartHttpServletRequest
 import org.springframework.mock.web.MockMultipartFile
 
+import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
+import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
+import org.springframework.mock.web.MockHttpServletResponse
+import org.springframework.mock.web.MockServletContext
+import org.springframework.mock.web.MockMultipartHttpServletRequest
+import org.springframework.web.context.request.RequestContextHolder
 
 
 
-class UploadControllerTests extends ControllerUnitTestCase {
+
+class UploadTests extends ControllerUnitTestCase {
 
     def grailsApplication
     // def controller
@@ -23,7 +30,10 @@ class UploadControllerTests extends ControllerUnitTestCase {
     }
 
     void testSomething() {
-
+      // controller.params.owner = "marcpalmer"
+      // controller.params.on_behalf_of = "secret"
+      // controller.params.passwordConfirm = "secret"
+      // controller.signup()
     }
 
     // def testUpload() { 
