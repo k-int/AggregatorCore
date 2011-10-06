@@ -7,7 +7,7 @@ class BuiltInHandlersService {
     def handleDCDescription() {
     }
 
-    def handleECD() {
+    def handleECD(xml_params) {
       println "\n\nhandle ECD\n\n"
     }
 

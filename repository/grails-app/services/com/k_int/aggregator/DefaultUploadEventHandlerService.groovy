@@ -35,8 +35,8 @@ class DefaultUploadEventHandlerService implements ApplicationContextAware {
       log.debug( "Root element namespace: ${root_element_namespace} root element: ${root_element_name}")
 
       // 1. See if there are any handlers capable of dealing with this root element namespace
-      def upload_xml_event_map = [ "xmldoc": xml, 
-                                   "rootElementNamespace":root_element_namespace,
+      // def upload_xml_event_map = [ "xmldoc": xml, 
+      def upload_xml_event_map = [ "rootElementNamespace":root_element_namespace,
                                    "rootElement":root_element_name ]
 
       def schema_handler = handlerSelectionService.selectHandlersFor("com.k_int.aggregator.event.upload.xml",upload_xml_event_map)
@@ -104,7 +104,14 @@ class DefaultUploadEventHandlerService implements ApplicationContextAware {
           log.debug( "Located handler information - Service event handler : ${schema_handler.targetBeanId}")
           def bean = applicationContext.getBean(schema_handler.targetBeanId)
           log.debug( "Calling handler method ${schema_handler.targetMethodName}")
-          bean."${schema_handler.targetMethodName}"()
+
+          // Clone the props and add anything else we may need
+          def xml_params = new java.util.HashMap(props);
+          xml_params["xml"] = xml;
+          xml_params["rootElementNamespace"] = root_element_namespace
+          xml_params["rootElement"] = root_element_name
+
+          bean."${schema_handler.targetMethodName}"(xml_params)
         }
 
         // println "Delete temp file"

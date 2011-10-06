@@ -10,6 +10,12 @@ class BootStrap {
 
       def r1 = new HandlerRevision(owner:h1, revision:1, handler:"log.debug(\"ECDHandler v1.0\")\nlog.debug(\"Line2\");").save();
 
+     
+     
+      def h2 = Handler.findByName("XCRI_CAP") ?: new Handler(name:'XCRI_CAP',
+                                                               preconditions:['p.rootElementNamespace=="http://xcri.org/profiles/catalog"']).save()
+      def r2 = new HandlerRevision(owner:h2, revision:1, handler:"log.debug(\"XCRI_CAP v1.0\")\nlog.debug(\"Line2\");").save();
+
     }
     def destroy = {
     }

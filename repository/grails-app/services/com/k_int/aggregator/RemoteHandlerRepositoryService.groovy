@@ -32,8 +32,12 @@ class RemoteHandlerRepositoryService {
       // assert resp.data.user.screen_name == userName
       // def postID = resp.data.id.toInteger()
 
+   
+      log.debug("Result of findWhen on remote repository: resp.status=${resp.status}, resp.data=${resp.data}")
 
-      log.debug("Result of findWhen on remote repository: ${resp.status}")
+      if ( resp.data?.code == 0 ) {
+        log.debug("Located remote handler with name ${resp.data.handlerName}");
+      }
 
       log.debug("Done");
     }
