@@ -99,7 +99,7 @@ com {
   k_int {
     aggregator {
       handlers {
-        remoteRepo='http://localhost:8090/HandlerRegistry'
+        remoteRepo='http://localhost:8090'
       }
     }
   }

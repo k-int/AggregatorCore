@@ -1,0 +1,5 @@
+In dev, you might want to run this component using 
+
+grails -Dserver.port=8090 run-app
+
+So you can dev the registry and repo at the same time

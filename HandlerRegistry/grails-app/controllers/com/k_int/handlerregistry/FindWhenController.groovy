@@ -7,9 +7,17 @@ class FindWhenController {
   def index = { 
     log.debug("action called with stringified json constraints: ${params.constraints}");
 
-    def constraints = JSON.parse(params.constraints)
+    if ( params.constraints?.length > 0 ) {
+      log.debug("${params.constraints} - attempting json parse");
+      def constraints = JSON.parse(params.constraints)
+    }
+    else {
+      log.error("No constraints in request");
+    }
 
-    log.debug("${constraints}");
+    def result = [:]
+
+    render result as JSON
   }
   
 }

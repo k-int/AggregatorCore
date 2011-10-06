@@ -20,7 +20,7 @@ class RemoteHandlerRepositoryService {
       def remote_repo = new RESTClient( ApplicationHolder.application.config.com.k_int.aggregator.handlers.remoteRepo )
 
       def resp = remote_repo.post( 
-                     path : '/findWhen',
+                     path : '/HandlerRegistry/findWhen',
                      body : [ status:'doobrie', 
                               source:'httpbuilder' ],
                      requestContentType : URLENC )
