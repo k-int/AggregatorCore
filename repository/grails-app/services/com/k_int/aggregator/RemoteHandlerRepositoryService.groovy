@@ -4,7 +4,7 @@ import groovyx.net.http.RESTClient
 import groovy.util.slurpersupport.GPathResult
 import static groovyx.net.http.ContentType.URLENC
 import org.codehaus.groovy.grails.commons.ApplicationHolder
-
+import grails.converters.*
  
 class RemoteHandlerRepositoryService {
 
@@ -19,10 +19,11 @@ class RemoteHandlerRepositoryService {
       // def remote_repo = new RESTClient( 'http://developer.k-int.com');
       def remote_repo = new RESTClient( ApplicationHolder.application.config.com.k_int.aggregator.handlers.remoteRepo )
 
+      def json_constraints = props as JSON
+
       def resp = remote_repo.post( 
                      path : '/HandlerRegistry/findWhen',
-                     body : [ status:'doobrie', 
-                              source:'httpbuilder' ],
+                     body : [ constraints:json_constraints?.toString() ],
                      requestContentType : URLENC )
  
       // assert resp.status == 200
