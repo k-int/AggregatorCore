@@ -94,3 +94,13 @@ log4j = {
 
     warn   'org.mortbay.log'
 }
+
+com {
+  k_int {
+    aggregator {
+      handlers {
+        remoteRepo='http://localhost:8090/HandlerRegistry'
+      }
+    }
+  }
+}

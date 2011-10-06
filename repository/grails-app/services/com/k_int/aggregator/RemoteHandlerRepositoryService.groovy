@@ -3,6 +3,8 @@ package com.k_int.aggregator
 import groovyx.net.http.RESTClient
 import groovy.util.slurpersupport.GPathResult
 import static groovyx.net.http.ContentType.URLENC
+import org.codehaus.groovy.grails.commons.ApplicationHolder
+
  
 class RemoteHandlerRepositoryService {
 
@@ -11,12 +13,14 @@ class RemoteHandlerRepositoryService {
     // see http://groovy.codehaus.org/modules/http-builder/doc/rest.html
 
     def findHandlerWhen(props) {
-      log.debug("Finding any remote handlers for properties : ${props.keySet()}");
+      log.debug("Finding any remote handlers for properties : ${props.keySet()}, remote repo configured as ${ApplicationHolder.application.config.com.k_int.aggregator.handlers.remoteRepo}");
 
-      def remote_repo = new RESTClient( 'http://developer.k-int.com');
+
+      // def remote_repo = new RESTClient( 'http://developer.k-int.com');
+      def remote_repo = new RESTClient( ApplicationHolder.application.config.com.k_int.aggregator.handlers.remoteRepo )
 
       def resp = remote_repo.post( 
-                     path : 'findWhen',
+                     path : '/findWhen',
                      body : [ status:'doobrie', 
                               source:'httpbuilder' ],
                      requestContentType : URLENC )
