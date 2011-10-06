@@ -3,14 +3,6 @@ package com.k_int.aggr3
 import com.k_int.aggregator.*;
 import org.apache.shiro.SecurityUtils
 
-import grails.plugins.nimble.InstanceGenerator
-import grails.plugins.nimble.core.LevelPermission
-import grails.plugins.nimble.core.Role
-import grails.plugins.nimble.core.Group
-import grails.plugins.nimble.core.AdminsService
-import grails.plugins.nimble.core.UserService
-
-
 class UploadController {
 
     def grailsApplication
@@ -22,7 +14,7 @@ class UploadController {
 
     def index = { 
 
-      def user = User.get(SecurityUtils.getSubject()?.getPrincipal()) 
+      // def user = User.get(SecurityUtils.getSubject()?.getPrincipal()) 
 
       println "Index.... User: ${SecurityUtils.getSubject()?.getPrincipal()} -- ${user}"
 
@@ -43,8 +35,8 @@ class UploadController {
       println "Save.... User: ${SecurityUtils.getSubject()?.getPrincipal()}"
 
       // This is a secured resource... get user details
-      def user = User.get(SecurityUtils.getSubject()?.getPrincipal()) 
-      def effective_user = user;
+      // def user = User.get(SecurityUtils.getSubject()?.getPrincipal()) 
+      // def effective_user = user;
 
       def provider = params.owner;
       def on_behalf_of = params.on_behalf_of;
@@ -54,9 +46,9 @@ class UploadController {
       println "Validating provider : ${provider}"
 
       // If none present, does the user have a default?
-      if ( ( provider == null ) || ( provider == '' ) ) {
-        provider = user?.defaultProvider?.code
-      }
+      // if ( ( provider == null ) || ( provider == '' ) ) {
+      //   provider = user?.defaultProvider?.code
+      // }
 
       // Validate the presence of a data provider
       if ( ( provider == null ) || ( provider == '' ) ) {
@@ -76,47 +68,47 @@ class UploadController {
       
       // If provider present in request, but doesn't exist in db, does user have permission to dynamically create?
       if ( provider_object == null ) {
-        println "Unable to locate provider with code ${provider}"
-        if ( org.apache.shiro.SecurityUtils.subject.isPermitted('provider:create' ) ) {
-          println "User has create provider permission.. Creating ${provider} provider"
-        }
-        else {
-          response.code = '-4';
-          response.status = 'Error'
-          response.message = 'An unknown provider was specified, and the logged in user does not have create provider permission';
-          render(view:"index",model:response)
-          return
-        }
+        // println "Unable to locate provider with code ${provider}"
+        // if ( org.apache.shiro.SecurityUtils.subject.isPermitted('provider:create' ) ) {
+        //   println "User has create provider permission.. Creating ${provider} provider"
+        // }
+        // else {
+        //   response.code = '-4';
+        //   response.status = 'Error'
+        //   response.message = 'An unknown provider was specified, and the logged in user does not have create provider permission';
+        //   render(view:"index",model:response)
+        //   return
+        // }
       }
 
       // Is the upload an administrator on behalf of a particular user. If so, validate
       if ( on_behalf_of != null ) {
-        if ( org.apache.shiro.SecurityUtils.subject.hasRole(AdminsService.ADMIN_ROLE) ) {
-          println "Request for on_behalf_of and user has admin perms..."
-          effective_user = User.findByUsername(on_behalf_of)
-          if ( ( effective_user == null ) && ( params.create_user == 'Y' ) ) {
-            // The effective user doesn't exist. If the request contains create_user=Y then we will create one
-            println "Creating missing user account for ${on_behalf_of}"
-            createUser(on_behalf_of,'**changeme**',params.user_full_name)
-          }
-        }
-        else {
-          println "Request contained on_behalf_of parameter, but authenticated user has no administrative permission"
-          response.code = '-4';
-          response.status = 'error'
-          response.message = 'on_behalf_of not available for this user'
-          render(view:"index",model:response)
-          return
-        }
+        // if ( org.apache.shiro.SecurityUtils.subject.hasRole(AdminsService.ADMIN_ROLE) ) {
+        //   println "Request for on_behalf_of and user has admin perms..."
+        //   effective_user = User.findByUsername(on_behalf_of)
+        //   if ( ( effective_user == null ) && ( params.create_user == 'Y' ) ) {
+        //     // The effective user doesn't exist. If the request contains create_user=Y then we will create one
+        //     println "Creating missing user account for ${on_behalf_of}"
+        //     createUser(on_behalf_of,'**changeme**',params.user_full_name)
+        //   }
+        // }
+        // else {
+        //   println "Request contained on_behalf_of parameter, but authenticated user has no administrative permission"
+        //   response.code = '-4';
+        //   response.status = 'error'
+        //   response.message = 'on_behalf_of not available for this user'
+        //   render(view:"index",model:response)
+        //   return
+        // }
       }
       
       // Validate user permission to deposit on behalf of that provider
-      if ( org.apache.shiro.SecurityUtils.subject.isPermitted('resource:deposit:222') ) {
-        println "User has upload permission for provider \"${provider}\""
-      }
-      else {
-        println "No user permission to upload for \"${provider}\""
-      }
+      // if ( org.apache.shiro.SecurityUtils.subject.isPermitted('resource:deposit:222') ) {
+      //   println "User has upload permission for provider \"${provider}\""
+      // }
+      // else {
+      //   println "No user permission to upload for \"${provider}\""
+      // }
 
       if ( file != null ) {
         def content_type = file.contentType
@@ -141,7 +133,8 @@ class UploadController {
 
           // Set up the propeties for the upload event, in this case event=com.k_int.aggregator.event.upload and mimetype=<mimetype>
           // We are looking for any handlers willing to accept this event given the appropriate properties
-          def event_properties = ["content_type":content_type, "file":temp_file, "response":response, "upload_event_token":deposit_token, "user":user]
+          // def event_properties = ["content_type":content_type, "file":temp_file, "response":response, "upload_event_token":deposit_token, "user":user]
+          def event_properties = ["content_type":content_type, "file":temp_file, "response":response, "upload_event_token":deposit_token]
 
           // Firstly we need to select an appropriate handler for the com.k_int.aggregator.event.upload event
           if ( handlerSelectionService ) {
@@ -190,25 +183,25 @@ class UploadController {
 
   def createUser(username,password,name) {
     // Create example User account
-    def user = InstanceGenerator.user()
-    user.username = username;
-    user.pass = password;
-    user.passConfirm = password;
-    user.enabled = true
+    //def user = InstanceGenerator.user()
+    //user.username = username;
+    //user.pass = password;
+    //user.passConfirm = password;
+    //user.enabled = true
 
-    def userProfile = InstanceGenerator.profile()
-    userProfile.fullName = name
-    userProfile.owner = user
-    user.profile = userProfile
+    //def userProfile = InstanceGenerator.profile()
+    //userProfile.fullName = name
+    //userProfile.owner = user
+    //user.profile = userProfile
 
-    def savedUser = userService.createUser(user)
+    //def savedUser = userService.createUser(user)
 
-    if (savedUser.hasErrors()) {
-      savedUser.errors.each {
-        log.error(it)
-      }
+    //if (savedUser.hasErrors()) {
+    //  savedUser.errors.each {
+    //    log.error(it)
+    //  }
       throw new RuntimeException("Error creating example user")
-    }
+    //}
   }
 
 }

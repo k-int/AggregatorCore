@@ -1,18 +1,6 @@
 package com.k_int.aggr3
 
 import grails.test.*
-import org.springframework.mock.web.MockMultipartHttpServletRequest
-import org.springframework.mock.web.MockMultipartFile
-
-import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
-import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
-import org.springframework.mock.web.MockHttpServletResponse
-import org.springframework.mock.web.MockServletContext
-import org.springframework.mock.web.MockMultipartHttpServletRequest
-import org.springframework.web.context.request.RequestContextHolder
-
-
-
 
 class UploadTests extends ControllerUnitTestCase {
 
