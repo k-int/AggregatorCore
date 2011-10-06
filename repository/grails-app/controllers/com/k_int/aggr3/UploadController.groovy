@@ -41,7 +41,7 @@ class UploadController {
 
       def provider = params.owner;
       def on_behalf_of = params.on_behalf_of;
-      def response = ["code": 0]
+      def response = ["code": 0, messageLog:[]]
       def file = request.getFile("upload")
 
       log.debug( "Validating provider : ${provider}")
@@ -144,7 +144,10 @@ class UploadController {
           // Set up the propeties for the upload event, in this case event=com.k_int.aggregator.event.upload and mimetype=<mimetype>
           // We are looking for any handlers willing to accept this event given the appropriate properties
           // def event_properties = ["content_type":content_type, "file":temp_file, "response":response, "upload_event_token":deposit_token, "user":user]
-          def event_properties = ["content_type":content_type, "file":temp_file, "response":response, "upload_event_token":deposit_token]
+          def event_properties = ["content_type":content_type, 
+                                  "file":temp_file, 
+                                  "response":response, 
+                                  "upload_event_token":deposit_token]
 
           // Firstly we need to select an appropriate handler for the com.k_int.aggregator.event.upload event
           if ( handlerSelectionService ) {

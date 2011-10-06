@@ -11,17 +11,16 @@ class HandlerSelectionService implements ApplicationContextAware {
 
     @javax.annotation.PostConstruct
     def init() {
-      println "Initialising handler selection service ${this.hashCode()}"
       log.debug("Initialising handler selection service ${this.hashCode()}")
     }
 
     def selectHandlersFor(base_event, properties) {
       
-      println "Locating handlers for ${base_event}..."
+      log.debug("Locating handlers for ${base_event}...")
 
       // Load the events
       def possible_handlers = EventHandler.findAllByEventCodeAndActive(base_event,true)
-      println "Located the following possible event handlers: ${possible_handlers}"
+      log.debug("Located the following possible event handlers: ${possible_handlers}")
 
       def selected_handler
       def highest_match_so_far = -1;
@@ -37,40 +36,40 @@ class HandlerSelectionService implements ApplicationContextAware {
           }
         }
 
-        println "Handler ${handler.name} matched ${matching_preconditions} out of a possible ${handler.preconditions.size()} preconditions. Current best is ${highest_match_so_far}"
+        log.debug("Handler ${handler.name} matched ${matching_preconditions} out of a possible ${handler.preconditions.size()} preconditions. Current best is ${highest_match_so_far}")
 
         if ( ( matching_preconditions == handler.preconditions.length ) && ( matching_preconditions > highest_match_so_far ) ) { 
-          println "Handler is a more specific match than any previous, and is selected"
+          log.debug("Handler is a more specific match than any previous, and is selected")
           selected_handler = handler 
           highest_match_so_far = matching_preconditions;
         }
       }
 
       if ( selected_handler != null ) {
-        println "After evaluation, selected handler for this event is ${selected_handler.name}"
+        log.debug("After evaluation, selected handler for this event is ${selected_handler.name}")
       }
 
       selected_handler
     }
 
     def executeHandler(handler, props) {
-       println "Request to execute handler ${handler.name}...."
+       log.debug("Request to execute handler ${handler.name}....")
 
       if ( handler instanceof ServiceEventHandler ) {
-        println "ServiceEventHandler..."
+        log.debug("handler is a ServiceEventHandler... get hold of the bean from spring context")
         def bean = applicationContext.getBean(handler.targetBeanId)
 
         if ( bean != null ) {
-          println "Got hold of ${bean}... Calling ${handler.targetMethodName}"
+          log.debug("Got hold of ${bean}... Calling ${handler.targetMethodName}")
           bean."${handler.targetMethodName}"(props)
-          println "Call complete"
+          log.debug("Call complete")
         }
         else {
-          println "Unable to identify bean with name ${handler.targetBeanId}"
+          log.error("Unable to identify bean with name ${handler.targetBeanId}")
         }
       }
       else {
-        println "Not implemented yet"
+        log.warn("Non service based handlers not implemented yet")
       }
     }
 }

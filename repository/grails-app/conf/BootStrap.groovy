@@ -1,10 +1,24 @@
 import com.k_int.aggregator.*
 
+import org.apache.shiro.crypto.hash.Sha256Hash
+
 class BootStrap {
 
     def springSecurityService
 
     def init = { servletContext ->
+
+      log.debug("Verify default Shiro User");
+      def user = ShiroUser.findByUsername("admin")
+      if ( user == null ) {
+        log.debug("admin user not found.. creating default");
+        user = new ShiroUser(username: "admin", passwordHash: new Sha256Hash("password").toHex())
+        user.addToPermissions("*:*")
+        user.save()
+      }
+      else {
+        log.debug("Admin user verified");
+      }
 
       log.debug("Validating default handler entries....");
 

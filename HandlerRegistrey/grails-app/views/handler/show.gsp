@@ -31,13 +31,7 @@
                     
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="handler.preconditions.label" default="Preconditions" /></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="handler.liveRevision.label" default="Live Revision" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="handlerRevision" action="show" id="${handlerInstance?.liveRevision?.id}">${handlerInstance?.liveRevision?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value">${fieldValue(bean: handlerInstance, field: "preconditions")}</td>
                             
                         </tr>
                     
@@ -45,19 +39,6 @@
                             <td valign="top" class="name"><g:message code="handler.name.label" default="Name" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: handlerInstance, field: "name")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="handler.revisions.label" default="Revisions" /></td>
-                            
-                            <td valign="top" style="text-align: left;" class="value">
-                                <ul>
-                                <g:each in="${handlerInstance.revisions}" var="r">
-                                    <li><g:link controller="handlerRevision" action="show" id="${r.id}">${r?.encodeAsHTML()}</g:link></li>
-                                </g:each>
-                                </ul>
-                            </td>
                             
                         </tr>
                     

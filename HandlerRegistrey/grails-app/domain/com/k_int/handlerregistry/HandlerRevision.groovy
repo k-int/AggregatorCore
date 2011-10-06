@@ -6,8 +6,6 @@ class HandlerRevision {
   long revision
   String handler
 
-  static belongsTo = [owner : Handler]
-
   static constraints = {
     handler(maxSize:1000000)  
   }

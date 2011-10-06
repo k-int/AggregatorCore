@@ -26,8 +26,6 @@
                         
                             <g:sortableColumn property="preconditions" title="${message(code: 'handler.preconditions.label', default: 'Preconditions')}" />
                         
-                            <th><g:message code="handler.liveRevision.label" default="Live Revision" /></th>
-                        
                             <g:sortableColumn property="name" title="${message(code: 'handler.name.label', default: 'Name')}" />
                         
                         </tr>
@@ -39,8 +37,6 @@
                             <td><g:link action="show" id="${handlerInstance.id}">${fieldValue(bean: handlerInstance, field: "id")}</g:link></td>
                         
                             <td>${fieldValue(bean: handlerInstance, field: "preconditions")}</td>
-                        
-                            <td>${fieldValue(bean: handlerInstance, field: "liveRevision")}</td>
                         
                             <td>${fieldValue(bean: handlerInstance, field: "name")}</td>
                         
