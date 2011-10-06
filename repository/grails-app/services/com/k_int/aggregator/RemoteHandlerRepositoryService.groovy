@@ -4,7 +4,7 @@ class RemoteHandlerRepositoryService {
 
     static transactional = true
 
-    def findHanlderWhen(props) {
+    def findHandlerWhen(props) {
       log.debug("Finding any remote handlers for properties : ${props.keySet()}");
 
     }

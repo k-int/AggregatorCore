@@ -8,7 +8,7 @@ class HandlerSelectionService implements ApplicationContextAware {
     static transactional = true
 
     def ApplicationContext applicationContext
-    def remoteHandlerRepository
+    def remoteHandlerRepositoryService
 
 
     @javax.annotation.PostConstruct
@@ -80,6 +80,6 @@ class HandlerSelectionService implements ApplicationContextAware {
 
     def checkForHandlersFromRemote(properties) {
       log.debug("Check for handlers from remote...");
-      remoteHandlerRepository.findHandlerWhen(properties);
+      remoteHandlerRepositoryService.findHandlerWhen(properties);
     }
 }
