@@ -1,0 +1,779 @@
+== Info: About to connect() to localhost port 8080 (#0)
+== Info:   Trying ::1... == Info: connected
+== Info: Connected to localhost (::1) port 8080 (#0)
+== Info: Server auth using Basic with user 'admin'
+=> Send header, 347 bytes (0x15b)
+0000: POST /repository/upload HTTP/1.1
+0022: Authorization: Basic YWRtaW46YWRtaU4xMjMh
+004d: User-Agent: curl/7.21.3 (x86_64-pc-linux-gnu) libcurl/7.21.3 Ope
+008d: nSSL/0.9.8o zlib/1.2.3.4 libidn/1.18
+00b3: Host: localhost:8080
+00c9: Accept: */*
+00d6: Content-Length: 41421
+00ed: Expect: 100-continue
+0103: Content-Type: multipart/form-data; boundary=--------------------
+0143: --------c7d002028505
+0159: 
+<= Recv header, 23 bytes (0x17)
+0000: HTTP/1.1 100 Continue
+=> Send data, 793 bytes (0x319)
+0000: ------------------------------c7d002028505
+002c: Content-Disposition: form-data; name="owner"
+005a: 
+005c: testprovider
+006a: ------------------------------c7d002028505
+0096: Content-Disposition: form-data; name="on_behalf_of"
+00cb: 
+00cd: testuser
+00d7: ------------------------------c7d002028505
+0103: Content-Disposition: form-data; name="create_user"
+0137: 
+0139: Y
+013c: ------------------------------c7d002028505
+0168: Content-Disposition: form-data; name="user_full_name"
+019f: 
+01a1: Test User Name
+01b1: ------------------------------c7d002028505
+01dd: Content-Disposition: form-data; name="authoritative"
+0213: 
+0215: true
+021b: ------------------------------c7d002028505
+0247: Content-Disposition: form-data; name="Connection"
+027a: 
+027c: keep-alive
+0288: ------------------------------c7d002028505
+02b4: Content-Disposition: form-data; name="upload"; filename="import_
+02f4: 2517.xml"
+02ff: Content-Type: text/xml
+0317: 
+=> Send data, 16384 bytes (0x4000)
+0000: <ProviderDescription xmlns="http://dcsf.gov.uk/XMLSchema/Childca
+0040: re" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xm
+0080: lns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="ht
+00c0: tp://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.go
+0100: vtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs
+0140: " xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://
+0180: www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.u
+01c0: k/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Add
+0200: ressAndPersonalDetails" xsi:schemaLocation="http://dcsf.gov.uk/X
+0240: MLSchema/Childcare  http://www.ispp-aggregator.org.uk/f1les/ISPP
+0280: /docs/schemas/v5/ProviderTypes-v1-1e.xsd">
+02ac:   <DC.Title xmlns="http://dcsf.gov.uk/XMLSchema/Childcare" xmlns
+02ec: :con="http://www.govtalk.gov.uk/people/ContactTypes" xmlns:xsi="
+032c: http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="http://www.
+036c: govtalk.gov.uk/metadata/egms" xmlns:core="http://www.govtalk.gov
+03ac: .uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs" xmlns:g
+03ec: ms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://www.esd.o
+042c: rg.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk/people/
+046c: bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/AddressAndPe
+04ac: rsonalDetails">Provider 3221</DC.Title>
+04d5:   <DC.Identifier xmlns="http://dcsf.gov.uk/XMLSchema/Childcare" 
+0515: xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xmlns:
+0555: xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="http:/
+0595: /www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.govtal
+05d5: k.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs" xm
+0615: lns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://www.
+0655: esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk/pe
+0695: ople/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Address
+06d5: AndPersonalDetails" Href="http://www.tribalgroup.co.uk">Dummy DC
+0715: .Identifier 2517</DC.Identifier>
+0737:  <Description><DC.Description xmlns="http://dcsf.gov.uk/XMLSchem
+0777: a/Childcare" xmlns:con="http://www.govtalk.gov.uk/people/Contact
+07b7: Types" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml
+07f7: ns:n3="http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http
+0837: ://www.govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/
+0877: CM/gms-xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg
+08b7: ="http://www.esd.org.uk/standards" xmlns:BS7666="http://www.govt
+08f7: alk.gov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/p
+0937: eople/AddressAndPersonalDetails" Format="plain">Dummy DC.Descrip
+0977: tion</DC.Description></Description>  <DC.Language xmlns="http://
+09b7: dcsf.gov.uk/XMLSchema/Childcare" xmlns:con="http://www.govtalk.g
+09f7: ov.uk/people/ContactTypes" xmlns:xsi="http://www.w3.org/2001/XML
+0a37: Schema-instance" xmlns:n3="http://www.govtalk.gov.uk/metadata/eg
+0a77: ms" xmlns:core="http://www.govtalk.gov.uk/core" xmlns:n2="http:/
+0ab7: /www.govtalk.gov.uk/CM/gms-xs" xmlns:gms="http://www.govtalk.gov
+0af7: .uk/CM/gms" xmlns:lg="http://www.esd.org.uk/standards" xmlns:BS7
+0b37: 666="http://www.govtalk.gov.uk/people/bs7666" xmlns:apd="http://
+0b77: www.govtalk.gov.uk/people/AddressAndPersonalDetails">English</DC
+0bb7: .Language>
+0bc3:   <DC.Subject ListName="ISPP-001a-M" ItemName="Solid feeding" Id
+0c03: ="001-3f8">Solid feeding</DC.Subject><DC.Creator xmlns="http://d
+0c43: csf.gov.uk/XMLSchema/Childcare" xmlns:con="http://www.govtalk.go
+0c83: v.uk/people/ContactTypes" xmlns:xsi="http://www.w3.org/2001/XMLS
+0cc3: chema-instance" xmlns:n3="http://www.govtalk.gov.uk/metadata/egm
+0d03: s" xmlns:core="http://www.govtalk.gov.uk/core" xmlns:n2="http://
+0d43: www.govtalk.gov.uk/CM/gms-xs" xmlns:gms="http://www.govtalk.gov.
+0d83: uk/CM/gms" xmlns:lg="http://www.esd.org.uk/standards" xmlns:BS76
+0dc3: 66="http://www.govtalk.gov.uk/people/bs7666" xmlns:apd="http://w
+0e03: ww.govtalk.gov.uk/people/AddressAndPersonalDetails" Href="http:/
+0e43: /www.tribalgroup.co.uk">Norfolk</DC.Creator>
+0e71:   <DC.Publisher xmlns="http://dcsf.gov.uk/XMLSchema/Childcare" x
+0eb1: mlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xmlns:x
+0ef1: si="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="http://
+0f31: www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.govtalk
+0f71: .gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs" xml
+0fb1: ns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://www.e
+0ff1: sd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk/peo
+1031: ple/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/AddressA
+1071: ndPersonalDetails" Href="http://www.tribalgroup.co.uk">Norfolk</
+10b1: DC.Publisher>
+10c0:   <DC.Date.Created xmlns="http://dcsf.gov.uk/XMLSchema/Childcare
+1100: " xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xmln
+1140: s:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="http
+1180: ://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.govt
+11c0: alk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs" 
+1200: xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://ww
+1240: w.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk/
+1280: people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Addre
+12c0: ssAndPersonalDetails">2003-05-22T00:00:00</DC.Date.Created>
+12fd:   <DC.Date.Modified xmlns="http://dcsf.gov.uk/XMLSchema/Childcar
+133d: e" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xml
+137d: ns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="htt
+13bd: p://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.gov
+13fd: talk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs"
+143d:  xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://w
+147d: ww.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk
+14bd: /people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Addr
+14fd: essAndPersonalDetails">2006-10-24T00:00:00</DC.Date.Modified>
+153c:   <ProviderDetails xmlns="http://dcsf.gov.uk/XMLSchema/Childcare
+157c: " xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xmln
+15bc: s:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="http
+15fc: ://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.govt
+163c: alk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs" 
+167c: xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://ww
+16bc: w.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk/
+16fc: people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Addre
+173c: ssAndPersonalDetails">
+1754:     <ProviderName>Provider 3221</ProviderName>
+1784:     <ConsentVisibleAddress>true</ConsentVisibleAddress>
+17bd:     <SettingDetails xmlns="http://dcsf.gov.uk/XMLSchema/Childcar
+17fd: e" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xml
+183d: ns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="htt
+187d: p://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.gov
+18bd: talk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs"
+18fd:  xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://w
+193d: ww.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk
+197d: /people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Addr
+19bd: essAndPersonalDetails">
+19d6:       <ContactName xmlns="http://dcsf.gov.uk/XMLSchema/Childcare
+1a16: " xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xmln
+1a56: s:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="http
+1a96: ://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.govt
+1ad6: alk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs" 
+1b16: xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://ww
+1b56: w.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk/
+1b96: people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Addre
+1bd6: ssAndPersonalDetails">Ms Jinny                Venessa           
+1c16:   </ContactName>
+1c28:       <TelephoneNumber xmlns="http://dcsf.gov.uk/XMLSchema/Child
+1c68: care" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" 
+1ca8: xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="
+1ce8: http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.
+1d28: govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-
+1d68: xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http:
+1da8: //www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov
+1de8: .uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/A
+1e28: ddressAndPersonalDetails" TelUse="home" TelMobile="no" TelPrefer
+1e68: red="yes">
+1e74:         <apd:TelNationalNumber xmlns="http://dcsf.gov.uk/XMLSche
+1eb4: ma/Childcare" xmlns:con="http://www.govtalk.gov.uk/people/Contac
+1ef4: tTypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xm
+1f34: lns:n3="http://www.govtalk.gov.uk/metadata/egms" xmlns:core="htt
+1f74: p://www.govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk
+1fb4: /CM/gms-xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:l
+1ff4: g="http://www.esd.org.uk/standards" xmlns:BS7666="http://www.gov
+2034: talk.gov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/
+2074: people/AddressAndPersonalDetails">01603 224920</apd:TelNationalN
+20b4: umber>
+20bc:       </TelephoneNumber>
+20d6:       <FaxNumber xmlns="http://dcsf.gov.uk/XMLSchema/Childcare" 
+2116: xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xmlns:
+2156: xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="http:/
+2196: /www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.govtal
+21d6: k.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs" xm
+2216: lns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://www.
+2256: esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk/pe
+2296: ople/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Address
+22d6: AndPersonalDetails" FaxUse="work" FaxMobile="no" FaxPreferred="y
+2316: es">
+231c:         <apd:FaxNationalNumber xmlns="http://dcsf.gov.uk/XMLSche
+235c: ma/Childcare" xmlns:con="http://www.govtalk.gov.uk/people/Contac
+239c: tTypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xm
+23dc: lns:n3="http://www.govtalk.gov.uk/metadata/egms" xmlns:core="htt
+241c: p://www.govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk
+245c: /CM/gms-xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:l
+249c: g="http://www.esd.org.uk/standards" xmlns:BS7666="http://www.gov
+24dc: talk.gov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/
+251c: people/AddressAndPersonalDetails">01603 224921</apd:FaxNationalN
+255c: umber>
+2564:       </FaxNumber>
+2578:       <PostalAddress xmlns="http://dcsf.gov.uk/XMLSchema/Childca
+25b8: re" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xm
+25f8: lns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="ht
+2638: tp://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.go
+2678: vtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs
+26b8: " xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://
+26f8: www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.u
+2738: k/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Add
+2778: ressAndPersonalDetails">
+2792:         <apd:BS7666Address xmlns="http://dcsf.gov.uk/XMLSchema/C
+27d2: hildcare" xmlns:con="http://www.govtalk.gov.uk/people/ContactTyp
+2812: es" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:
+2852: n3="http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://
+2892: www.govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/
+28d2: gms-xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="h
+2912: ttp://www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk
+2952: .gov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/peop
+2992: le/AddressAndPersonalDetails">
+29b2:           <BS7666:PAON xmlns="http://dcsf.gov.uk/XMLSchema/Child
+29f2: care" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" 
+2a32: xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="
+2a72: http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.
+2ab2: govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-
+2af2: xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http:
+2b32: //www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov
+2b72: .uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/A
+2bb2: ddressAndPersonalDetails">
+2bce:             <BS7666:StartRange xmlns="http://dcsf.gov.uk/XMLSche
+2c0e: ma/Childcare" xmlns:con="http://www.govtalk.gov.uk/people/Contac
+2c4e: tTypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xm
+2c8e: lns:n3="http://www.govtalk.gov.uk/metadata/egms" xmlns:core="htt
+2cce: p://www.govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk
+2d0e: /CM/gms-xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:l
+2d4e: g="http://www.esd.org.uk/standards" xmlns:BS7666="http://www.gov
+2d8e: talk.gov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/
+2dce: people/AddressAndPersonalDetails">
+2df2:               <BS7666:Number>1</BS7666:Number>
+2e22:             </BS7666:StartRange>
+2e44:             <BS7666:Description>Unit 45 Longs Industrial Estate<
+2e84: /BS7666:Description>
+2e9a:           </BS7666:PAON>
+2eb4:           <BS7666:StreetDescription>Englands Lane</BS7666:Street
+2ef4: Description>
+2f02:           <BS7666:Locality>10</BS7666:Locality>
+2f33:           <BS7666:Town>Gorleston, Great Yarmouth</BS7666:Town>
+2f73:           <BS7666:AdministrativeArea>Norfolk</BS7666:Administrat
+2fb3: iveArea>
+2fbd:           <BS7666:PostCode>NR31 6BE</BS7666:PostCode>
+2ff4:         </apd:BS7666Address>
+3012:       </PostalAddress>
+302a:       <EmailAddress xmlns="http://dcsf.gov.uk/XMLSchema/Childcar
+306a: e" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xml
+30aa: ns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="htt
+30ea: p://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.gov
+312a: talk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs"
+316a:  xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://w
+31aa: ww.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk
+31ea: /people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Addr
+322a: essAndPersonalDetails" EmailPreferred="yes" EmailUsage="work">
+326a:         <apd:EmailAddress xmlns="http://dcsf.gov.uk/XMLSchema/Ch
+32aa: ildcare" xmlns:con="http://www.govtalk.gov.uk/people/ContactType
+32ea: s" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n
+332a: 3="http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://w
+336a: ww.govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/g
+33aa: ms-xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="ht
+33ea: tp://www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.
+342a: gov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/peopl
+346a: e/AddressAndPersonalDetails">resolve@tribalgroup.co.uk</apd:Emai
+34aa: lAddress>
+34b5:       </EmailAddress>
+34cc:       <WebsiteAddress>www.monkey.com</WebsiteAddress>
+3503:     </SettingDetails>
+351a:     <ContactDetails xmlns="http://dcsf.gov.uk/XMLSchema/Childcar
+355a: e" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xml
+359a: ns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="htt
+35da: p://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.gov
+361a: talk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs"
+365a:  xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://w
+369a: ww.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk
+36da: /people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Addr
+371a: essAndPersonalDetails">
+3733:       <TelephoneNumber xmlns="http://dcsf.gov.uk/XMLSchema/Child
+3773: care" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" 
+37b3: xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="
+37f3: http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.
+3833: govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-
+3873: xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http:
+38b3: //www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov
+38f3: .uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/A
+3933: ddressAndPersonalDetails" TelUse="work" TelMobile="no" TelPrefer
+3973: red="yes">
+397f:         <apd:TelNationalNumber xmlns="http://dcsf.gov.uk/XMLSche
+39bf: ma/Childcare" xmlns:con="http://www.govtalk.gov.uk/people/Contac
+39ff: tTypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xm
+3a3f: lns:n3="http://www.govtalk.gov.uk/metadata/egms" xmlns:core="htt
+3a7f: p://www.govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk
+3abf: /CM/gms-xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:l
+3aff: g="http://www.esd.org.uk/standards" xmlns:BS7666="http://www.gov
+3b3f: talk.gov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/
+3b7f: people/AddressAndPersonalDetails">01603 224920</apd:TelNationalN
+3bbf: umber>
+3bc7:       </TelephoneNumber>
+3be1:       <FaxNumber xmlns="http://dcsf.gov.uk/XMLSchema/Childcare" 
+3c21: xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xmlns:
+3c61: xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="http:/
+3ca1: /www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.govtal
+3ce1: k.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs" xm
+3d21: lns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://www.
+3d61: esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk/pe
+3da1: ople/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Address
+3de1: AndPersonalDetails" FaxUse="work" FaxMobile="no" FaxPreferred="y
+3e21: es">
+3e27:         <apd:FaxNationalNumber xmlns="http://dcsf.gov.uk/XMLSche
+3e67: ma/Childcare" xmlns:con="http://www.govtalk.gov.uk/people/Contac
+3ea7: tTypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xm
+3ee7: lns:n3="http://www.govtalk.gov.uk/metadata/egms" xmlns:core="htt
+3f27: p://www.govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk
+3f67: /CM/gms-xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:l
+3fa7: g="http://www.esd.org.uk/standards" xmlns:BS7666="http://www.gov
+3fe7: talk.gov.uk/people/bs7666
+=> Send data, 16384 bytes (0x4000)
+0000: " xmlns:apd="http://www.govtalk.gov.uk/people/AddressAndPersonal
+0040: Details">01603 224921</apd:FaxNationalNumber>
+006f:       </FaxNumber>
+0083:       <PostalAddress xmlns="http://dcsf.gov.uk/XMLSchema/Childca
+00c3: re" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xm
+0103: lns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="ht
+0143: tp://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.go
+0183: vtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs
+01c3: " xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://
+0203: www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.u
+0243: k/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Add
+0283: ressAndPersonalDetails">
+029d:         <apd:BS7666Address xmlns="http://dcsf.gov.uk/XMLSchema/C
+02dd: hildcare" xmlns:con="http://www.govtalk.gov.uk/people/ContactTyp
+031d: es" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:
+035d: n3="http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://
+039d: www.govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/
+03dd: gms-xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="h
+041d: ttp://www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk
+045d: .gov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/peop
+049d: le/AddressAndPersonalDetails">
+04bd:           <BS7666:PAON xmlns="http://dcsf.gov.uk/XMLSchema/Child
+04fd: care" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" 
+053d: xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="
+057d: http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.
+05bd: govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-
+05fd: xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http:
+063d: //www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov
+067d: .uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/A
+06bd: ddressAndPersonalDetails">
+06d9:             <BS7666:StartRange xmlns="http://dcsf.gov.uk/XMLSche
+0719: ma/Childcare" xmlns:con="http://www.govtalk.gov.uk/people/Contac
+0759: tTypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xm
+0799: lns:n3="http://www.govtalk.gov.uk/metadata/egms" xmlns:core="htt
+07d9: p://www.govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk
+0819: /CM/gms-xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:l
+0859: g="http://www.esd.org.uk/standards" xmlns:BS7666="http://www.gov
+0899: talk.gov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/
+08d9: people/AddressAndPersonalDetails">
+08fd:               <BS7666:Number>1</BS7666:Number>
+092d:             </BS7666:StartRange>
+094f:             <BS7666:Description>Unit 45 Longs Industrial Estate<
+098f: /BS7666:Description>
+09a5:           </BS7666:PAON>
+09bf:           <BS7666:StreetDescription>Englands Lane</BS7666:Street
+09ff: Description>
+0a0d:           <BS7666:Locality>10</BS7666:Locality>
+0a3e:           <BS7666:Town>Gorleston, Great Yarmouth</BS7666:Town>
+0a7e:           <BS7666:AdministrativeArea>Norfolk</BS7666:Administrat
+0abe: iveArea>
+0ac8:           <BS7666:PostCode>NR31 6BE</BS7666:PostCode>
+0aff:         </apd:BS7666Address>
+0b1d:       </PostalAddress>
+0b35:       <EmailAddress xmlns="http://dcsf.gov.uk/XMLSchema/Childcar
+0b75: e" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xml
+0bb5: ns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="htt
+0bf5: p://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.gov
+0c35: talk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs"
+0c75:  xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://w
+0cb5: ww.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk
+0cf5: /people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Addr
+0d35: essAndPersonalDetails" EmailPreferred="yes" EmailUsage="work">
+0d75:         <apd:EmailAddress xmlns="http://dcsf.gov.uk/XMLSchema/Ch
+0db5: ildcare" xmlns:con="http://www.govtalk.gov.uk/people/ContactType
+0df5: s" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n
+0e35: 3="http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://w
+0e75: ww.govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/g
+0eb5: ms-xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="ht
+0ef5: tp://www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.
+0f35: gov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/peopl
+0f75: e/AddressAndPersonalDetails">A</apd:EmailAddress>
+0fa8:       </EmailAddress>
+0fbf:     </ContactDetails>
+0fd6:     <ChildcareType>Day Nursery</ChildcareType>
+1006:     <ProvisionType>CCD</ProvisionType>
+102e:     <ChildcareAges xmlns="http://dcsf.gov.uk/XMLSchema/Childcare
+106e: " xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xmln
+10ae: s:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="http
+10ee: ://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.govt
+112e: alk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs" 
+116e: xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://ww
+11ae: w.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk/
+11ee: people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Addre
+122e: ssAndPersonalDetails">
+1246:       <ChildcareAge xmlns="http://dcsf.gov.uk/XMLSchema/Childcar
+1286: e" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xml
+12c6: ns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="htt
+1306: p://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.gov
+1346: talk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs"
+1386:  xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://w
+13c6: ww.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk
+1406: /people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Addr
+1446: essAndPersonalDetails">
+145f:         <AgeFrom>4</AgeFrom>
+147d:         <AgeTo>5</AgeTo>
+1497:       </ChildcareAge>
+14ae:       <ChildcareAge xmlns="http://dcsf.gov.uk/XMLSchema/Childcar
+14ee: e" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xml
+152e: ns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="htt
+156e: p://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.gov
+15ae: talk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs"
+15ee:  xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://w
+162e: ww.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk
+166e: /people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Addr
+16ae: essAndPersonalDetails">
+16c7:         <AgeFrom>2</AgeFrom>
+16e5:         <AgeTo>3</AgeTo>
+16ff:       </ChildcareAge>
+1716:       <ChildcareAge xmlns="http://dcsf.gov.uk/XMLSchema/Childcar
+1756: e" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xml
+1796: ns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="htt
+17d6: p://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.gov
+1816: talk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs"
+1856:  xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://w
+1896: ww.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk
+18d6: /people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Addr
+1916: essAndPersonalDetails">
+192f:         <AgeFrom>6</AgeFrom>
+194d:         <AgeTo>8</AgeTo>
+1967:       </ChildcareAge>
+197e:     </ChildcareAges>
+1994:     <ChildcarePeriods xmlns="http://dcsf.gov.uk/XMLSchema/Childc
+19d4: are" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" x
+1a14: mlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="h
+1a54: ttp://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.g
+1a94: ovtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-x
+1ad4: s" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http:/
+1b14: /www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.
+1b54: uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Ad
+1b94: dressAndPersonalDetails"/>
+1bb0:     <ChildcareTimes xmlns="http://dcsf.gov.uk/XMLSchema/Childcar
+1bf0: e" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xml
+1c30: ns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="htt
+1c70: p://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.gov
+1cb0: talk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs"
+1cf0:  xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://w
+1d30: ww.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk
+1d70: /people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Addr
+1db0: essAndPersonalDetails">
+1dc9:       <Times xmlns="http://dcsf.gov.uk/XMLSchema/Childcare" xmln
+1e09: s:con="http://www.govtalk.gov.uk/people/ContactTypes" xmlns:xsi=
+1e49: "http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="http://www
+1e89: .govtalk.gov.uk/metadata/egms" xmlns:core="http://www.govtalk.go
+1ec9: v.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs" xmlns:
+1f09: gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://www.esd.
+1f49: org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk/people
+1f89: /bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/AddressAndP
+1fc9: ersonalDetails">Friday (07:00 - 19:00), Monday (07:00 - 19:00), 
+2009: Thursday (07:00 - 19:00), Tuesday (07:00 - 19:00), Wednesday (07
+2049: :00 - 19:00)</Times>
+205f:       <Availability>All Year</Availability>
+208c:     </ChildcareTimes>
+20a3:     <TimesOfFundedPlaces xmlns="http://dcsf.gov.uk/XMLSchema/Chi
+20e3: ldcare" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes
+2123: " xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3
+2163: ="http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://ww
+21a3: w.govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gm
+21e3: s-xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="htt
+2223: p://www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.g
+2263: ov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people
+22a3: /AddressAndPersonalDetails">
+22c1:       <Times xmlns="http://dcsf.gov.uk/XMLSchema/Childcare" xmln
+2301: s:con="http://www.govtalk.gov.uk/people/ContactTypes" xmlns:xsi=
+2341: "http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="http://www
+2381: .govtalk.gov.uk/metadata/egms" xmlns:core="http://www.govtalk.go
+23c1: v.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs" xmlns:
+2401: gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://www.esd.
+2441: org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk/people
+2481: /bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/AddressAndP
+24c1: ersonalDetails"/>
+24d4:       <Availability>All Year</Availability>
+2501:     </TimesOfFundedPlaces>
+251d:     <CostDetails xmlns="http://dcsf.gov.uk/XMLSchema/Childcare" 
+255d: xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xmlns:
+259d: xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="http:/
+25dd: /www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.govtal
+261d: k.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs" xm
+265d: lns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://www.
+269d: esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk/pe
+26dd: ople/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Address
+271d: AndPersonalDetails" ContactForCosts="false">
+274b:       <Costs xmlns="http://dcsf.gov.uk/XMLSchema/Childcare" xmln
+278b: s:con="http://www.govtalk.gov.uk/people/ContactTypes" xmlns:xsi=
+27cb: "http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="http://www
+280b: .govtalk.gov.uk/metadata/egms" xmlns:core="http://www.govtalk.go
+284b: v.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs" xmlns:
+288b: gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://www.esd.
+28cb: org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk/people
+290b: /bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/AddressAndP
+294b: ersonalDetails"/>
+295e:       <OtherCosts xmlns="http://dcsf.gov.uk/XMLSchema/Childcare"
+299e:  xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xmlns
+29de: :xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="http:
+2a1e: //www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.govta
+2a5e: lk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs" x
+2a9e: mlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://www
+2ade: .esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk/p
+2b1e: eople/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Addres
+2b5e: sAndPersonalDetails">Cost by arrangement</OtherCosts>
+2b95:     </CostDetails>
+2ba9:     <Pickups xmlns="http://dcsf.gov.uk/XMLSchema/Childcare" xmln
+2be9: s:con="http://www.govtalk.gov.uk/people/ContactTypes" xmlns:xsi=
+2c29: "http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="http://www
+2c69: .govtalk.gov.uk/metadata/egms" xmlns:core="http://www.govtalk.go
+2ca9: v.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs" xmlns:
+2ce9: gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://www.esd.
+2d29: org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk/people
+2d69: /bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/AddressAndP
+2da9: ersonalDetails" HasProvision="false"/>
+2dd1:     <FutureVacancyDetails xmlns="http://dcsf.gov.uk/XMLSchema/Ch
+2e11: ildcare" xmlns:con="http://www.govtalk.gov.uk/people/ContactType
+2e51: s" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n
+2e91: 3="http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://w
+2ed1: ww.govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/g
+2f11: ms-xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="ht
+2f51: tp://www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.
+2f91: gov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/peopl
+2fd1: e/AddressAndPersonalDetails" ContactForVacancies="false">
+300c:       <VacancyInformation>We have vacancies for childern from 0 
+304c: years old to 5 years old and you need to contact us for details 
+308c: of hours we can have available on each day.</VacancyInformation>
+30ce:       <TotalVacancies xmlns="http://dcsf.gov.uk/XMLSchema/Childc
+310e: are" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" x
+314e: mlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="h
+318e: ttp://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.g
+31ce: ovtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-x
+320e: s" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http:/
+324e: /www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.
+328e: uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Ad
+32ce: dressAndPersonalDetails">14</TotalVacancies>
+32fc:     </FutureVacancyDetails>
+3319:     <SpecialProvisions xmlns="http://dcsf.gov.uk/XMLSchema/Child
+3359: care" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" 
+3399: xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="
+33d9: http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.
+3419: govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-
+3459: xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http:
+3499: //www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov
+34d9: .uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/A
+3519: ddressAndPersonalDetails">
+3535:       <SpecialNeeds xmlns="http://dcsf.gov.uk/XMLSchema/Childcar
+3575: e" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xml
+35b5: ns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="htt
+35f5: p://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.gov
+3635: talk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs"
+3675:  xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://w
+36b5: ww.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk
+36f5: /people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Addr
+3735: essAndPersonalDetails" HasProvision="false"/>
+3764:       <WheelchairAccess xmlns="http://dcsf.gov.uk/XMLSchema/Chil
+37a4: dcare" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes"
+37e4:  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3=
+3824: "http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www
+3864: .govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms
+38a4: -xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http
+38e4: ://www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.go
+3924: v.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/
+3964: AddressAndPersonalDetails" HasProvision="true"/>
+3996:     </SpecialProvisions>
+39b0:     <Facilities xmlns="http://dcsf.gov.uk/XMLSchema/Childcare" x
+39f0: mlns:con="http://www.govtalk.gov.uk/people/ContactTypes" xmlns:x
+3a30: si="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="http://
+3a70: www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.govtalk
+3ab0: .gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-xs" xml
+3af0: ns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http://www.e
+3b30: sd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.uk/peo
+3b70: ple/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/AddressA
+3bb0: ndPersonalDetails"/>
+3bc6:     <OtherInformation xmlns="http://dcsf.gov.uk/XMLSchema/Childc
+3c06: are" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" x
+3c46: mlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="h
+3c86: ttp://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.g
+3cc6: ovtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-x
+3d06: s" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http:/
+3d46: /www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.
+3d86: uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Ad
+3dc6: dressAndPersonalDetails">Working towards Kitemark Accreditation.
+3e06:  Not open Bank Holidays or two days at Christmas.  3mths-2 years
+3e46:  &#163;3.50 per hour, 2-3 years &#163;3.35 per hour, 3-5 years &
+3e86: #163;3.10 per hour. Contact nursery for more detailed cost detai
+3ec6: ls.</OtherInformation>
+3ede:     <ModificationDate>2006-10-24</ModificationDate>
+3f13:     <RegistrationDetails xmlns="http://dcsf.gov.uk/XMLSchema/Chi
+3f53: ldcare" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes
+3f93: " xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3
+3fd3: ="http://www.govtalk.gov.uk/metadata/egms" xm
+=> Send data, 7812 bytes (0x1e84)
+0000: lns:core="http://www.govtalk.gov.uk/core" xmlns:n2="http://www.g
+0040: ovtalk.gov.uk/CM/gms-xs" xmlns:gms="http://www.govtalk.gov.uk/CM
+0080: /gms" xmlns:lg="http://www.esd.org.uk/standards" xmlns:BS7666="h
+00c0: ttp://www.govtalk.gov.uk/people/bs7666" xmlns:apd="http://www.go
+0100: vtalk.gov.uk/people/AddressAndPersonalDetails" RegistrationId="E
+0140: Y239628">
+014b:       <RegistrationDate>2003-05-22</RegistrationDate>
+0182:       <RegistrationConditions xmlns="http://dcsf.gov.uk/XMLSchem
+01c2: a/Childcare" xmlns:con="http://www.govtalk.gov.uk/people/Contact
+0202: Types" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml
+0242: ns:n3="http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http
+0282: ://www.govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/
+02c2: CM/gms-xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg
+0302: ="http://www.esd.org.uk/standards" xmlns:BS7666="http://www.govt
+0342: alk.gov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/p
+0382: eople/AddressAndPersonalDetails"/>
+03a6:       <RegistrationTypes xmlns="http://dcsf.gov.uk/XMLSchema/Chi
+03e6: ldcare" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes
+0426: " xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3
+0466: ="http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://ww
+04a6: w.govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gm
+04e6: s-xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="htt
+0526: p://www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.g
+0566: ov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people
+05a6: /AddressAndPersonalDetails">
+05c4:         <RegistrationType>EYR</RegistrationType>
+05f6:       </RegistrationTypes>
+0612:       <RegistrationStatus xmlns="http://dcsf.gov.uk/XMLSchema/Ch
+0652: ildcare" xmlns:con="http://www.govtalk.gov.uk/people/ContactType
+0692: s" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n
+06d2: 3="http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://w
+0712: ww.govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/g
+0752: ms-xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="ht
+0792: tp://www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.
+07d2: gov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/peopl
+0812: e/AddressAndPersonalDetails">
+0831:         <RegistrationStatus xmlns="http://dcsf.gov.uk/XMLSchema/
+0871: Childcare" xmlns:con="http://www.govtalk.gov.uk/people/ContactTy
+08b1: pes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns
+08f1: :n3="http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http:/
+0931: /www.govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM
+0971: /gms-xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="
+09b1: http://www.esd.org.uk/standards" xmlns:BS7666="http://www.govtal
+09f1: k.gov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/peo
+0a31: ple/AddressAndPersonalDetails">Active</RegistrationStatus>
+0a6d:         <RegistrationStatusStartDate xmlns="http://dcsf.gov.uk/X
+0aad: MLSchema/Childcare" xmlns:con="http://www.govtalk.gov.uk/people/
+0aed: ContactTypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instan
+0b2d: ce" xmlns:n3="http://www.govtalk.gov.uk/metadata/egms" xmlns:cor
+0b6d: e="http://www.govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.
+0bad: gov.uk/CM/gms-xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" x
+0bed: mlns:lg="http://www.esd.org.uk/standards" xmlns:BS7666="http://w
+0c2d: ww.govtalk.gov.uk/people/bs7666" xmlns:apd="http://www.govtalk.g
+0c6d: ov.uk/people/AddressAndPersonalDetails">2003-05-22</Registration
+0cad: StatusStartDate>
+0cbf:       </RegistrationStatus>
+0cdc:       <LastInspection xmlns="http://dcsf.gov.uk/XMLSchema/Childc
+0d1c: are" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes" x
+0d5c: mlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3="h
+0d9c: ttp://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www.g
+0ddc: ovtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms-x
+0e1c: s" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http:/
+0e5c: /www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.gov.
+0e9c: uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/Ad
+0edc: dressAndPersonalDetails">
+0ef7:         <InspectionType xmlns="http://dcsf.gov.uk/XMLSchema/Chil
+0f37: dcare" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes"
+0f77:  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3=
+0fb7: "http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www
+0ff7: .govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms
+1037: -xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http
+1077: ://www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.go
+10b7: v.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/
+10f7: AddressAndPersonalDetails">Unknown</InspectionType>
+112c:         <InspectionDate xmlns="http://dcsf.gov.uk/XMLSchema/Chil
+116c: dcare" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes"
+11ac:  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3=
+11ec: "http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www
+122c: .govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms
+126c: -xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http
+12ac: ://www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.go
+12ec: v.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/
+132c: AddressAndPersonalDetails">1900-01-01</InspectionDate>
+1364:         <InspectionOverallJudgementDescription xmlns="http://dcs
+13a4: f.gov.uk/XMLSchema/Childcare" xmlns:con="http://www.govtalk.gov.
+13e4: uk/people/ContactTypes" xmlns:xsi="http://www.w3.org/2001/XMLSch
+1424: ema-instance" xmlns:n3="http://www.govtalk.gov.uk/metadata/egms"
+1464:  xmlns:core="http://www.govtalk.gov.uk/core" xmlns:n2="http://ww
+14a4: w.govtalk.gov.uk/CM/gms-xs" xmlns:gms="http://www.govtalk.gov.uk
+14e4: /CM/gms" xmlns:lg="http://www.esd.org.uk/standards" xmlns:BS7666
+1524: ="http://www.govtalk.gov.uk/people/bs7666" xmlns:apd="http://www
+1564: .govtalk.gov.uk/people/AddressAndPersonalDetails">Unknown</Inspe
+15a4: ctionOverallJudgementDescription>
+15c7:       </LastInspection>
+15e0:       <WelfareNoticeHistoryList xmlns="http://dcsf.gov.uk/XMLSch
+1620: ema/Childcare" xmlns:con="http://www.govtalk.gov.uk/people/Conta
+1660: ctTypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" x
+16a0: mlns:n3="http://www.govtalk.gov.uk/metadata/egms" xmlns:core="ht
+16e0: tp://www.govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.u
+1720: k/CM/gms-xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:
+1760: lg="http://www.esd.org.uk/standards" xmlns:BS7666="http://www.go
+17a0: vtalk.gov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk
+17e0: /people/AddressAndPersonalDetails"/>
+1806:     </RegistrationDetails>
+1822:     <CaterForOverEights xmlns="http://dcsf.gov.uk/XMLSchema/Chil
+1862: dcare" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes"
+18a2:  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3=
+18e2: "http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www
+1922: .govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms
+1962: -xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http
+19a2: ://www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.go
+19e2: v.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/
+1a22: AddressAndPersonalDetails">false</CaterForOverEights>
+1a59:     <RegistrationExempt>false</RegistrationExempt>
+1a8d:     <LinkedRegistration xmlns="http://dcsf.gov.uk/XMLSchema/Chil
+1acd: dcare" xmlns:con="http://www.govtalk.gov.uk/people/ContactTypes"
+1b0d:  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n3=
+1b4d: "http://www.govtalk.gov.uk/metadata/egms" xmlns:core="http://www
+1b8d: .govtalk.gov.uk/core" xmlns:n2="http://www.govtalk.gov.uk/CM/gms
+1bcd: -xs" xmlns:gms="http://www.govtalk.gov.uk/CM/gms" xmlns:lg="http
+1c0d: ://www.esd.org.uk/standards" xmlns:BS7666="http://www.govtalk.go
+1c4d: v.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/
+1c8d: AddressAndPersonalDetails"/>
+1cab:   <QualityAssurance>        <QualityLevel>            <QualitySt
+1ceb: atus Id="2" ItemName="Contact details confirmed" ListName="Quali
+1d2b: tyAssurance_0.1">Contact details confirmed</QualityStatus>      
+1d6b:       <QualityStatusChangeDate>2009-03-18T08:30:00Z</QualityStat
+1dab: usChangeDate>            <Details>some details about the quality
+1deb:  status checks performed</Details>        </QualityLevel>    </Q
+1e2b: ualityAssurance><FromOfsted>true</FromOfsted></ProviderDetails>
+1e6c: </ProviderDescription>
+=> Send data, 48 bytes (0x30)
+0000: 
+0002: ------------------------------c7d002028505--
+<= Recv header, 17 bytes (0x11)
+0000: HTTP/1.1 200 OK
+<= Recv header, 27 bytes (0x1b)
+0000: Server: Apache-Coyote/1.1
+<= Recv header, 75 bytes (0x4b)
+0000: Set-Cookie: JSESSIONID=521F05A4E2B4BA6FD6220B9B549533F5; Path=/r
+0040: epository
+<= Recv header, 39 bytes (0x27)
+0000: Content-Type: text/html;charset=utf-8
+<= Recv header, 25 bytes (0x19)
+0000: Content-Language: en-GB
+<= Recv header, 28 bytes (0x1c)
+0000: Transfer-Encoding: chunked
+<= Recv header, 37 bytes (0x25)
+0000: Date: Thu, 12 May 2011 07:28:22 GMT
+<= Recv header, 2 bytes (0x2)
+0000: 
+<= Recv data, 254 bytes (0xfe)
+0000: f8
+0004: <h1>Metadata upload form</h1>......<form method="POST" enctype="
+0044: multipart/form-data">.  File: <input type="file" name="upload" l
+0084: abel="File"/><br/>.  On Behalf Of: <input type="text" name="owne
+00c4: r" label="Owner"/><br/>.  <input type="submit"/>.<form>.
+<= Recv data, 5 bytes (0x5)
+0000: 0
+0003: 
+== Info: Connection #0 to host localhost left intact
+== Info: Closing connection #0
