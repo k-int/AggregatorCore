@@ -12,6 +12,7 @@ class HandlerSelectionService implements ApplicationContextAware {
     @javax.annotation.PostConstruct
     def init() {
       println "Initialising handler selection service ${this.hashCode()}"
+      log.debug("Initialising handler selection service ${this.hashCode()}")
     }
 
     def selectHandlersFor(base_event, properties) {

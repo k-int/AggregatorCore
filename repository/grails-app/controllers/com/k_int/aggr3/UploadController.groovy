@@ -16,7 +16,7 @@ class UploadController {
 
       // def user = User.get(SecurityUtils.getSubject()?.getPrincipal()) 
 
-      println "Index.... User: ${SecurityUtils.getSubject()?.getPrincipal()} -- ${user}"
+      log.debug("Index....")
 
       // Empty response object
       def response = ["code":"0"]
@@ -26,13 +26,14 @@ class UploadController {
     def validateUploadDir(path) {
       File f = new File(path);
       if ( ! f.exists() ) {
-        println "Creating upload directory path"
+        log.debug("Creating upload directory path")
         f.mkdirs();
       }
     }
 
     def save = { 
-      println "Save.... User: ${SecurityUtils.getSubject()?.getPrincipal()}"
+      log.debug("Save");
+      // println "Save.... User: ${SecurityUtils.getSubject()?.getPrincipal()}"
 
       // This is a secured resource... get user details
       // def user = User.get(SecurityUtils.getSubject()?.getPrincipal()) 
@@ -43,7 +44,7 @@ class UploadController {
       def response = ["code": 0]
       def file = request.getFile("upload")
 
-      println "Validating provider : ${provider}"
+      log.debug( "Validating provider : ${provider}")
 
       // If none present, does the user have a default?
       // if ( ( provider == null ) || ( provider == '' ) ) {
@@ -52,7 +53,7 @@ class UploadController {
 
       // Validate the presence of a data provider
       if ( ( provider == null ) || ( provider == '' ) ) {
-        println "Aborting save, no provider present"
+        log.debug("Aborting save, no provider present")
         response.code = '-3';
         response.status = 'No data provider';
         response.message = 'No data provider';
@@ -60,7 +61,7 @@ class UploadController {
         return
       }
       else {
-        println "Using provider code ${provider}"
+        log.debug( "Using provider code ${provider}")
       }
       
       // Try and look up the provider
@@ -68,17 +69,25 @@ class UploadController {
       
       // If provider present in request, but doesn't exist in db, does user have permission to dynamically create?
       if ( provider_object == null ) {
-        // println "Unable to locate provider with code ${provider}"
+        log.debug("Unable to locate provider with code ${provider}")
         // if ( org.apache.shiro.SecurityUtils.subject.isPermitted('provider:create' ) ) {
-        //   println "User has create provider permission.. Creating ${provider} provider"
-        // }
-        // else {
-        //   response.code = '-4';
-        //   response.status = 'Error'
-        //   response.message = 'An unknown provider was specified, and the logged in user does not have create provider permission';
-        //   render(view:"index",model:response)
-        //   return
-        // }
+        if ( 1==1 ) {
+          println "User has create provider permission.. Creating ${provider} provider"
+          provider_object = new DataProvider(code:provider)
+          if ( provider_object.save() ) {
+            log.debug("New provider ${provider} created for user...");
+          }
+          else {
+            log.error("Problems creating provider ${provider}");
+          }
+        }
+        else {
+          response.code = '-4';
+          response.status = 'Error'
+          response.message = 'An unknown provider was specified, and the logged in user does not have create provider permission';
+          render(view:"index",model:response)
+          return
+        }
       }
 
       // Is the upload an administrator on behalf of a particular user. If so, validate
@@ -118,7 +127,7 @@ class UploadController {
         // Store the uploaded file for future reference.
 
         // bytes byte[] = file.getBytes()
-        println "Storring uploaded file in temporary storage...."
+        log.debug( "Storring uploaded file in temporary storage....")
         def deposit_token = java.util.UUID.randomUUID().toString();
         def temp_file_name = "./filestore/${deposit_token}.xml";
         def temp_file = new File(temp_file_name);
@@ -126,10 +135,11 @@ class UploadController {
         // Copy the upload file to a temporary space
         file.transferTo(temp_file);
 
-        println "Create deposit event ${deposit_token}"
-        DepositEvent de = new DepositEvent(depositToken:deposit_token, status:'1',uploadUser:user)
+        log.debug( "Create deposit event ${deposit_token}")
+        // DepositEvent de = new DepositEvent(depositToken:deposit_token, status:'1',uploadUser:user)
+        DepositEvent de = new DepositEvent(depositToken:deposit_token, status:'1')
         if ( de.save() ) {
-          println "Created..."
+          log.debug( "Created...")
 
           // Set up the propeties for the upload event, in this case event=com.k_int.aggregator.event.upload and mimetype=<mimetype>
           // We are looking for any handlers willing to accept this event given the appropriate properties
@@ -163,8 +173,8 @@ class UploadController {
           response.code = '-2';
           response.status = 'Internal Error';
           response.message = 'Unable to create deposit event. This deposit has not been recorded, please contact support and re-submit.';
-          println de.errors.allErrors.each {
-            println it.defaultMessage
+          de.errors.allErrors.each {
+            log.error(it.defaultMessage)
           }
         }
       }
@@ -175,7 +185,7 @@ class UploadController {
       }
 
 
-      println "Response: ${response}"
+      log.debug("Response: ${response}")
 
       render(view:"index",model:response)
     }
