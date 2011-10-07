@@ -7,6 +7,7 @@ class DefaultUploadEventHandlerService implements ApplicationContextAware {
     static transactional = true
 
     def handlerSelectionService
+    def handlerExecutionService
 
     def ApplicationContext applicationContext
 
@@ -99,6 +100,11 @@ class DefaultUploadEventHandlerService implements ApplicationContextAware {
         // Handler found, invoke it,
         if ( schema_handler instanceof ScriptletEventHandler  ) { 
           log.debug("Located handler information - Scriptlet event handler")
+          def xml_params = new java.util.HashMap(props);
+          xml_params["xml"] = xml;
+          xml_params["rootElementNamespace"] = root_element_namespace
+          xml_params["rootElement"] = root_element_name
+          handlerExecutionService.process(schema_handler, xml_params);
         }
         else if ( schema_handler instanceof ServiceEventHandler  ) {
           log.debug( "Located handler information - Service event handler : ${schema_handler.targetBeanId}")

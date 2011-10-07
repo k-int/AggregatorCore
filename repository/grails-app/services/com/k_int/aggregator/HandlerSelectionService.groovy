@@ -9,7 +9,7 @@ class HandlerSelectionService implements ApplicationContextAware {
 
     def ApplicationContext applicationContext
     def remoteHandlerRepositoryService
-
+    def handlerExecutionService
 
     @javax.annotation.PostConstruct
     def init() {
@@ -51,7 +51,7 @@ class HandlerSelectionService implements ApplicationContextAware {
         log.debug("After evaluation, selected handler for this event is ${selected_handler.name}")
       }
       else {
-        checkForHandlersFromRemote(properties);
+        selected_handler = remoteHandlerRepositoryService.findHandlerWhen(properties);
       }
 
       selected_handler
@@ -76,10 +76,5 @@ class HandlerSelectionService implements ApplicationContextAware {
       else {
         log.warn("Non service based handlers not implemented yet")
       }
-    }
-
-    def checkForHandlersFromRemote(properties) {
-      log.debug("Check for handlers from remote...");
-      remoteHandlerRepositoryService.findHandlerWhen(properties);
     }
 }
