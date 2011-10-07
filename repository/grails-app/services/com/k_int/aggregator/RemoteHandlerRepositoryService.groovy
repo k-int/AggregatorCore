@@ -36,7 +36,8 @@ class RemoteHandlerRepositoryService {
       log.debug("Result of findWhen on remote repository: resp.status=${resp.status}, resp.data=${resp.data}")
 
       if ( resp.data?.code == 0 ) {
-        log.debug("Located remote handler with name ${resp.data.handlerName}");
+        log.debug("Located remote handler with name ${resp.data.handlerName}, revision: ${resp.data.handler_revision}");
+        log.debug("Handler: ${resp.data.handler}");
       }
 
       log.debug("Done");

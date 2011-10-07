@@ -38,6 +38,15 @@ class FindWhenController {
           log.debug("Handler is a more specific match than any previous, and is selected")
           selected_handler = handler
           highest_match_so_far = matching_preconditions;
+
+          def handler_revisions = HandlerRevision.findAllByOwner(selected_handler, [sort:"revision", order:"desc"]);
+
+          log.debug("Lookup handler revisions returns ${handler_revisions}");
+          if ( handler_revisions.size() > 0 ) {
+            def the_handler = handler_revisions.get(0);
+            result.handler = the_handler.handler;
+            result.handler_revision = the_handler.revision;
+          }
         }
       }
 
