@@ -25,6 +25,8 @@ class FindWhenController {
         log.debug("testing ${handler.name}");
         def matching_preconditions = 0;
         handler.preconditions.each { precondition ->
+          log.debug("Evaulate precondition: ${precondition}");
+
           if ( groovy.util.Eval.me("p",properties,precondition) == true ) {
             matching_preconditions++;
           }

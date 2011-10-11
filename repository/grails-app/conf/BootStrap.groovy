@@ -38,19 +38,15 @@ class BootStrap {
                                                                                                         active:true,
                                                                                                         preconditions:['p.content_type=="application/xml" || p.content_type=="text/xml"']).save()
 
-      log.debug("ECDDepositHandler");
-      def ecd_deposit_handler = EventHandler.findByName("ECDHandler") ?: new ServiceEventHandler(name:'ECDHandler',
-                                                                                                 eventCode:'com.k_int.aggregator.event.upload.xml',
-                                                                                                 targetBeanId:'builtInHandlersService',
-                                                                                                 targetMethodName:'handleECD',
-                                                                                                 active:true,
-                                                                                                 preconditions:['p.rootElementNamespace=="http://dcsf.gov.uk/XMLSchema/Childcare"']).save()
+      // log.debug("ECDDepositHandler");
+      // def ecd_deposit_handler = EventHandler.findByName("ECDHandler") ?: new ServiceEventHandler(name:'ECDHandler',
+      //                                                                                            eventCode:'com.k_int.aggregator.event.upload.xml',
+      //                                                                                            targetBeanId:'builtInHandlersService',
+      //                                                                                            targetMethodName:'handleECD',
+      //                                                                                            active:true,
+      //                                                                                            preconditions:['p.rootElementNamespace=="http://dcsf.gov.uk/XMLSchema/Childcare"']).save()
 
       log.debug("BootStrap::init end");
-
-      Resource r = applicationContext.getResource("/handlers");
-      def f = r.getFile();
-      log.debug("got handlers dir: ${f}");
     }
 
     def destroy = {

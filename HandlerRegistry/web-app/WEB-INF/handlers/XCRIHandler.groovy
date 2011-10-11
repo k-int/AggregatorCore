@@ -19,7 +19,7 @@ class XCRIHandler {
     ]
   }
 
-  def process() {
+  def process(log, props, ctx) {
     log.debug("this is a doodah");
   }
 }

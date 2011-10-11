@@ -15,7 +15,7 @@ class test1 {
 
   def getPreconditions() {
     [
-      "some.pre.condition"
+      "1==2"
     ]
   }
 
