@@ -2,11 +2,11 @@
 
 import com.gmongo.GMongo
 
-class test1 {
-  
+class XCRIHandler {
+
   // handlers have access to the repository mongo service.. suggest you use http://blog.paulopoiati.com/2010/06/20/gmongo-0-5-released/
   def getHandlerName() {
-    "HelloWorld"
+    "XCRI_CAP"
   }
 
   def getRevision() {
@@ -15,11 +15,11 @@ class test1 {
 
   def getPreconditions() {
     [
-      "some.pre.condition"
+      'p.rootElementNamespace=="http://xcri.org/profiles/catalog"'
     ]
   }
 
   def process() {
-    println "This is the code......."
+    log.debug("this is a doodah");
   }
 }
