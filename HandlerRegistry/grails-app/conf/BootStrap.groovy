@@ -29,9 +29,20 @@ class BootStrap {
       def f = r.getFile();
       log.debug("got handlers dir: ${f}");
 
+      // see http://groovy.dzone.com/news/class-loading-fun-groovy for info on the strategy being used here
+
       if ( f.isDirectory() ) {
         f.listFiles().each { handler_file ->
           log.debug("Procesing ${handler_file}");
+          log.debug("Using class loader to load file....${handler_file.text}");
+          // this.class.classLoader.rootLoader.addURL(new URL("file://${handler_file}"))
+
+          // Use the groovy class loader to parse the file
+          // def handler_class = this.class.classLoader.rootLoader.parseClass(handler_file.text);
+
+          GroovyClassLoader gcl = new GroovyClassLoader();
+          Class clazz = gcl.parseClass(handler_file.text);
+          Object aScript = clazz.newInstance();
         }
       }
     }
