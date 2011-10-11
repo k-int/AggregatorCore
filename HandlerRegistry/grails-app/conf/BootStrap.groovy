@@ -25,9 +25,15 @@ class BootStrap {
       def r2 = new HandlerRevision(owner:h2, revision:1, handler:"x.log.debug(\"XCRI_CAP v1.0\")\nx.log.debug(\"Line2\");").save();
 
 
-      Resource r = ctx.getResource("/handlers");
+      Resource r = ctx.getResource("/WEB-INF/handlers");
       def f = r.getFile();
       log.debug("got handlers dir: ${f}");
+
+      if ( f.isDirectory() ) {
+        f.listFiles().each { handler_file ->
+          log.debug("Procesing ${handler_file}");
+        }
+      }
     }
 
     def destroy = {

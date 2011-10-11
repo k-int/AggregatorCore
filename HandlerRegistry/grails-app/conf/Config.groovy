@@ -90,7 +90,8 @@ log4j = {
 
     debug  'grails.app.controller.com.k_int',
            'grails.app.service.com.k_int',
-           'grails.app.domain.com.k_int'
+           'grails.app.domain.com.k_int',
+           'grails.app'
 
 
     warn   'org.mortbay.log'
