@@ -1,8 +1,16 @@
 import com.k_int.handlerregistry.*
 
+import org.springframework.core.io.Resource
+import org.codehaus.groovy.grails.commons.ApplicationAttributes 
+
 class BootStrap {
 
+  // servletContext.getResourceAsStream("/WEB-INF/myfile.gtpl") 
+
     def init = { servletContext ->
+
+      def ctx = servletContext.getAttribute(ApplicationAttributes.APPLICATION_CONTEXT) 
+
 
 
       def h1 = Handler.findByName("ECDHandler") ?: new Handler(name:'ECDHandler',
@@ -16,7 +24,12 @@ class BootStrap {
                                                                preconditions:['p.rootElementNamespace=="http://xcri.org/profiles/catalog"']).save()
       def r2 = new HandlerRevision(owner:h2, revision:1, handler:"x.log.debug(\"XCRI_CAP v1.0\")\nx.log.debug(\"Line2\");").save();
 
+
+      Resource r = ctx.getResource("/handlers");
+      def f = r.getFile();
+      log.debug("got handlers dir: ${f}");
     }
+
     def destroy = {
     }
 }

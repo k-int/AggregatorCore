@@ -22,11 +22,13 @@ grails.project.dependency.resolution = {
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"
         //mavenRepo "http://repository.jboss.com/maven2/"
+        mavenRepo "http://repo1.maven.org/maven2/"
     }
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
         // runtime 'mysql:mysql-connector-java:5.1.13'
         runtime 'mysql:mysql-connector-java:5.1.14'
+        runtime 'com.gmongo gmongo 0.9.2'
     }
 }
