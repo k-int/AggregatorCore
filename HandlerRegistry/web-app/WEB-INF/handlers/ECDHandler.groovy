@@ -19,7 +19,7 @@ class ECDHandler {
     ]
   }
 
-  def process(log, properties, ctx) {
+  def process(properties, ctx) {
     println "This is the ECD handler code......."
   }
 }

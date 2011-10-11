@@ -1,22 +1,37 @@
 package com.k_int.aggregator
 
-class HandlerExecutionService {
+import org.springframework.context.* 
+
+class HandlerExecutionService implements ApplicationContextAware {
+
+    def handler_cache = [:] 
+
+    ApplicationContext applicationContext 
 
     static transactional = true
 
     def process(handler,properties) {
-      log.debug("${handler}, ...... Calling eval on ${handler.scriptlet}");
+
       def p2 = new java.util.HashMap(properties);
-      // p2['log'] = log
-      // groovy.util.Eval.x(p2,handler.scriptlet)
 
-      GroovyClassLoader gcl = new GroovyClassLoader();
-      Class clazz = gcl.parseClass(handler.scriptlet);
-      Object h = clazz.newInstance();
+      def hi = handler_cache[handler.id]
 
-      log.debug("Calling process method on handler...");
-      h.process(log, p2, null);
-      log.debug("Completed call to process");
+      if ( hi == null ) {
+        // GroovyClassLoader gcl = new GroovyClassLoader();
+        // Class clazz = gcl.parseClass(handler.scriptlet);
+        Class clazz = new GroovyClassLoader(this.class.getClassLoader()).parseClass(handler.scriptlet);
+        hi = clazz.newInstance();
+        handler_cache[handler.id] = hi;
+      }
+
+      if ( hi != null ) {
+        log.debug("Calling process method on handler...");
+        hi.process(p2, applicationContext);
+        log.debug("Completed call to process");
+      }
+      else {
+        log.error("Unable to locate handler instance for ${handler}");
+      }
     }
 
 }
