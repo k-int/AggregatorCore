@@ -28,5 +28,20 @@ class XCRIHandler {
 
   def process(props, ctx) {
     log.debug("this is a doodah");
+    props.response.messageLog.add("This is a message from the downloaded XCRI handler")
+
+    def d2 = props.xml.declareNamespace(['xcri':'http://xcri.org/profiles/catalog']) // , ns2: 'http://www.example.org/NS2') 
+
+    // def xcri = new groovy.xml.Namespace("http://xcri.org/profiles/catalog", 'xcri') 
+
+    log.debug("root element namespace: ${d2.namespaceURI()}");
+    log.debug("lookup namespace: ${d2.lookupNamespace('xcri')}");
+    log.debug("d2.name : ${d2.name()}");
+
+    // Properties contain an xml element, which is the parsed document
+    def id1 = d2.'xcri:provider'.'xcri:identifier'.text()
+
+    props.response.messageLog.add("Identifier for this XCRI document: ${id1}")
+
   }
 }

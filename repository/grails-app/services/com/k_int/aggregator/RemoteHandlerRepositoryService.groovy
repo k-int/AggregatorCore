@@ -36,11 +36,11 @@ class RemoteHandlerRepositoryService {
       // def postID = resp.data.id.toInteger()
 
    
-      log.debug("Result of findWhen on remote repository: resp.status=${resp.status}, resp.data=${resp.data}")
+      log.debug("Result of findWhen on remote repository: resp.status=${resp.status}");
 
       if ( resp.data?.code == 0 ) {
-        log.debug("Located remote handler with name ${resp.data.handlerName}, revision: ${resp.data.handler_revision}");
-        log.debug("Handler: ${resp.data.handler}");
+        log.debug("** Located remote handler with name ${resp.data.handlerName}, revision: ${resp.data.handler_revision}");
+        // log.debug("Handler: ${resp.data.handler}");
         log.debug("EventCode: ${resp.data.eventCode}");
         log.debug("Preconditions: ${resp.data.preconditions}");
 

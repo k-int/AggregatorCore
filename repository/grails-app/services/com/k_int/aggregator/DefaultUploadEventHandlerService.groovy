@@ -23,6 +23,7 @@ class DefaultUploadEventHandlerService implements ApplicationContextAware {
 
     def handleXML(props) {
       log.debug("handleXML content_type ${props.content_type}")
+      props.response.messageLog.add("Content type detected as XML : ${props.content_type}")
 
       // Open the new file so that we can parse the xml
       def xml = new XmlSlurper().parse(new FileInputStream(props.file))
@@ -97,6 +98,8 @@ class DefaultUploadEventHandlerService implements ApplicationContextAware {
         // Finally, if the system is configured to do so, push the uploaded item onto the pending queue.
       }
       else {
+        props.response.messageLog.add("Located event handler for schema: ${schema_handler.name}")
+
         // Handler found, invoke it,
         if ( schema_handler instanceof ScriptletEventHandler  ) { 
           log.debug("Located handler information - Scriptlet event handler")

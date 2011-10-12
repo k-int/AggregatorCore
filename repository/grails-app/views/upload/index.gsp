@@ -9,3 +9,13 @@
   On Behalf Of: <input type="text" name="owner" label="Owner"/><br/>
   <input type="submit"/>
 <form>
+
+<g:if test="${messageLog}">
+  <div id="messageLog">
+    <ul>
+      <g:each in="${messageLog}" var="m">
+        <li>${m}</li>
+      </g:each>
+    </ul>
+  </div>
+</g:if>
