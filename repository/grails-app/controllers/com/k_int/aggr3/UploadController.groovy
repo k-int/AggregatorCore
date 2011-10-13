@@ -144,7 +144,8 @@ class UploadController {
           // Set up the propeties for the upload event, in this case event=com.k_int.aggregator.event.upload and mimetype=<mimetype>
           // We are looking for any handlers willing to accept this event given the appropriate properties
           // def event_properties = ["content_type":content_type, "file":temp_file, "response":response, "upload_event_token":deposit_token, "user":user]
-          def event_properties = ["content_type":content_type, 
+          def event_properties = ["owner":provider,
+                                  "content_type":content_type, 
                                   "file":temp_file, 
                                   "response":response, 
                                   "upload_event_token":deposit_token]
@@ -187,8 +188,6 @@ class UploadController {
         response.message = 'You must supply an upload parameter in the form of a multipart-file field';
       }
 
-
-      log.debug("Response: ${response}")
 
       render(view:"index",model:response)
     }
