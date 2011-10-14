@@ -1,12 +1,13 @@
 package com.k_int.repository.handlers
 
+@GrabResolver(name='es', root='https://oss.sonatype.org/content/repositories/releases')
+
 @Grab(group='com.gmongo', module='gmongo', version='0.5.1')
+@Grab(group='org.elasticsearch', module='elasticsearch-client-groovy', version='0.10.0')
 
 import com.gmongo.GMongo
 import org.apache.commons.logging.LogFactory
 import grails.converters.*
-
-
 
 class XCRIHandler {
 
@@ -28,13 +29,19 @@ class XCRIHandler {
   }
 
   def process(props, ctx) {
-    log.debug("this is a doodah");
-
-    def mongo = new com.gmongo.GMongo();
-    def db = mongo.getDB("xcri")
+    log.debug("process....");
 
     def start_time = System.currentTimeMillis();
     def course_count = 0;
+
+    // Get hold of some services we might use ;)
+    def mongo = new com.gmongo.GMongo();
+    def db = mongo.getDB("xcri")
+    Object eswrapper = ctx.getBean('ESWrapperService');
+
+    log.debug("After call to getbean-eswrapper : ${eswrapper}");
+
+    // Start processing proper
 
     props.response.messageLog.add("This is a message from the downloaded XCRI handler")
 
@@ -92,6 +99,24 @@ class XCRIHandler {
       // db.courses.update([identifier:crs_internal_uri.toString()],course_as_pojo, true);
       db.courses.save(course_as_pojo);
     }
+
+    org.elasticsearch.groovy.node.GNode esnode = eswrapper.getNode()
+    org.elasticsearch.groovy.client.GClient esclient = esnode.getClient()
+
+    log.debug("Sending record to es");
+    def future = esclient.index {
+      index "courses"
+      type "course"
+      id "1"
+      source {
+        test = "value"
+        complex {
+            value1 = "value1"
+            value2 = "value2"
+        }
+      }
+    }
+    log.debug("Indexed $future.response.index/$future.response.type/$future.response.id")
 
     def elapsed = System.currentTimeMillis() - start_time;
 

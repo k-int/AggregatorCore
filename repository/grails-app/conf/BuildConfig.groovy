@@ -19,7 +19,8 @@ grails.project.dependency.resolution = {
         mavenLocal()
         mavenCentral()
         //mavenRepo "http://snapshots.repository.codehaus.org"
-        //mavenRepo "http://repository.codehaus.org"
+        // mavenRepo "http://repository.codehaus.org"
+        mavenRepo "https://oss.sonatype.org/content/repositories/releases"
         //mavenRepo "http://download.java.net/maven/2/"
         //mavenRepo "http://repository.jboss.com/maven2/"
         mavenRepo "http://repo1.maven.org/maven2/"
@@ -29,6 +30,8 @@ grails.project.dependency.resolution = {
 
         // runtime 'mysql:mysql-connector-java:5.1.13'
         runtime 'mysql:mysql-connector-java:5.1.14'
-        runtime 'com.gmongo gmongo 0.9.2'
+        runtime 'com.gmongo:gmongo:0.9.2'
+        runtime 'org.elasticsearch:elasticsearch-client-groovy:0.10.0'
+
     }
 }
