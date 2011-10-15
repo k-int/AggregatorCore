@@ -9,15 +9,24 @@ class ESWrapperService {
   @javax.annotation.PostConstruct
   def init() {
     log.debug("Init");
+
+    System.setProperty("java.net.preferIPv4Stack","true");
+
     def nodeBuilder = new org.elasticsearch.groovy.node.GNodeBuilder()
+
     nodeBuilder.settings {
       node {
         client = true
-        local = false
+        local = true
+        data = false
       }
-      cluster {
-        name = 'aggr'
-      }
+      // cluster {
+      //   name = 'aggr'
+      // }
+      // testing...
+      // transport {
+      //   port = 9305
+      // }
     }
 
     log.debug("Constructing node...");
