@@ -1,5 +1,9 @@
 package com.k_int.aggregator
 
+import org.elasticsearch.groovy.node.GNode
+import org.elasticsearch.groovy.node.GNodeBuilder
+import static org.elasticsearch.groovy.node.GNodeBuilder.*
+
 class ESWrapperService {
 
   static transactional = true
@@ -10,9 +14,11 @@ class ESWrapperService {
   def init() {
     log.debug("Init");
 
-    System.setProperty("java.net.preferIPv4Stack","true");
+    // System.setProperty("java.net.preferIPv4Stack","true");
 
     def nodeBuilder = new org.elasticsearch.groovy.node.GNodeBuilder()
+
+    log.debug("Construct node settings");
 
     nodeBuilder.settings {
       node {
@@ -44,7 +50,7 @@ class ESWrapperService {
   }
 
   def getNode() {
-    log.debug("gNode");
+    log.debug("getNode()");
     gNode
   }
 
