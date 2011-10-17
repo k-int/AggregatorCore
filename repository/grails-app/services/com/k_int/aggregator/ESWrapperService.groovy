@@ -51,20 +51,20 @@ class ESWrapperService {
     log.debug("Constructing node...");
     gNode = nodeBuilder.node()
 
-    log.debug("Sending record to es");
-    def future = gNode.client.index {
-      index "courses"
-      type "course"
-      id "1"
-      source {
-        test = "value"
-        value1 = "value1"
-        value2 = "value2"
-      }
-    }
-    log.debug("waiting for response...");
+    // log.debug("Sending record to es");
+    // def future = gNode.client.index {
+    //   index "courses"
+    //   type "course"
+    //   id "1"
+    //   source {
+    //     test = "value"
+    //     value1 = "value1"
+    //     value2 = "value2"
+    //   }
+    // }
+    // log.debug("waiting for response...");
 
-    log.debug("Indexed $future.response.index/$future.response.type/$future.response.id")
+    // log.debug("Indexed $future.response.index/$future.response.type/$future.response.id")
 
     log.debug("Init completed");
   }
