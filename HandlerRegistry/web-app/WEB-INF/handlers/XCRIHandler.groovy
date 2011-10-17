@@ -101,19 +101,24 @@ class XCRIHandler {
       course_count++
 
       log.debug("Saving mongo instance of course....${crs_internal_uri}");
+
       // db.courses.update([identifier:crs_internal_uri.toString()],course_as_pojo, true);
       db.courses.save(course_as_pojo);
+
+      log.debug("Saved pojo: ${course_as_pojo}");
+      // Mongo inserts an _id into the record.. we can reuse that
 
       log.debug("Sending record to es");
       def future = esclient.index {
         index "courses"
         type "course"
-        // id crs_internal_uri.toString()
+        id course_as_pojo['_id'].toString()
         source course_as_pojo
       }
       log.debug("Indexed $future.response.index/$future.response.type/$future.response.id")
     }
 
+    def elapsed = System.currentTimeMillis() - start_time
     props.response.messageLog.add("Completed processing of ${course_count} courses from catalog ${id1} for provider ${props.owner} in ${elapsed}ms");
   }
 }

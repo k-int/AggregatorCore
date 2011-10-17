@@ -1,1 +1,6 @@
 readme for aggregator
+
+
+Common ES search: 
+
+http://localhost:9200/courses/course/_search?q=painting%20AND%20A2
