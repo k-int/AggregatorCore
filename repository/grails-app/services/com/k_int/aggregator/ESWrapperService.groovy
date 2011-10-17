@@ -6,7 +6,7 @@ import static org.elasticsearch.groovy.node.GNodeBuilder.*
 
 class ESWrapperService {
 
-  static transactional = true
+  static transactional = false
 
   def gNode = null;
 
@@ -15,6 +15,12 @@ class ESWrapperService {
     log.debug("Init");
 
     // System.setProperty("java.net.preferIPv4Stack","true");
+    // log.debug("Attempting to create a transport client...");
+    // Map<String,String> m = new HashMap<String,String>();
+    // m.put("cluster.name","aggr");
+    // Settings s = ImmutableSettings.settingsBuilder() .put(m).build();
+    // TransportClient client = new TransportClient(s);
+
 
     def nodeBuilder = new org.elasticsearch.groovy.node.GNodeBuilder()
 
@@ -23,22 +29,43 @@ class ESWrapperService {
     nodeBuilder.settings {
       node {
         client = true
-        local = true
-        data = false
       }
-      // cluster {
-      //   name = 'aggr'
-      // }
-      // testing...
-      // transport {
-      //   port = 9305
-      // }
+      cluster {
+        name = "aggr"
+      }
+      http {
+        enabled = false
+      }
+      discovery {
+        zen {
+          minimum_master_nodes=1
+          ping {
+            unicast {
+              hosts = [ "localhost" ] 
+            }
+          }
+        }
+      }
     }
 
     log.debug("Constructing node...");
-
     gNode = nodeBuilder.node()
-    // def esclient = gNode.client
+
+    log.debug("Sending record to es");
+    def future = gNode.client.index {
+      index "courses"
+      type "course"
+      id "1"
+      source {
+        test = "value"
+        value1 = "value1"
+        value2 = "value2"
+      }
+    }
+    log.debug("waiting for response...");
+
+    log.debug("Indexed $future.response.index/$future.response.type/$future.response.id")
+
     log.debug("Init completed");
   }
 
