@@ -38,6 +38,8 @@ class XCRIHandler {
     def mongo = new com.gmongo.GMongo();
     def db = mongo.getDB("xcri")
     Object eswrapper = ctx.getBean('ESWrapperService');
+    org.elasticsearch.groovy.node.GNode esnode = eswrapper.getNode()
+    org.elasticsearch.groovy.client.GClient esclient = esnode.getClient()
 
     log.debug("After call to getbean-eswrapper : ${eswrapper}");
 
@@ -83,7 +85,10 @@ class XCRIHandler {
       course_as_pojo.title = crs.'xcri:title'?.text()?.toString();
       course_as_pojo.descriptions = [:]
       crs.'xcri:description'.each { desc ->
-        course_as_pojo.descriptions[desc.@'xsi:type'] = desc?.text()?.toString();
+        String desc_type = desc.@'xsi:type'?.text()?.toString()
+        if ( ( desc_type != null ) && ( desc_type.length() > 0 ) ) {
+          course_as_pojo.descriptions[desc_type] = desc?.text()?.toString();
+        }
       }
       course_as_pojo.url = crs.'xcri:url'?.text()?.toString()
       course_as_pojo.subject = []
@@ -98,27 +103,16 @@ class XCRIHandler {
       log.debug("Saving mongo instance of course....${crs_internal_uri}");
       // db.courses.update([identifier:crs_internal_uri.toString()],course_as_pojo, true);
       db.courses.save(course_as_pojo);
-    }
 
-    org.elasticsearch.groovy.node.GNode esnode = eswrapper.getNode()
-    org.elasticsearch.groovy.client.GClient esclient = esnode.getClient()
-
-    log.debug("Sending record to es");
-    def future = esclient.index {
-      index "courses"
-      type "course"
-      id "1"
-      source {
-        test = "value"
-        complex {
-            value1 = "value1"
-            value2 = "value2"
-        }
+      log.debug("Sending record to es");
+      def future = esclient.index {
+        index "courses"
+        type "course"
+        // id crs_internal_uri.toString()
+        source course_as_pojo
       }
+      log.debug("Indexed $future.response.index/$future.response.type/$future.response.id")
     }
-    log.debug("Indexed $future.response.index/$future.response.type/$future.response.id")
-
-    def elapsed = System.currentTimeMillis() - start_time;
 
     props.response.messageLog.add("Completed processing of ${course_count} courses from catalog ${id1} for provider ${props.owner} in ${elapsed}ms");
   }
