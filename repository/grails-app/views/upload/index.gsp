@@ -10,12 +10,17 @@
   <input type="submit"/>
 <form>
 
-<g:if test="${messageLog}">
-  <div id="messageLog">
+<g:if test="${eventLog}">
+  <div id="eventLog">
     <ul>
-      <g:each in="${messageLog}" var="m">
-        <li>${m}</li>
-      </g:each>
+        <g:each in="${eventLog}" var="m">
+          <g:if test="{m.type=='msg'}">
+            <li>${m.msg}</li>
+          </g:if>
+          <g:if test="${m.type=='item'}">
+            <li>An item weas added</li>
+          </g:if>
+        </g:each>
     </ul>
   </div>
 </g:if>

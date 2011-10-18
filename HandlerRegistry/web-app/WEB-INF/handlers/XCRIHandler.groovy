@@ -13,6 +13,18 @@ class XCRIHandler {
 
   private static final log = LogFactory.getLog(this)
 
+  // This handler processes XCRI documents... After the handler is invoked, the local mongodb
+  // will contain a new database called xcri and a collection called courses. If rest = true is configured in
+  // /etc/mongodb.conf you can use a URL like http://localhost:28017/xcri/courses/ to enumerate all courses
+  // The handler also inserts records into an elasticsearch cluster, using a courses collection, you can 
+  // query this with URL's like 
+  // http://localhost:9200/_all/course/_search?q=painting%20AND%20A2
+  // Which will search all indexes (In ES, an index is like a solr core) for all items of type course with the given parameters.
+  // This handler creates an index(core) with name courses, so to search this specific core:
+  // http://localhost:9200/courses/course/_search?q=painting%20AND%20A2
+  // Or search everything
+  // http://localhost:9200/_search?q=painting%20AND%20A2
+
   // handlers have access to the repository mongo service.. suggest you use http://blog.paulopoiati.com/2010/06/20/gmongo-0-5-released/
   def getHandlerName() {
     "XCRI_CAP"
@@ -45,7 +57,7 @@ class XCRIHandler {
 
     // Start processing proper
 
-    props.response.messageLog.add("This is a message from the downloaded XCRI handler")
+    props.response.eventLog.add([type:"msg",msg:"This is a message from the downloaded XCRI handler"])
 
     def d2 = props.xml.declareNamespace(['xcri':'http://xcri.org/profiles/catalog', 
                                          'xsi':'http://www.w3.org/2001/XMLSchema-instance',
@@ -60,7 +72,7 @@ class XCRIHandler {
     // Properties contain an xml element, which is the parsed document
     def id1 = d2.'xcri:provider'.'xcri:identifier'.text()
 
-    props.response.messageLog.add("Identifier for this XCRI document: ${id1}")
+    props.response.eventLog.add([type:"msg",msg:"Identifier for this XCRI document: ${id1}"])
 
     d2.'xcri:provider'.'xcri:course'.each { crs ->
 
@@ -68,7 +80,7 @@ class XCRIHandler {
       def crs_internal_uri = "uri:${props.owner}:xcri:${id1}:${crs_identifier}";
 
       log.debug("Processing course: ${crs_identifier}");
-      props.response.messageLog.add("Validating course entry ${crs_internal_uri} - ${crs.'xcri:title'}");
+      props.response.eventLog.add([type:"msg",msg:"Validating course entry ${crs_internal_uri} - ${crs.'xcri:title'}"]);
 
       log.debug("looking up course with identifier ${crs_internal_uri}");
       def course_as_pojo = db.courses.findOne(identifier: crs_internal_uri.toString())
@@ -119,6 +131,6 @@ class XCRIHandler {
     }
 
     def elapsed = System.currentTimeMillis() - start_time
-    props.response.messageLog.add("Completed processing of ${course_count} courses from catalog ${id1} for provider ${props.owner} in ${elapsed}ms");
+    props.response.eventLog.add([type:"msg",msg:"Completed processing of ${course_count} courses from catalog ${id1} for provider ${props.owner} in ${elapsed}ms"]);
   }
 }
