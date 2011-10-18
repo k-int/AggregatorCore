@@ -117,7 +117,7 @@ class XCRIHandler {
       // db.courses.update([identifier:crs_internal_uri.toString()],course_as_pojo, true);
       db.courses.save(course_as_pojo);
 
-      log.debug("Saved pojo: ${course_as_pojo}");
+      log.debug("Saved pojo: ${course_as_pojo} identifier will be \"${course_as_pojo['_id'].toString()}\"");
       // Mongo inserts an _id into the record.. we can reuse that
 
       log.debug("Sending record to es");
