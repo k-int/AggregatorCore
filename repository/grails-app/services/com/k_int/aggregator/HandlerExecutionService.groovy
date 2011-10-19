@@ -14,15 +14,7 @@ class HandlerExecutionService implements ApplicationContextAware {
 
       def p2 = new java.util.HashMap(properties);
 
-      def hi = handler_cache[handler.id]
-
-      if ( hi == null ) {
-        // GroovyClassLoader gcl = new GroovyClassLoader();
-        // Class clazz = gcl.parseClass(handler.scriptlet);
-        Class clazz = new GroovyClassLoader(this.class.getClassLoader()).parseClass(handler.scriptlet);
-        hi = clazz.newInstance();
-        handler_cache[handler.id] = hi;
-      }
+      def hi = getHandlerInstance(handler);
 
       if ( hi != null ) {
         log.debug("Calling process method on handler...");
@@ -34,4 +26,19 @@ class HandlerExecutionService implements ApplicationContextAware {
       }
     }
 
+
+    def getHandlerInstance(handler_definition) {
+      def hi = handler_cache[handler_definition.id]
+
+      if ( hi == null ) {
+        // GroovyClassLoader gcl = new GroovyClassLoader();
+        // Class clazz = gcl.parseClass(handler.scriptlet);
+        Class clazz = new GroovyClassLoader(this.class.getClassLoader()).parseClass(handler_definition.scriptlet);
+        hi = clazz.newInstance();
+        log.debug("Cache new instance of handler with id ${handler_definition.id}");
+        handler_cache[handler_definition.id] = hi;
+      }
+
+      hi
+    }
 }

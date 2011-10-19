@@ -5,12 +5,12 @@ import groovy.util.slurpersupport.GPathResult
 import static groovyx.net.http.ContentType.URLENC
 import org.codehaus.groovy.grails.commons.ApplicationHolder
 import grails.converters.*
+import org.springframework.context.*
  
-class RemoteHandlerRepositoryService {
+class RemoteHandlerRepositoryService implements ApplicationContextAware {
 
-    static transactional = true
-
-    // see http://groovy.codehaus.org/modules/http-builder/doc/rest.html
+    ApplicationContext applicationContext
+    def handlerExecutionService
 
     def findHandlerWhen(props) {
 
@@ -50,7 +50,16 @@ class RemoteHandlerRepositoryService {
           preconditions: resp.data.preconditions,
           scriptlet: resp.data.handler,
           active: true
-        ).save();
+        )
+
+        if ( result.save() ) {
+          log.debug("Obtaining an instance of the new handler class");
+          def handler_instance = handlerExecutionService.getHandlerInstance(result);
+          if ( handler_instance.metaClass.respondsTo(handler_instance,"setup", applicationContext) ) {
+            log.debug("New handler has a setup method");
+            handler_instance.setup(applicationContext);
+          }
+        }
       }
 
       log.debug("Done");

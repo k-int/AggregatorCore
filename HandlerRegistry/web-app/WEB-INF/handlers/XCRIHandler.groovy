@@ -133,4 +133,8 @@ class XCRIHandler {
     def elapsed = System.currentTimeMillis() - start_time
     props.response.eventLog.add([type:"msg",msg:"Completed processing of ${course_count} courses from catalog ${id1} for provider ${props.owner} in ${elapsed}ms"]);
   }
+
+  def setup(ctx) {
+    log.debug("This is the XCRI handler setup method");
+  }
 }
