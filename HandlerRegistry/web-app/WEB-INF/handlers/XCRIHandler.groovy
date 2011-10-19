@@ -143,26 +143,28 @@ class XCRIHandler {
     // Get hold of an index admin client
     org.elasticsearch.groovy.client.GIndicesAdminClient index_admin_client = new org.elasticsearch.groovy.client.GIndicesAdminClient(esclient);
 
+    // use http://localhost:9200/_all/_mapping to list all installed mappings
+
     // Declare a mapping of type "course" that explains to ES how it should index course elements
     log.debug("Attempting to put a mapping for course...");
-    index_admin_client.putMapping {
+    def future = index_admin_client.putMapping {
       indices 'courses'
       type 'course'
       source {
-        properties {
-          title {
-            type = 'string'
-            store = 'yes'
+        course {       // Think this is the name of the mapping within the type
+          properties {
+            title {
+              type = 'string'
+              store = 'yes'
+            }
+            widgetid {
+              type = 'string'
+              store = 'yes'
+            }
           }
         }
       }
     }
-    //   'course' {
-    //     properties {
-    //     }
-    //   }
-    // }
-    log.debug("ES Course mapping installed");
-
+    log.debug("Installed course mapping ${future}");
   }
 }
