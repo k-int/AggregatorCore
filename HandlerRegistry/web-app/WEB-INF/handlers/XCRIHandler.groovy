@@ -136,5 +136,33 @@ class XCRIHandler {
 
   def setup(ctx) {
     log.debug("This is the XCRI handler setup method");
+    Object eswrapper = ctx.getBean('ESWrapperService');
+    org.elasticsearch.groovy.node.GNode esnode = eswrapper.getNode()
+    org.elasticsearch.groovy.client.GClient esclient = esnode.getClient()
+    
+    // Get hold of an index admin client
+    org.elasticsearch.groovy.client.GIndicesAdminClient index_admin_client = new org.elasticsearch.groovy.client.GIndicesAdminClient(esclient);
+
+    // Declare a mapping of type "course" that explains to ES how it should index course elements
+    log.debug("Attempting to put a mapping for course...");
+    index_admin_client.putMapping {
+      indices 'courses'
+      type 'course'
+      source {
+        properties {
+          title {
+            type = 'string'
+            store = 'yes'
+          }
+        }
+      }
+    }
+    //   'course' {
+    //     properties {
+    //     }
+    //   }
+    // }
+    log.debug("ES Course mapping installed");
+
   }
 }
