@@ -17,17 +17,38 @@ Public Aggregation Endpoints For this ODA are:
   </li>
   <li>SOLR
     <ul>
-      <li></li>
+      <g:each in="${aggregations['solr']}" var="i">
+        <li>${i.title}
+          <table>
+            <tr><td>Identifier:</td><td>${i.identifier}</td></tr>
+            <tr><td>Description:</td><td>${i.description}</td></tr>
+          </table>
+        </li>
+      </g:each>
     </ul>
   </li>
   <li>4Store
     <ul>
-      <li></li>
+      <g:each in="${aggregations['4s']}" var="i">
+        <li>${i.title}
+          <table>
+            <tr><td>Identifier:</td><td>${i.identifier}</td></tr>
+            <tr><td>Description:</td><td>${i.description}</td></tr>
+          </table>
+        </li>
+      </g:each>
     </ul>
   </li>
   <li>MongoDB
     <ul>
-      <li></li>
+      <g:each in="${aggregations['mongo']}" var="i">
+        <li>${i.title}
+          <table>
+            <tr><td>Identifier:</td><td>${i.identifier}</td></tr>
+            <tr><td>Description:</td><td>${i.description}</td></tr>
+          </table>
+        </li>
+      </g:each>
     </ul>
   </li>
 </ul>
