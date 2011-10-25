@@ -139,7 +139,11 @@ class XCRIHandler {
     Object eswrapper = ctx.getBean('ESWrapperService');
     org.elasticsearch.groovy.node.GNode esnode = eswrapper.getNode()
     org.elasticsearch.groovy.client.GClient esclient = esnode.getClient()
-    
+
+    // Get hold of mongodb 
+    def mongo = new com.gmongo.GMongo();
+    def db = mongo.getDB("oda")
+
     // Get hold of an index admin client
     org.elasticsearch.groovy.client.GIndicesAdminClient index_admin_client = new org.elasticsearch.groovy.client.GIndicesAdminClient(esclient);
 
@@ -166,5 +170,23 @@ class XCRIHandler {
       }
     }
     log.debug("Installed course mapping ${future}");
+
+    // Store a definition of the searchable part of the resource in mongo
+    def courses_aggregation = db.aggregations.findOne(identifier: 'uri:aggr:cld:courses')
+
+    if ( courses_aggregation == null ) {
+      // Create a definition of a course CLD
+      courses_aggregation = [:]
+      courses_aggregation.identifier = 'uri:aggr:cld:courses'
+      courses_aggregation.type = 'es'
+      courses_aggregation.indexs = ['courses']
+      courses_aggregation.types = ['course']
+      courses_aggregation.access_points = [ 
+                                    [ field:'identifier', label:'Identifier' ], 
+                                    [ field:'title', label:'Title' ], 
+                                    [ field:'descriptions', label:'Description' ] ]
+      db.aggregations.save(courses_aggregation);
+    }
+
   }
 }
