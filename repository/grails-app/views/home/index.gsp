@@ -6,7 +6,12 @@ Public Aggregation Endpoints For this ODA are:
   <li>ElasticSearch
     <ul>
       <g:each in="${aggregations['es']}" var="i">
-        <li>${i}</li>
+        <li>${i.title}
+          <table>
+            <tr><td>Identifier:</td><td>${i.identifier}</td></tr>
+            <tr><td>Description:</td><td>${i.description}</td></tr>
+          </table>
+        </li>
       </g:each>
     </ul>
   </li>

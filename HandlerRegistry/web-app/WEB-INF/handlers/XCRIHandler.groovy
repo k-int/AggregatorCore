@@ -177,16 +177,18 @@ class XCRIHandler {
     if ( courses_aggregation == null ) {
       // Create a definition of a course CLD
       courses_aggregation = [:]
-      courses_aggregation.identifier = 'uri:aggr:cld:courses'
-      courses_aggregation.type = 'es'
-      courses_aggregation.indexs = ['courses']
-      courses_aggregation.types = ['course']
-      courses_aggregation.access_points = [ 
+    }
+
+    courses_aggregation.identifier = 'uri:aggr:cld:courses'
+    courses_aggregation.type = 'es'
+    courses_aggregation.indexes = ['courses']
+    courses_aggregation.types = ['course']
+    courses_aggregation.title = 'All UK Courses'
+    courses_aggregation.description = 'An searchable aggregation of course descriptions from institutions in the UK'
+    courses_aggregation.access_points = [ 
                                     [ field:'identifier', label:'Identifier' ], 
                                     [ field:'title', label:'Title' ], 
                                     [ field:'descriptions', label:'Description' ] ]
-      db.aggregations.save(courses_aggregation);
-    }
-
+    db.aggregations.save(courses_aggregation);
   }
 }
