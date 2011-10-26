@@ -47,7 +47,12 @@ class BootStrap {
       //                                                                                            active:true,
       //                                                                                            preconditions:['p.rootElementNamespace=="http://dcsf.gov.uk/XMLSchema/Childcare"']).save()
 
-      log.debug("BootStrap::init end");
+      def system_id = Setting.findByStKey('instanceid')
+      if ( system_id == null ) {
+        system_id = new Setting(stKey:'systemid',stValue:java.util.UUID.randomUUID().toString())
+        system_id.save()
+      }
+      log.debug("BootStrap::init end. syste, instanceid is ${system_id.stValue}");
     }
 
     def destroy = {
