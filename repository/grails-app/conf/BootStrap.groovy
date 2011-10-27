@@ -46,14 +46,14 @@ class BootStrap {
           verifySetting('instanceid','dev');
           verifySetting('handlerServiceURL','http://localhost:8090/HandlerRegistry');
           verifySetting('handlerServiceUser','anonymous');
-          verifySetting('handlerServicePass','anonumous');
+          verifySetting('handlerServicePass','anonymous');
           break
         case 'production':
           log.debug("Configuring for production environment");
           verifySetting('instanceid',java.util.UUID.randomUUID().toString());
           verifySetting('handlerServiceURL','http://aggrconf.k-int.com');
           verifySetting('handlerServiceUser','anonymous');
-          verifySetting('handlerServicePass','anonumous');
+          verifySetting('handlerServicePass','anonymous');
           break
       }
     }

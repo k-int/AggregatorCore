@@ -18,7 +18,7 @@ environments {
             dbCreate = "create-drop"           // "create"
             username = "k-int"
             password = "k-int"
-            url = "jdbc:mysql://localhost/a2dev?autoReconnect=true&amp;characterEncoding=utf8"
+            url = "jdbc:mysql://localhost/hrepdev?autoReconnect=true&amp;characterEncoding=utf8"
 
         }
     }

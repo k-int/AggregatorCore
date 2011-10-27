@@ -92,7 +92,8 @@ log4j = {
            'grails.app.service.com.k_int',
            'grails.app.domain.com.k_int',
            'grails.app.com.k_int',
-           'com.k_int' // , 'org.elasticsearch'
+           'com.k_int', 
+           'org.elasticsearch'
 
     warn   'org.mortbay.log'
 }

@@ -1,6 +1,7 @@
 package com.k_int.handlerregistry
 
 import grails.converters.*
+import org.apache.shiro.SecurityUtils
 
 class FindWhenController {
 
@@ -57,6 +58,23 @@ class FindWhenController {
       if ( selected_handler != null ) {
         result.code = 0;
         result.handlerName = selected_handler.name;
+
+        def log_entry = new FindWhenLogEntry(remoteUserId:SecurityUtils.subject.principal,
+                                             remoteSystemId:params.remote_instance_id,
+                                             remoteConstraints:params.constraints,
+                                             selectedHandler:selected_handler,
+                                             selectedRevision:result.handler_revision)
+        if ( log_entry.save() ) {
+          log.debug("Saved log entry");
+        }
+        else {
+          log.debug("Problem saving log entry");
+          log_entry.errors.each { err ->
+            log.error(err);
+          }
+        }
+
+        log.debug("Selected handler ${selected_handler.name} for request from remote system with id ${params.remote_instance_id}. Remote user is..${SecurityUtils.subject?.principal}");
       }
 
     }

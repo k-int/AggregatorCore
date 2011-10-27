@@ -24,7 +24,7 @@ class RemoteHandlerRepositoryService implements ApplicationContextAware {
       remote_repo = Setting.findByStKey('handlerServiceURL').stValue
       remote_user = Setting.findByStKey('handlerServiceUser').stValue
       remote_pass = Setting.findByStKey('handlerServicePass').stValue
-      log.debug("At startup, this system is identified by repository id ${sys_id}. Remote repo is ${remote_repo}, user at remote repo is ${remote_user}")
+      log.debug("At startup, this system is identified by repository id ${sys_id}. Remote repo is ${remote_repo}, user at remote repo is ${remote_user}/${remote_pass}")
     }
 
     def findHandlerWhen(props) {
@@ -35,13 +35,16 @@ class RemoteHandlerRepositoryService implements ApplicationContextAware {
 
 
       // def remote_repo = new RESTClient( 'http://developer.k-int.com');
-      def remote_repo = new RESTClient( ApplicationHolder.application.config.com.k_int.aggregator.handlers.remoteRepo )
+      // def remote_repo = new RESTClient( ApplicationHolder.application.config.com.k_int.aggregator.handlers.remoteRepo )
+      def remote_repo = new RESTClient( remote_repo )
+      remote_repo.auth.basic remote_user, remote_pass
 
       def json_constraints = props as JSON
 
       def resp = remote_repo.post( 
                      path : '/HandlerRegistry/findWhen',
-                     body : [ constraints:json_constraints?.toString() ],
+                     body : [ constraints:json_constraints?.toString(),
+                              remote_instance_id:sys_id ],
                      requestContentType : URLENC )
  
       // assert resp.status == 200
