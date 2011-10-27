@@ -96,3 +96,14 @@ log4j = {
 
     warn   'org.mortbay.log'
 }
+
+// /** = authcBasic
+
+security.shiro.filter.config = """
+[filters]
+authcBasic = org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter
+authcBasic.applicationName='Repository Handler Registry'
+
+[urls]
+/findWhen* = authcBasic
+"""
