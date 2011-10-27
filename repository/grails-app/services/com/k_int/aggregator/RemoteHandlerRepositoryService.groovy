@@ -10,7 +10,22 @@ import org.springframework.context.*
 class RemoteHandlerRepositoryService implements ApplicationContextAware {
 
     ApplicationContext applicationContext
+
     def handlerExecutionService
+    def sys_id = null
+    def remote_repo = null
+    def remote_user = null
+    def remote_pass = null
+
+    @javax.annotation.PostConstruct
+    def init() {
+      log.debug("Init");
+      sys_id = Setting.findByStKey('instanceid').stValue
+      remote_repo = Setting.findByStKey('handlerServiceURL').stValue
+      remote_user = Setting.findByStKey('handlerServiceUser').stValue
+      remote_pass = Setting.findByStKey('handlerServicePass').stValue
+      log.debug("At startup, this system is identified by repository id ${sys_id}. Remote repo is ${remote_repo}, user at remote repo is ${remote_user}")
+    }
 
     def findHandlerWhen(props) {
 

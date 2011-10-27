@@ -1,6 +1,7 @@
 import com.k_int.aggregator.*
 
 import org.apache.shiro.crypto.hash.Sha256Hash
+import grails.util.GrailsUtil
 
 class BootStrap {
 
@@ -39,22 +40,32 @@ class BootStrap {
                                                                                                         active:true,
                                                                                                         preconditions:['p.content_type=="application/xml" || p.content_type=="text/xml"']).save()
 
-      // log.debug("ECDDepositHandler");
-      // def ecd_deposit_handler = EventHandler.findByName("ECDHandler") ?: new ServiceEventHandler(name:'ECDHandler',
-      //                                                                                            eventCode:'com.k_int.aggregator.event.upload.xml',
-      //                                                                                            targetBeanId:'builtInHandlersService',
-      //                                                                                            targetMethodName:'handleECD',
-      //                                                                                            active:true,
-      //                                                                                            preconditions:['p.rootElementNamespace=="http://dcsf.gov.uk/XMLSchema/Childcare"']).save()
-
-      def system_id = Setting.findByStKey('instanceid')
-      if ( system_id == null ) {
-        system_id = new Setting(stKey:'systemid',stValue:java.util.UUID.randomUUID().toString())
-        system_id.save()
+      switch (GrailsUtil.environment) {
+        case 'development':
+          log.debug("Configuring for development environment");
+          verifySetting('instanceid','dev');
+          verifySetting('handlerServiceURL','http://localhost:8090/HandlerRegistry');
+          verifySetting('handlerServiceUser','anonymous');
+          verifySetting('handlerServicePass','anonumous');
+          break
+        case 'production':
+          log.debug("Configuring for production environment");
+          verifySetting('instanceid',java.util.UUID.randomUUID().toString());
+          verifySetting('handlerServiceURL','http://aggrconf.k-int.com');
+          verifySetting('handlerServiceUser','anonymous');
+          verifySetting('handlerServicePass','anonumous');
+          break
       }
-      log.debug("BootStrap::init end. syste, instanceid is ${system_id.stValue}");
     }
 
     def destroy = {
+    }
+
+    def verifySetting(key,value) {
+      def setting = Setting.findByStKey(key)
+      if ( setting == null ) {
+        setting = new Setting(stKey:key,stValue:value)
+        setting.save()
+      }
     }
 }
