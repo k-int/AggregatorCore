@@ -1,6 +1,18 @@
-readme for aggregator
+readme for aggregatorG
 
 
 Common ES search: 
 
 http://localhost:9200/courses/course/_search?q=painting%20AND%20A2
+
+
+Clearing down
+
+mongo <<!!
+use oda;
+db.aggregations.remove({});
+use xcri;
+db.courses.remove({});
+!!
+
+curl -XDELETE 'http://localhost:9200/courses/'

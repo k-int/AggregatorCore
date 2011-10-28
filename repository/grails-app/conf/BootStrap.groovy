@@ -43,19 +43,16 @@ class BootStrap {
       switch (GrailsUtil.environment) {
         case 'development':
           log.debug("Configuring for development environment");
-          verifySetting('instanceid','dev');
           verifySetting('handlerServiceURL','http://localhost:8090/HandlerRegistry');
-          verifySetting('handlerServiceUser','anonymous');
-          verifySetting('handlerServicePass','anonymous');
           break
         case 'production':
           log.debug("Configuring for production environment");
-          verifySetting('instanceid',java.util.UUID.randomUUID().toString());
           verifySetting('handlerServiceURL','http://aggrconf.k-int.com');
-          verifySetting('handlerServiceUser','anonymous');
-          verifySetting('handlerServicePass','anonymous');
           break
       }
+      verifySetting('instanceid',java.util.UUID.randomUUID().toString());
+      verifySetting('handlerServiceUser','anonymous');
+      verifySetting('handlerServicePass','anonymous');
     }
 
     def destroy = {
