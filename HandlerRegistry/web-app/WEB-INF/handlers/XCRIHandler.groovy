@@ -2,7 +2,7 @@ package com.k_int.repository.handlers
 
 @GrabResolver(name='es', root='https://oss.sonatype.org/content/repositories/releases')
 
-@Grab(group='com.gmongo', module='gmongo', version='0.5.1')
+@Grab(group='com.gmongo', module='gmongo', version='0.9.2')
 @Grab(group='org.elasticsearch', module='elasticsearch-lang-groovy', version='0.17.8')
 
 import com.gmongo.GMongo
@@ -134,7 +134,7 @@ class XCRIHandler {
       }
       else {
         log.error("Failed to store course information");
-        props.response.eventLog.add([type:"msg",msg:"There was an unexpected error trying to store the course information");
+        props.response.eventLog.add([type:"msg",msg:"There was an unexpected error trying to store the course information"]);
       }
     }
 
