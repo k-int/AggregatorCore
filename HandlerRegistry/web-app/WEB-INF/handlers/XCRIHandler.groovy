@@ -118,16 +118,24 @@ class XCRIHandler {
       db.courses.save(course_as_pojo);
 
       log.debug("Saved pojo: ${course_as_pojo} identifier will be \"${course_as_pojo['_id'].toString()}\"");
-      // Mongo inserts an _id into the record.. we can reuse that
 
-      log.debug("Sending record to es");
-      def future = esclient.index {
-        index "courses"
-        type "course"
-        id course_as_pojo['_id'].toString()
-        source course_as_pojo
+      if ( ( course_as_pojo != null ) && 
+           ( course_as_pojo['_id'] != null ) ) {
+        // Mongo inserts an _id into the record.. we can reuse that
+
+        log.debug("Sending record to es");
+        def future = esclient.index {
+          index "courses"
+          type "course"
+          id course_as_pojo['_id'].toString()
+          source course_as_pojo
+        }
+        log.debug("Indexed respidx:$future.response.index/resptp:$future.response.type/respid:$future.response.id")
       }
-      log.debug("Indexed respidx:$future.response.index/resptp:$future.response.type/respid:$future.response.id")
+      else {
+        log.error("Failed to store course information");
+        props.response.eventLog.add([type:"msg",msg:"There was an unexpected error trying to store the course information");
+      }
     }
 
     def elapsed = System.currentTimeMillis() - start_time
