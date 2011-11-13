@@ -5,6 +5,17 @@ Common ES search:
 
 http://localhost:9200/courses/course/_search?q=painting%20AND%20A2
 
+http://localhost:9200/courses/course/_search?q=title:science
+http://localhost:9200/courses/course/_search?q=*
+
+
+Example mongo search
+
+mongo <<!!
+use xcri
+db.courses.find({})
+!!
+
 
 Clearing down
 
@@ -16,3 +27,29 @@ db.courses.remove({});
 !!
 
 curl -XDELETE 'http://localhost:9200/courses/'
+
+
+
+
+Setting up ES:
+
+cluster:
+   name:   aggr
+
+node:
+   name: "Aggr Master"
+   master: true
+   data: true
+
+# bind to 0.0.0.0 by defauly
+# network:
+#    host: 127.0.0.1
+
+path:
+  logs: /var/log/elasticsearch
+  data: /var/data/elasticsearch
+
+http:
+   port: 9200
+   enabled: true
+

@@ -127,7 +127,7 @@ class XCRIHandler {
         id course_as_pojo['_id'].toString()
         source course_as_pojo
       }
-      log.debug("Indexed $future.response.index/$future.response.type/$future.response.id")
+      log.debug("Indexed respidx:$future.response.index/resptp:$future.response.type/respid:$future.response.id")
     }
 
     def elapsed = System.currentTimeMillis() - start_time
