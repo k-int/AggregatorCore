@@ -20,6 +20,7 @@ class HomeController {
     // Store a definition of the searchable part of the resource in mongo
     result.aggregations = [:]
     result.aggregations['es'] = db.aggregations.find(type: 'es')
+    result.aggregations['mongo'] = []
 
     // Ideally we would dynamically look up aggregation services here and auto discover any aggregations.
     // Look up any mongo headings
@@ -29,7 +30,10 @@ class HomeController {
     log.debug("Mongo databases: ${mongo_databases}");
     mongo_databases.each { md ->
       def db_colls = mongo.getDB(md);
-      log.debug("colls at ${md} - ${db_colls}");
+      // log.debug("colls at ${md} - ${db_colls}");
+      db_colls.each { mongo_coll ->
+        result.aggregations['mongo'].add([title:mongo_coll,identifier:mongo_coll,description:mongo_coll])
+      }
     }
 
     result.handlers = EventHandler.list()
