@@ -6,6 +6,7 @@ class EventHandler {
   String eventCode
   boolean active = false
   String[] preconditions
+  Date installDate = new java.util.Date()
 
   static constraints = {
   }

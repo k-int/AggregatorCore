@@ -3,9 +3,11 @@ package com.k_int.aggr3
 @Grab(group='com.gmongo', module='gmongo', version='0.9.2')
 
 import com.gmongo.GMongo
+import com.k_int.aggregator.*
 
 class HomeController {
 
+  def remoteHandlerRepositoryService
 
   def index = { 
 
@@ -30,9 +32,18 @@ class HomeController {
       log.debug("colls at ${md} - ${db_colls}");
     }
 
+    result.handlers = EventHandler.list()
+    
     // es_aggregations.each { esa ->
     //   log.debug(esa);
     // }
+
+    result.handlerrepos = []
+    result.handlerrepos.add( [
+                              url:remoteHandlerRepositoryService.remote_repo,
+                              user:remoteHandlerRepositoryService.remote_user])
+    result.sysid = remoteHandlerRepositoryService.sys_id
+
     result
   }
 }

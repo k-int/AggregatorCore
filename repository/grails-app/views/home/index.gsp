@@ -1,7 +1,7 @@
-This is the index page
+This is the index page - Open Data Aggregator - Instance ID : ${sysid}
 
-Public Aggregation Endpoints For this ODA are:
-
+<h2>Public Aggregation Endpoints For this ODA</h2>
+<p>
 <ul>
   <li>ElasticSearch
     <ul>
@@ -52,3 +52,44 @@ Public Aggregation Endpoints For this ODA are:
     </ul>
   </li>
 </ul>
+</p>
+
+<h2>Registered Handlers for this ODA instance</h2>
+<p>
+<table border="1">
+  <tr>
+    <th>Handler Name</th>
+    <th>Event Code</th>
+    <th>Active?</th>
+    <th>Preconditions</th>
+    <th>Install date</th>
+  </tr>
+<g:each in="${handlers}" var="h">
+  <tr>
+    <td>${h.name}</td>
+    <td>${h.eventCode}</td>
+    <td>${h.active}</td>
+    <td>
+      <ul>
+      <g:each in="${h.preconditions}" var="p">
+        <li>${p}</li>
+      </g:each>
+      </ul>
+    </td>
+    <td>${h.installDate}</td>
+  </tr>
+</g:each>
+</table>
+</p>
+
+<h2>Registered Remote Handler Repository for this ODA (${sysid})</h2>
+<p>
+When deposited resources are not identified by any registered handler, the following services will be consulted to see if an appropriate handler can be dynamically downloaded and installed
+</p>
+<p>
+<ul>
+<g:each in="${handlerrepos}" var="hr">
+  <li>${hr.url} using userid ${hr.user}</li>
+</g:each>
+</ul>
+</p>
