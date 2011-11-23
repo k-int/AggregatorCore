@@ -1,0 +1,4 @@
+The Zip test was created by moving into the ziptest1 dir and running
+
+zip -r -v ../ziptest1.zip ./*
+

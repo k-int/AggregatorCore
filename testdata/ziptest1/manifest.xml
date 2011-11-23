@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<culturegrid_item:description xmlns:culturegrid_item="http://www.peoplesnetwork.gov.uk/schema/CultureGrid_Item" 
+                              xmlns:dc="http://purl.org/dc/elements/1.1/" 
+                              xmlns:dcterms="http://purl.org/dc/terms/" 
+                              xmlns:e20cl="http://www.20thcenturylondon.org.uk" 
+                              xmlns:pnds_dc="http://purl.org/mla/pnds/pndsdc/" 
+                              xmlns:pndsterms="http://purl.org/mla/pnds/terms/" 
+                              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                              xsi:schemaLocation="http://www.peoplesnetwork.gov.uk/schema/CultureGrid_Item http://www.peoplesnetwork.gov.uk/schema/CultureGrid_Item.xsd">
+  <dc:identifier>http://media.culturegrid.org.uk/mediaLibrary/NCMG/BLDIDIT001363.jpg</dc:identifier>
+  <dc:title>telephone tester</dc:title>
+  <dc:description>in wooden box with plugs and spare fuses
+Accession number: NIM 1984-31</dc:description>
+  <dc:subject>telecommunications</dc:subject>
+  <dc:type encSchemeURI="http://purl.org/dc/terms/DCMIType">PhysicalObject</dc:type>
+  <dcterms:license valueURI="http://creativecommons.org/licenses/by-nc-sa/2.5/">Image Copyright Nottingham City Museums &amp; Galleries</dcterms:license>
+  <dcterms:rightsHolder>NCMG</dcterms:rightsHolder>
+  <dc:creator>made by Ediswan; used by British Insulated Calendar Cables</dc:creator>
+  <dcterms:temporal>1915</dcterms:temporal>
+  <dcterms:isPartOf>http://gossweb.nottinghamcity.gov.uk/www/collections12/Industry/default.asp</dcterms:isPartOf>
+  <pndsterms:thumbnail>file:./BLDIDIT001363.jpg</pndsterms:thumbnail>
+</culturegrid_item:description>

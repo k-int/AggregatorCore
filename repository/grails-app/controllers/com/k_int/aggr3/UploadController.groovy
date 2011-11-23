@@ -127,9 +127,17 @@ class UploadController {
         // Store the uploaded file for future reference.
 
         // bytes byte[] = file.getBytes()
-        log.debug( "Storring uploaded file in temporary storage....")
+        log.debug( "Storring uploaded file in temporary storage.... (content_type=${content_type})")
         def deposit_token = java.util.UUID.randomUUID().toString();
-        def temp_file_name = "./filestore/${deposit_token}.xml";
+
+        // Here we need to take special action if a compressed archive has been uploaded
+        def temp_file_name 
+        if ( content_type == '' ) {
+          temp_file_name = "./filestore/${deposit_token}.zip";
+        }
+        else {
+          temp_file_name = "./filestore/${deposit_token}.xml";
+        }
         def temp_file = new File(temp_file_name);
 
         // Copy the upload file to a temporary space
@@ -137,7 +145,8 @@ class UploadController {
 
         log.debug( "Create deposit event ${deposit_token}")
         // DepositEvent de = new DepositEvent(depositToken:deposit_token, status:'1',uploadUser:user)
-        DepositEvent de = new DepositEvent(depositToken:deposit_token, status:'1')
+        DepositEvent de = new DepositEvent(depositToken:deposit_token, 
+                                           status:'1')
         if ( de.save() ) {
           log.debug( "Created...")
 
