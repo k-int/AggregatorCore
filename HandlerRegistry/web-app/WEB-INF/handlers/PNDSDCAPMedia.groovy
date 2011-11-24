@@ -61,7 +61,12 @@ class PNDSDCAPMedia {
 
     def d2 = props.xml.declareNamespace(['xsi':'http://www.w3.org/2001/XMLSchema-instance',
                                          'xhtml':'http://www.w3.org/1999/xhtml',
-                                         'dc':'http://www.peoplesnetwork.gov.uk/schema/CultureGrid_Item'])
+                                         'dcterms':'http://purl.org/dc/terms/',
+                                         'e20cl':'http://www.20thcenturylondon.org.uk',
+                                         'pnds_dc':'http://purl.org/mla/pnds/pndsdc/',
+                                         'pndsterms':'http://purl.org/mla/pnds/terms/',
+                                         'dc':'http://purl.org/dc/elements/1.1/',
+                                         'culturegrid_item':'http://www.peoplesnetwork.gov.uk/schema/CultureGrid_Item'])
 
     log.debug("root element namespace: ${d2.namespaceURI()}");
     log.debug("lookup namespace: ${d2.lookupNamespace('xcri')}");
@@ -72,6 +77,7 @@ class PNDSDCAPMedia {
 
     props.response.eventLog.add([type:"msg",msg:"Identifier for this PNDS_DCAP document: ${id1}"])
 
+    def elapsed = System.currentTimeMillis() - start_time
     props.response.eventLog.add([type:"msg",msg:"Completed processing of ${course_count} courses from catalog ${id1} for provider ${props.owner} in ${elapsed}ms"]);
   }
 
