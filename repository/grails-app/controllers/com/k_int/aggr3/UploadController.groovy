@@ -158,6 +158,7 @@ class UploadController {
         def manifest_file = new File("${context_dir}/${manifest_filename}")
         if ( manifest_file.exists() ) {
           log.debug("Manifest file exists! ${manifest_filename}");
+          temp_file = manifest_file
         }
         else {
           log.debug("Can't locate manifest file... ${manifest_filename}");
@@ -178,6 +179,7 @@ class UploadController {
                                 "content_type":content_type, 
                                 "file":temp_file, 
                                 "response":response, 
+                                "context_dir":context_dir,
                                 "upload_event_token":deposit_token]
 
         // Firstly we need to select an appropriate handler for the com.k_int.aggregator.event.upload event
@@ -237,7 +239,6 @@ class UploadController {
         def bos = new BufferedOutputStream(new FileOutputStream("${context_dir}/${zfe.getName()}")) 
         bos << zf.getInputStream(zfe)
       }
-      
     }
   }
 
