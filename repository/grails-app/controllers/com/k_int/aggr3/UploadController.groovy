@@ -159,6 +159,8 @@ class UploadController {
         if ( manifest_file.exists() ) {
           log.debug("Manifest file exists! ${manifest_filename}");
           temp_file = manifest_file
+          def t = new org.apache.tika.Tika()
+          content_type = t.detect(manifest_file)
         }
         else {
           log.debug("Can't locate manifest file... ${manifest_filename}");

@@ -33,5 +33,7 @@ grails.project.dependency.resolution = {
         runtime 'mysql:mysql-connector-java:5.1.14'
         runtime 'com.gmongo:gmongo:0.9.2'
         runtime 'org.elasticsearch:elasticsearch-lang-groovy:0.18.4'
+        runtime 'org.apache.tika:tika-core:0.9'
+        // runtime 'org.apache.tika:tika-parsers:0.9' // this is for actually parsing files
     }
 }
