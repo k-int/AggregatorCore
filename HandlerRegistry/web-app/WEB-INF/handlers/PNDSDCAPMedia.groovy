@@ -48,7 +48,7 @@ class PNDSDCAPMedia {
 
     // Get hold of some services we might use ;)
     def mongo = new com.gmongo.GMongo();
-    def db = mongo.getDB("xcri")
+    def db = mongo.getDB("frbr")
     Object eswrapper = ctx.getBean('ESWrapperService');
     org.elasticsearch.groovy.node.GNode esnode = eswrapper.getNode()
     org.elasticsearch.groovy.client.GClient esclient = esnode.getClient()
@@ -76,6 +76,24 @@ class PNDSDCAPMedia {
     def id1 = d2.'dc:identifier'.text()
 
     props.response.eventLog.add([type:"msg",msg:"Identifier for this PNDS_DCAP document: ${id1}"])
+
+    log.debug("looking up work with identifier ${id1}");
+    def work_information = db.work.findOne(identifier: id1.toString())
+    def expression_information = db.expression.findOne(identifier: id1.toString())
+
+    if ( work_information == null ) 
+      work_information = [:]
+
+    if ( expression_information == null ) 
+      expression_information = [:]
+
+    expression_information.identifier = id1.toString();
+    work_information.identifier = id1.toString();
+
+    work_information.title = d2.'dc:title'?.text()?.toString();
+
+    db.expression.save(expression_information);
+    db.work.save(work_information);
 
     def elapsed = System.currentTimeMillis() - start_time
     props.response.eventLog.add([type:"msg",msg:"Completed processing of ${course_count} courses from catalog ${id1} for provider ${props.owner} in ${elapsed}ms"]);
