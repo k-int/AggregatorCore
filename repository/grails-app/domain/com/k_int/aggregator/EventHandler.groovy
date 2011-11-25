@@ -9,5 +9,6 @@ class EventHandler {
   Date installDate = new java.util.Date()
 
   static constraints = {
+    eventCode(maxSize:1000000)
   }
 }

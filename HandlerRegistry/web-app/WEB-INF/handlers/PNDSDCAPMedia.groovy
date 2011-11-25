@@ -87,10 +87,15 @@ class PNDSDCAPMedia {
     if ( expression_information == null ) 
       expression_information = [:]
 
-    expression_information.identifier = id1.toString();
+    work_information._id = java.util.UUID.randomUUID().toString()
     work_information.identifier = id1.toString();
-
     work_information.title = d2.'dc:title'?.text()?.toString();
+
+    expression_information._id = java.util.UUID.randomUUID().toString()
+    expression_information.pns_identifier = id1.toString();
+    expression_information.work_id = work_information._id;
+
+    log.debug("Saving expression instance: ${expression_information._id}, work instance:${work_information._id}");
 
     db.expression.save(expression_information);
     db.work.save(work_information);
