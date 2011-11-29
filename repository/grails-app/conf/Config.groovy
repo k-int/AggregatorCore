@@ -104,6 +104,14 @@ com {
       handlers {
         remoteRepo='http://localhost:8090'
       }
+      aggregationServices {
+        solr {
+          SolrDefault {
+            name='Default SOLR Server'
+            baseUrl=''
+          }
+        }
+      }
     }
   }
 }
