@@ -6,8 +6,14 @@ grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
     inherits("global") {
         // uncomment to disable ehcache
-        // excludes 'ehcache'
-        excludes 'jcl-over-slf4j','slf4j-log4j12'
+        // excludes 'ehcache' 
+        // /usr/local/grails-1.3.7/src/java/org/codehaus/groovy/grails/resolve/IvyDependencyManager.groovy
+        // 'org.slf4j:slf4j-api:1.5.8', 
+        // 'org.slf4j:slf4j-log4j12:1.5.8', 
+        // 'org.slf4j:jcl-over-slf4j:1.5.8'
+        // excludes "slf4j-api",
+        //          "slf4j-log4j12",
+        //          "jcl-over-slf4j"
     }
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     repositories {
@@ -37,13 +43,14 @@ grails.project.dependency.resolution = {
         runtime 'org.apache.tika:tika-core:0.9'
         // runtime (group:'org.apache.solr',name:'solr-solrj',version:'3.5.0', transitive:false)  // This seems to work!
         runtime (group:'org.apache.solr',name:'solr-solrj',version:'3.5.0') {
-          excludes([group:'org.slf4j',name:'slf4j-api'],
-                   [group:'org.slf4j',name:'slf4j-log4j12'])
+          excludes([group:'org.slf4j',name:'slf4j-api',version:'1.5.8'],
+                   [group:'org.slf4j',name:'jcl-over-slf4j',version:'1.5.8'],
+                   [group:'org.slf4j',name:'slf4j-log4j12',version:'1.5.8'])
         }
         //  Special dependencies because of solrj dep conflicts.
-        runtime 'org.slf4j:slf4j-api:1.6.4'
-        runtime 'org.slf4j:slf4j-log4j12:1.6.4'
-        runtime 'org.slf4j:jcl-over-slf4j:1.6.4'
+        // runtime 'org.slf4j:slf4j-api:1.6.4'
+        // runtime 'org.slf4j:slf4j-log4j12:1.6.4'
+        // runtime 'org.slf4j:jcl-over-slf4j:1.6.4'
 
         // runtime 'org.apache.tika:tika-parsers:0.9' // this is for actually parsing files
     }
