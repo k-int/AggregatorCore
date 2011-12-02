@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog 
+		 xsi:schemaLocation="http://www.nottingham.ac.uk/eportfolio/test/xcri http://www.nottingham.ac.uk/eportfolio/test/xcri/ahpp.xsd"
+		 xmlns:x="http://www.w3.org/1999/xhtml" 
+		 generated="2009-12-17T10:10:05+00:00" 
+		 xmlns="http://xcri.org/profiles/catalog" 
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		 xmlns:xcri="http://xcri.org/profiles/catalog"
+		 xmlns:ahpp="http://www.nottingham.ac.uk/eportfolio/test/xcri">
+		 <!-- .xsd file to be created for ahpp xmnls -->
+		<provider recdatetime="2009-12-17T10:10:05+00:00">
+		<identifier>ii2-10001919</identifier>
+		<!-- 
+				UKPRN
+					Castle - 10007813
+					Derby - 10001919
+					NCN - 10004577
+					NTU - 10004797
+					
+			  Progression Pathways Provider IDs for import info
+			  Provider ID 4 corresponds to Castle College Nottingham,
+			  Provider ID 6 is Derby College
+			  Provider ID 12 is NCN
+			  Provider ID 26 is NTU
+		-->
+		<title>Derby College</title>
+		<url>http://www.derby-college.ac.uk/</url>
+		<address>Prince Charles Avenue</address>
+		<address>Derby</address>
+		<address>Derbyshire</address>
+		<street>Prince Charles Avenue</street>
+		<town>Derby</town>
+		<postcode> DE22 4LR</postcode>
+		<phone>0800 028 0289</phone>
+		<email>enquiries@derby-college.ac.uk</email>
+		<!--
+			Course Search (For info purposes)
+			Courses can be searched upon:-
+					Grade
+					Region/Area
+					Post Code (User enters thier postcode courses are searched in proximity
+					Subject
+					Keyword Search: Which searches:-
+						Subject Area 1
+						Subject Area 2
+						Course Title, QCASubject, Award, level and Award Type
+		-->
+		<!--
+			recstatus indicates nature of change to the feed 1 = Added, 2 = Updated, 3 = Deleted. 
+		-->
+	<course>
+		<identifier>20402---2</identifier>
+		<title>Beginners Painting and Drawing</title>
+		<description xsi:type="ahpp:QAN"></description>
+		<description xsi:type="xcri:topic"></description>
+		<subject>A2 Levels</subject>
+		<url>http://www.derby-college.ac.uk/course-search?dcl_c=0&amp;dcl_t=&amp;dcl_k=20402&amp;do=1</url>
+		<qualification>
+			<description>Non Council funded studies</description>
+			<level>1</level>
+			<awardedBy>NONE</awardedBy>
+		</qualification>
+		<presentation>
+			<identifier>JWVA0006EX</identifier>
+			<duration>1 Year(s)</duration>
+			<attendanceMode>pt</attendanceMode>
+			<venue>
+				<title>JWC</title>
+			</venue>
+			<cost> exam:0 tuition:120</cost>
+			<entryRequirements>
+				<description>
+					<div xmlns="http://www.w3.org/1999/xhtml"></div>
+				</description>
+			</entryRequirements>
+			<enquireTo></enquireTo>
+		</presentation>
+	</course>
+	<course>
+		<identifier>18590---2</identifier>
+		<title>A2 Applied Science (Double Award)</title>
+		<description xsi:type="ahpp:QAN"></description>
+		<description xsi:type="xcri:topic">Applied Science is a more practical and coursework orientated programme than traditional A-level Sciences. You will cover a mixture of biology, chemistry and physics, plus topics such as social and economic science, project management and professional report preparation.  Offered as a Double A-level only.</description>
+		<subject>A2 Levels</subject>
+		<url>http://www.derby-college.ac.uk/course-search?dcl_c=0&amp;dcl_t=&amp;dcl_k=18590&amp;do=1</url>
+		<qualification>
+			<description>GCE Applied A2 (Double Award)</description>
+			<level>3</level>
+			<awardedBy>OCR</awardedBy>
+		</qualification>
+		<presentation>
+			<identifier>JWA20045DX</identifier>
+			<duration>1 Year(s)</duration>
+			<attendanceMode>ft</attendanceMode>
+			<venue>
+				<title>JWC</title>
+			</venue>
+			<cost> exam:72 tuition:1338</cost>
+			<entryRequirements>
+				<description>
+					<div xmlns="http://www.w3.org/1999/xhtml">CC at Science GCSE plus C at Maths and English plus at least 1 more grade C. </div>
+				</description>
+			</entryRequirements>
+			<enquireTo>For more information contact Derby College on 0800 0280289 or enquiries@derby-college.ac.uk.</enquireTo>
+		</presentation>
+	</course>
+  </provider>
+</catalog>
