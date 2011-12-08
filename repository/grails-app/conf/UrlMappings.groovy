@@ -9,7 +9,7 @@ class UrlMappings {
                    }
                 }
 
-		"/$controller/$action?/$id?"{
+		"/$controller/$id?/$action?" {
 			constraints {
 				// apply constraints here
 			}

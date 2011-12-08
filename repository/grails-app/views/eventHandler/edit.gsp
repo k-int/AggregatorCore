@@ -74,13 +74,26 @@
                               <label for="preconditions"><g:message code="eventHandler.preconditions.label" default="Preconditions" /></label>
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: eventHandlerInstance, field: 'preconditions', 'errors')}">
+                              ${eventHandlerInstance?.preconditions}                      
                                 
+                            </td>
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name">
+                              <label for="eventCode"><g:message code="eventHandler.eventCode.label" default="Event Code" /></label>
+                            </td>
+                            <td valign="top" class="value ${hasErrors(bean: eventHandlerInstance, field: 'eventCode', 'errors')}">
+                              ${eventHandlerInstance?.eventCode}                      
                             </td>
                         </tr>
                     
                     </tbody>
                 </table>
-              	<g:textArea name="eventCode" cols="40" rows="5" value="${eventHandlerInstance?.eventCode}" />
+
+Event Handler Code <br/>
+              	<g:textArea name="eventCode" cols="40" rows="5" value="${eventHandlerInstance?.scriptlet}" />
+
             </div>
             <div id="tabs">
 				<ul>

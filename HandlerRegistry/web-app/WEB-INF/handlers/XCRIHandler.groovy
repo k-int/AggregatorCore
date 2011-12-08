@@ -49,6 +49,7 @@ class XCRIHandler {
     // Get hold of some services we might use ;)
     def mongo = new com.gmongo.GMongo();
     def db = mongo.getDB("xcri")
+    Object solrwrapper = ctx.getBean('SOLRWrapperService');
     Object eswrapper = ctx.getBean('ESWrapperService');
     org.elasticsearch.groovy.node.GNode esnode = eswrapper.getNode()
     org.elasticsearch.groovy.client.GClient esclient = esnode.getClient()
@@ -144,7 +145,10 @@ class XCRIHandler {
 
   def setup(ctx) {
     log.debug("This is the XCRI handler setup method");
+
     Object eswrapper = ctx.getBean('ESWrapperService');
+    Object solrwrapper = ctx.getBean('SOLRWrapperService');
+
     org.elasticsearch.groovy.node.GNode esnode = eswrapper.getNode()
     org.elasticsearch.groovy.client.GClient esclient = esnode.getClient()
 
@@ -198,5 +202,9 @@ class XCRIHandler {
                                     [ field:'title', label:'Title' ], 
                                     [ field:'descriptions', label:'Description' ] ]
     db.aggregations.save(courses_aggregation);
+
+
+    // Confirm SOLR setup for this aggregation
+    solrwrapper.verifyCore('courses');
   }
 }

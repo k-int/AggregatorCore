@@ -108,9 +108,13 @@ com {
       }
       aggregationServices {
         solr {
-          SolrDefault {
+          default_core_name='DefaultSolr'
+          DefaultSolr {
             name='Default SOLR Server'
-            baseUrl=''
+            baseUrl='http://localhost:8085/solr'
+            adminConfig {
+              basedir='/usr/local/solr'
+            }
           }
         }
       }

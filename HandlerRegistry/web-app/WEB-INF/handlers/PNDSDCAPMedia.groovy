@@ -25,6 +25,12 @@ class PNDSDCAPMedia {
   // Or search everything
   // http://localhost:9200/_search?q=painting%20AND%20A2
 
+  // Some notes on FRBR interpretations
+  // Work - abstract definition of the subject
+  // Expression - Photographic information
+  // Manifestation - Thumbnails, Primary Items, Alternate Formats
+  // Item - Instance Information - Specific identified copies.
+
   // handlers have access to the repository mongo service.. suggest you use http://blog.paulopoiati.com/2010/06/20/gmongo-0-5-released/
   def getHandlerName() {
     "PNDS_DCAP_Media"
@@ -107,6 +113,8 @@ class PNDSDCAPMedia {
 
     def elapsed = System.currentTimeMillis() - start_time
     props.response.eventLog.add([type:"msg",msg:"Completed processing of PNDS_DCAP encoded resource identified by ${id1}"]);
+
+    // create the denormalised retrieval records (Work and Manifestation)
   }
 
   def setup(ctx) {
@@ -122,48 +130,5 @@ class PNDSDCAPMedia {
     // Get hold of an index admin client
     org.elasticsearch.groovy.client.GIndicesAdminClient index_admin_client = new org.elasticsearch.groovy.client.GIndicesAdminClient(esclient);
 
-    // use http://localhost:9200/_all/_mapping to list all installed mappings
-
-    // Declare a mapping of type "course" that explains to ES how it should index course elements
-    // log.debug("Attempting to put a mapping for course...");
-    // def future = index_admin_client.putMapping {
-    //   indices 'courses'
-    //   type 'course'
-    //   source {
-    //     course {       // Think this is the name of the mapping within the type
-    //       properties {
-    //         title {
-    //           type = 'string'
-    //           store = 'yes'
-    //         }
-    //         widgetid {
-    //           type = 'string'
-    //           store = 'yes'
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
-    // log.debug("Installed course mapping ${future}");
-
-    // Store a definition of the searchable part of the resource in mongo
-    // def courses_aggregation = db.aggregations.findOne(identifier: 'uri:aggr:cld:courses')
-
-    // if ( courses_aggregation == null ) {
-      // Create a definition of a course CLD
-    //   courses_aggregation = [:]
-    // }
-
-    // courses_aggregation.identifier = 'uri:aggr:cld:courses'
-    // courses_aggregation.type = 'es'
-    // courses_aggregation.indexes = ['courses']
-    // courses_aggregation.types = ['course']
-    // courses_aggregation.title = 'All UK Courses'
-    // courses_aggregation.description = 'An searchable aggregation of course descriptions from institutions in the UK'
-    // courses_aggregation.access_points = [ 
-    //                                 [ field:'identifier', label:'Identifier' ], 
-    //                                 [ field:'title', label:'Title' ], 
-    //                                 [ field:'descriptions', label:'Description' ] ]
-    // db.aggregations.save(courses_aggregation);
   }
 }
