@@ -53,6 +53,9 @@ class PNDSDCAPMedia {
     org.elasticsearch.groovy.node.GNode esnode = eswrapper.getNode()
     org.elasticsearch.groovy.client.GClient esclient = esnode.getClient()
 
+    // Co referencing service
+    Object coref_service = ctx.getBean('coReferenceService');
+
     log.debug("After call to getbean-eswrapper : ${eswrapper}");
 
     // Start processing proper
@@ -78,6 +81,8 @@ class PNDSDCAPMedia {
     props.response.eventLog.add([type:"msg",msg:"Identifier for this PNDS_DCAP document: ${id1}"])
 
     log.debug("looking up work with identifier ${id1}");
+    coref_service.registerIdentifier(id1);
+
     def work_information = db.work.findOne(identifier: id1.toString())
     def expression_information = db.expression.findOne(identifier: id1.toString())
 
@@ -101,7 +106,7 @@ class PNDSDCAPMedia {
     db.work.save(work_information);
 
     def elapsed = System.currentTimeMillis() - start_time
-    props.response.eventLog.add([type:"msg",msg:"Completed processing of ${course_count} courses from catalog ${id1} for provider ${props.owner} in ${elapsed}ms"]);
+    props.response.eventLog.add([type:"msg",msg:"Completed processing of PNDS_DCAP encoded resource identified by ${id1}"]);
   }
 
   def setup(ctx) {

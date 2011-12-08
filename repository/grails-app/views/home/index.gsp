@@ -1,6 +1,6 @@
-This is the index page - Open Data Aggregator - Instance ID : ${sysid}
+${grailsApplication.config.aggr.system.name} - Instance ID : ${sysid}
 
-<h2>Public Aggregation Endpoints For this ODA</h2>
+<h2>Public Aggregation (Search/Retrieve) Endpoints For This Repository</h2>
 <p>
 <ul>
   <li>ElasticSearch
@@ -54,7 +54,7 @@ This is the index page - Open Data Aggregator - Instance ID : ${sysid}
 </ul>
 </p>
 
-<h2>Registered Handlers for this ODA instance</h2>
+<h2>Registered Handlers for this repository instance</h2>
 <p>
 <table border="1">
   <tr>

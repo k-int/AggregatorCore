@@ -1,4 +1,4 @@
-<h1>Metadata upload form</h1>
+<h1>${grailsApplication.config.aggr.system.name} - Resource Deposit</h1>
 
 <g:if test="${code}">Response code : ${code} </br></g:if>
 <g:if test="${status}">Response status : ${status} </br></g:if>
