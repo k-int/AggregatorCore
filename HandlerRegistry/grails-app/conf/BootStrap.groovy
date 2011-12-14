@@ -33,7 +33,7 @@ class BootStrap {
           def nh = Handler.findByName(h.getHandlerName()) ?: new Handler(name:h.getHandlerName(), preconditions:h.getPreconditions()).save()
           def nr = new HandlerRevision(owner:nh, 
                                        revision:h.getRevision(), 
-                                       handler:handler_file.text).save();
+                                       handlerText:handler_file.text).save();
         }
       }
 

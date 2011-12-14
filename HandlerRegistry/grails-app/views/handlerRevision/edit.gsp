@@ -61,7 +61,7 @@
                   		</tr>
                   	</tbody>
                 </table>
-                <g:textArea name="handler" cols="40" rows="5" value="${handlerRevisionInstance?.handler}" />
+                <g:textArea name="handler" cols="40" rows="5" value="${handlerRevisionInstance?.handlerText}" />
                 </div>
                 <div id="tabs">
 					<ul>

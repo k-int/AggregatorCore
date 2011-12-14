@@ -47,7 +47,7 @@ class FindWhenController {
           log.debug("Lookup handler revisions returns ${handler_revisions}");
           if ( handler_revisions.size() > 0 ) {
             def the_handler = handler_revisions.get(0);
-            result.handler = the_handler.handler;
+            result.handler = the_handler.handlerText;
             result.handler_revision = the_handler.revision;
             result.eventCode = 'com.k_int.aggregator.event.upload.xml';
             result.preconditions = handler.preconditions;

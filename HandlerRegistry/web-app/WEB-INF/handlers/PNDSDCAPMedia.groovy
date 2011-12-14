@@ -60,7 +60,7 @@ class PNDSDCAPMedia {
     org.elasticsearch.groovy.client.GClient esclient = esnode.getClient()
 
     // Co referencing service
-    Object coref_service = ctx.getBean('coReferenceService');
+    // Object coref_service = ctx.getBean('coReferenceService');
 
     log.debug("After call to getbean-eswrapper : ${eswrapper}");
 
@@ -87,7 +87,7 @@ class PNDSDCAPMedia {
     props.response.eventLog.add([type:"msg",msg:"Identifier for this PNDS_DCAP document: ${id1}"])
 
     log.debug("looking up work with identifier ${id1}");
-    coref_service.registerIdentifier(id1);
+    // coref_service.registerIdentifier(id1);
 
     def work_information = db.work.findOne(identifier: id1.toString())
     def expression_information = db.expression.findOne(identifier: id1.toString())

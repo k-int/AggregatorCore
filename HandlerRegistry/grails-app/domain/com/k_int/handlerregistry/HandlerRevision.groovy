@@ -4,10 +4,10 @@ class HandlerRevision {
 
   Handler owner
   long revision
-  String handler
+  String handlerText
 
   static constraints = {
-    handler(maxSize:1000000)  
+    handlerText(maxSize:1000000)  
   }
 
 }

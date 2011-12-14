@@ -32,8 +32,8 @@
                                 <td valign="top" class="name">
                                     <label for="handler"><g:message code="handlerRevision.handler.label" default="Handler" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: handlerRevisionInstance, field: 'handler', 'errors')}">
-                                    <g:textArea name="handler" cols="40" rows="5" value="${handlerRevisionInstance?.handler}" />
+                                <td valign="top" class="value ${hasErrors(bean: handlerRevisionInstance, field: 'handlerText', 'errors')}">
+                                    <g:textArea name="handler" cols="40" rows="5" value="${handlerRevisionInstance?.handlerText}" />
                                 </td>
                             </tr>
                         
