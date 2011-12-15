@@ -2,6 +2,7 @@ package com.k_int.aggr3
 
 import com.k_int.aggregator.*;
 import org.apache.shiro.SecurityUtils
+import grails.converters.*
 
 class UploadController {
 
@@ -122,6 +123,7 @@ class UploadController {
       def content_type = file.contentType
       def temp_file_name 
       def context_dir
+      def t = new org.apache.tika.Tika()
 
       validateUploadDir("./filestore");
 
@@ -131,19 +133,17 @@ class UploadController {
       log.debug( "Storring uploaded file in temporary storage.... (content_type=${content_type})")
       def deposit_token = java.util.UUID.randomUUID().toString();
 
-      // Here we need to take special action if a compressed archive has been uploaded
-      if ( content_type == 'application/zip' ) {
-        log.debug("uploaded item is a zip archive")
-        temp_file_name = "./filestore/${deposit_token}.zip";
-      }
-      else {
-        temp_file_name = "./filestore/${deposit_token}.xml";
-      }
-
+      temp_file_name = "./filestore/${deposit_token}";
       def temp_file = new File(temp_file_name);
 
       // Copy the upload file to a temporary space
       file.transferTo(temp_file);
+
+      if ( content_type == 'application/octet-stream' ) {
+        log.debug("Uploaded content stream is application/octet-stream, not ideal... Try and guess the content");
+        content_type = t.detect(temp_file)
+        log.debug("Detected content type is ${content_type}")
+      }
 
       // If it's a compressed archive, we need to unpack it here too
       if ( content_type == 'application/zip' ) {
@@ -159,7 +159,6 @@ class UploadController {
         if ( manifest_file.exists() ) {
           log.debug("Manifest file exists! ${manifest_filename}");
           temp_file = manifest_file
-          def t = new org.apache.tika.Tika()
           content_type = t.detect(manifest_file)
         }
         else {
@@ -223,7 +222,13 @@ class UploadController {
     }
 
 
-    render(view:"index",model:response)
+    withFormat {
+      html { render(view:"index",model:response) }
+      json { render(response) as JSON } 
+      xml { render (response) as XML }
+    }
+
+    // render(view:"index",model:response)
   }
 
   def extract(temp_file, context_dir) {

@@ -79,6 +79,9 @@ class RemoteHandlerRepositoryService implements ApplicationContextAware {
           }
         }
       }
+      else {
+        log.warn("Error processing json response...");
+      }
 
       log.debug("Done");
       result;

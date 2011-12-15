@@ -90,8 +90,8 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 
-    debug  'grails.app.controller.com.k_int',
-           'grails.app.service.com.k_int',
+    debug  'grails.app.controllers.com.k_int',
+           'grails.app.services.com.k_int',
            'grails.app.domain.com.k_int',
            'grails.app.com.k_int',
            'com.k_int', 
@@ -133,7 +133,7 @@ security {
 authcBasic = org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter 
 authcBasic.applicationName = Repository
 [urls] 
-/upload = authcBasic 
+/upload* = authcBasic 
 """ 
     } 
 
