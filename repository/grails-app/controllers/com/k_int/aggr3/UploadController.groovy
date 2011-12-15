@@ -222,10 +222,13 @@ class UploadController {
     }
 
 
+    log.debug("request.format: ${request.format}");
+
     withFormat {
       html { render(view:"index",model:response) }
-      json { render(response) as JSON } 
-      xml { render (response) as XML }
+      js { render response as JSON } 
+      json { render response as JSON } 
+      xml { render response as XML }
     }
 
     // render(view:"index",model:response)
