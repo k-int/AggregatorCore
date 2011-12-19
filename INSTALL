@@ -1,0 +1,18 @@
+
+
+Linux installation
+
+http://mycodesnippets.com/
+
+sudo add-apt-repository ppa:groovy-dev/grails
+sudo apt-add-repository ppa:groovy-dev/groovy
+sudo apt-get update && sudo apt-get install grails
+
+The base aggregator needs access to aggregation services, the following are a suggested base set
+
+Elasticsearch
+
+MongoDB
+
+apt-get install mongodb-server mongodb
+

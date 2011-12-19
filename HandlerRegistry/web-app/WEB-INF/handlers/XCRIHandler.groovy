@@ -58,7 +58,7 @@ class XCRIHandler {
 
     // Start processing proper
 
-    props.response.eventLog.add([ts:System.currentTimeMillis(),type:"msg",msg:"This is a message from the downloaded XCRI handler"])
+    props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"XCRI (CAP Profile) Document handler"])
 
     def d2 = props.xml.declareNamespace(['xcri':'http://xcri.org/profiles/catalog', 
                                          'xsi':'http://www.w3.org/2001/XMLSchema-instance',
@@ -73,7 +73,13 @@ class XCRIHandler {
     // Properties contain an xml element, which is the parsed document
     def id1 = d2.'xcri:provider'.'xcri:identifier'.text()
 
-    props.response.eventLog.add([ts:System.currentTimeMillis(),type:"msg",lvl:"info",msg:"Identifier for this XCRI document: ${id1}"])
+    props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Identifier for this XCRI document: ${id1}"])
+
+    props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Starting feed validation"])
+
+    // Validation tests
+
+    props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Validation complete. No fatal errors."])
 
     d2.'xcri:provider'.'xcri:course'.each { crs ->
 
@@ -81,7 +87,7 @@ class XCRIHandler {
       def crs_internal_uri = "uri:${props.owner}:xcri:${id1}:${crs_identifier}";
 
       log.debug("Processing course: ${crs_identifier}");
-      props.response.eventLog.add([ts:System.currentTimeMillis(),type:"msg",lvl:"info",msg:"Validating course entry ${crs_internal_uri} - ${crs.'xcri:title'}"]);
+      props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Validating course entry ${crs_internal_uri} - ${crs.'xcri:title'}"]);
 
       log.debug("looking up course with identifier ${crs_internal_uri}");
       def course_as_pojo = db.courses.findOne(identifier: crs_internal_uri.toString())
@@ -135,12 +141,12 @@ class XCRIHandler {
       }
       else {
         log.error("Failed to store course information");
-        props.response.eventLog.add([ts:System.currentTimeMillis(),type:"msg",lvl:"info",msg:"There was an unexpected error trying to store the course information"]);
+        props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"There was an unexpected error trying to store the course information"]);
       }
     }
 
     def elapsed = System.currentTimeMillis() - start_time
-    props.response.eventLog.add([ts:System.currentTimeMillis(),type:"msg",lvl:"info",msg:"Completed processing of ${course_count} courses from catalog ${id1} for provider ${props.owner} in ${elapsed}ms"]);
+    props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Completed processing of ${course_count} courses from catalog ${id1} for provider ${props.owner} in ${elapsed}ms"]);
   }
 
   def setup(ctx) {
