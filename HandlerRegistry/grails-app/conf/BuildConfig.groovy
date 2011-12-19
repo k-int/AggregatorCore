@@ -36,6 +36,7 @@ grails.project.dependency.resolution = {
         //
         // For now, we make sure the deps are available at compile time so we aren't reliant upon the @grape @grab
         // The downside is plugins can only access jars that are imported here.
+
         compile 'org.codehaus.groovy:groovy-all:1.8.1'
         runtime 'mysql:mysql-connector-java:5.1.14'
         runtime 'com.gmongo:gmongo:0.9.2'
@@ -46,7 +47,6 @@ grails.project.dependency.resolution = {
           excludes([group:'org.slf4j',name:'slf4j-api',version:'1.5.8'],
                    [group:'org.slf4j',name:'jcl-over-slf4j',version:'1.5.8'],
                    [group:'org.slf4j',name:'slf4j-log4j12',version:'1.5.8'])
-
         }
     }
 }
