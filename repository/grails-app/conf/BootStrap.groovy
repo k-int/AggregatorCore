@@ -2,6 +2,8 @@ import com.k_int.aggregator.*
 
 import org.apache.shiro.crypto.hash.Sha256Hash
 import grails.util.GrailsUtil
+import org.codehaus.groovy.grails.commons.ApplicationHolder
+
 
 class BootStrap {
 
@@ -9,6 +11,8 @@ class BootStrap {
     def ESWrapperService
 
     def init = { servletContext ->
+
+      log.debug("System name: ${ApplicationHolder.application.config.aggr.system.name}");
 
       log.debug("Verify default Shiro User");
       def user = ShiroUser.findByUsername("admin")
@@ -40,25 +44,23 @@ class BootStrap {
                                                                                                         active:true,
                                                                                                         preconditions:['p.content_type=="application/xml" || p.content_type=="text/xml"']).save()
 
-      switch (GrailsUtil.environment) {
-        case 'development':
-          log.debug("Configuring for development environment");
-          verifySetting('handlerServiceURL','http://localhost:8090/HandlerRegistry');
-          break
-        case 'production':
-          log.debug("Configuring for production environment");
-          verifySetting('handlerServiceURL','http://aggrconf.k-int.com');
-          break
+      if ( ApplicationHolder.application.config.repo?.settings != null ) {
+        def p = ApplicationHolder.application.config.repo?.settings.toProperties()
+        p.propertyNames().each { pname ->
+          verifySetting(pname, p[pname])
+        }
       }
+
       verifySetting('instanceid',java.util.UUID.randomUUID().toString());
-      verifySetting('handlerServiceUser','anonymous');
-      verifySetting('handlerServicePass','anonymous');
+
+      log.debug("Completed veryfying default settings\n\n");
     }
 
     def destroy = {
     }
 
     def verifySetting(key,value) {
+      log.debug("verify ${key}=${value}");
       def setting = Setting.findByStKey(key)
       if ( setting == null ) {
         setting = new Setting(stKey:key,stValue:value)
