@@ -16,3 +16,6 @@ MongoDB
 
 apt-get install mongodb-server mongodb
 
+
+
+Example groovy config files are in the config directory, and need to be copied to the owning user ~/.groovy directory
