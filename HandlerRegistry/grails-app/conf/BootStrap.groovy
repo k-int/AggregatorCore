@@ -22,11 +22,16 @@ class BootStrap {
       // see http://groovy.dzone.com/news/class-loading-fun-groovy for info on the strategy being used here
 
       if ( f.isDirectory() ) {
+
+        GroovyClassLoader gcl = new GroovyClassLoader();
+        log.debug("Using class loader: ${gcl.class.name}");
+
         f.listFiles().each { handler_file ->
           log.debug("Procesing ${handler_file}");
 
-          GroovyClassLoader gcl = new GroovyClassLoader();
-          Class clazz = gcl.parseClass(handler_file.text);
+          // Class clazz = gcl.parseClass(handler_file.text);
+          Class clazz = gcl.parseClass(handler_file)
+          // log.debug("Number of annotations in ${handler_file} : ${clazz.annotations.length} (This should be >0 for classes with grape annotations)");
           Object h = clazz.newInstance();
 
           log.debug("Loading handler: ${h.getHandlerName()} revision: ${h.getRevision()}, preconditions: ${h.getPreconditions()}");
