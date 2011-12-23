@@ -122,12 +122,11 @@ class XCRIHandler {
       log.debug("Saving mongo instance of course....${crs_internal_uri}");
 
       // db.courses.update([identifier:crs_internal_uri.toString()],course_as_pojo, true);
-      db.courses.save(course_as_pojo);
+      def mongo_store_result = db.courses.save(course_as_pojo);
 
-      log.debug("Saved pojo: ${course_as_pojo} identifier will be \"${course_as_pojo['_id'].toString()}\"");
+      log.debug("Saved pojo: ${course_as_pojo} (${mongo_store_result}) identifier will be \"${course_as_pojo['_id'].toString()}\"");
 
-      if ( ( course_as_pojo != null ) && 
-           ( course_as_pojo['_id'] != null ) ) {
+      if ( ( course_as_pojo != null ) && ( course_as_pojo['_id'] != null ) ) {
         // Mongo inserts an _id into the record.. we can reuse that
 
         log.debug("Sending record to es");
