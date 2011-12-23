@@ -31,11 +31,9 @@ class RemoteHandlerRepositoryService implements ApplicationContextAware {
 
       def result = null;
 
-      log.debug("Finding any remote handlers for properties : ${props.keySet()}, remote repo configured as ${ApplicationHolder.application.config.com.k_int.aggregator.handlers.remoteRepo}");
+      log.debug("Finding any remote handlers for properties : ${props.keySet()}, remote repo configured as ${remote_repo}");
 
 
-      // def remote_repo = new RESTClient( 'http://developer.k-int.com');
-      // def remote_repo = new RESTClient( ApplicationHolder.application.config.com.k_int.aggregator.handlers.remoteRepo )
       def remote_repo = new RESTClient( remote_repo )
       remote_repo.auth.basic remote_user, remote_pass
 

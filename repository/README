@@ -3,3 +3,41 @@ For plugins, mongo docs here: http://blog.paulopoiati.com/2010/06/20/gmongo-0-5-
 Elasticsearch config:
 
 
+
+
+You will need to create a ~/.grails/repository-config.groovy file with contents like
+
+
+--
+aggr.system.name='XCRI-CAP Aggregator'
+
+repo {
+  settings {
+    url='http://localhost:8090/HandlerRegistry'
+    user='anonymous'
+    pass='anonymous'
+  }
+}
+
+com {
+  k_int {
+    aggregator {
+      handlers {
+        remoteRepo='http://localhost:8090'
+      }
+      aggregationServices {
+        solr {
+          default_core_name='DefaultSolr'
+          DefaultSolr {
+            name='Default SOLR Server'
+            baseUrl='http://localhost:8085/solr'
+            adminConfig {
+              basedir='/usr/local/solr'
+            }
+          }
+        }
+      }
+    }
+  }
+}
+--

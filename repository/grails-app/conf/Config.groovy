@@ -101,27 +101,29 @@ log4j = {
     warn   'org.mortbay.log'
 }
 
-com {
-  k_int {
-    aggregator {
-      handlers {
-        remoteRepo='http://localhost:8090'
-      }
-      aggregationServices {
-        solr {
-          default_core_name='DefaultSolr'
-          DefaultSolr {
-            name='Default SOLR Server'
-            baseUrl='http://localhost:8085/solr'
-            adminConfig {
-              basedir='/usr/local/solr'
-            }
-          }
-        }
-      }
-    }
-  }
-}
+
+// The following config has moved to ~/.grails/repository-config.groovy
+// com {
+//  k_int {
+//    aggregator {
+//      handlers {
+//        remoteRepo='http://localhost:8090'
+//      }
+//      aggregationServices {
+//        solr {
+//          default_core_name='DefaultSolr'
+//          DefaultSolr {
+//            name='Default SOLR Server'
+//            baseUrl='http://localhost:8085/solr'
+//            adminConfig {
+//              basedir='/usr/local/solr'
+//            }
+//          }
+//        }
+//      }
+//    }
+//  }
+//}
 
 // /api/** = authcBasic 
 
