@@ -44,6 +44,7 @@ class BootStrap {
                                                                                                         active:true,
                                                                                                         preconditions:['p.content_type=="application/xml" || p.content_type=="text/xml"']).save()
 
+      log.debug("Verfy application settings");
       if ( ApplicationHolder.application.config.repo?.settings != null ) {
         def p = ApplicationHolder.application.config.repo?.settings.toProperties()
         p.propertyNames().each { pname ->

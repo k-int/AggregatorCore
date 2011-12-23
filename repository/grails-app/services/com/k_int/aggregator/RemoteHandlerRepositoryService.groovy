@@ -19,11 +19,11 @@ class RemoteHandlerRepositoryService implements ApplicationContextAware {
 
     @javax.annotation.PostConstruct
     def init() {
-      log.debug("Init");
-      sys_id = Setting.findByStKey('instanceid').stValue
-      remote_repo = Setting.findByStKey('handlerServiceURL').stValue
-      remote_user = Setting.findByStKey('handlerServiceUser').stValue
-      remote_pass = Setting.findByStKey('handlerServicePass').stValue
+      log.debug("Initialising Remote Handler Repository Service");
+      sys_id = Setting.findByStKey('instanceid')?.stValue
+      remote_repo = Setting.findByStKey('url')?.stValue
+      remote_user = Setting.findByStKey('user')?.stValue
+      remote_pass = Setting.findByStKey('pass')?.stValue
       log.debug("At startup, this system is identified by repository id ${sys_id}. Remote repo is ${remote_repo}, user at remote repo is ${remote_user}/${remote_pass}")
     }
 
