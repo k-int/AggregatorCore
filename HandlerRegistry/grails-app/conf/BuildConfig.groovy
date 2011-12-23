@@ -28,5 +28,25 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
         runtime 'mysql:mysql-connector-java:5.1.13'
+
+
+        // The following dependencies are listed because GroovyClassLoader.parseClass is, for some reason,
+        // not reading annotations when loading classes under grails run-war, although everything seems fine
+        // when running with grails run-app
+        //
+        // For now, we make sure the deps are available at compile time so we aren't reliant upon the @grape @grab
+        // The downside is plugins can only access jars that are imported here.
+
+        compile 'org.codehaus.groovy:groovy-all:1.8.1'
+        runtime 'mysql:mysql-connector-java:5.1.14'
+        runtime 'com.gmongo:gmongo:0.9.2'
+        runtime 'org.elasticsearch:elasticsearch-lang-groovy:0.18.4'
+        runtime 'org.apache.tika:tika-core:0.9'
+        // runtime (group:'org.apache.solr',name:'solr-solrj',version:'3.5.0', transitive:false)  // This seems to work!
+        runtime (group:'org.apache.solr',name:'solr-solrj',version:'3.5.0') {
+          excludes([group:'org.slf4j',name:'slf4j-api',version:'1.5.8'],
+                   [group:'org.slf4j',name:'jcl-over-slf4j',version:'1.5.8'],
+                   [group:'org.slf4j',name:'slf4j-log4j12',version:'1.5.8'])
+        }
     }
 }
