@@ -14,7 +14,7 @@ class BootStrap {
 
       log.debug("System name: ${ApplicationHolder.application.config.aggr.system.name}");
 
-      log.debug("Verify default Shiro User");
+      log.debug("Repository app : Verify default Shiro User");
       def user = ShiroUser.findByUsername("admin")
       if ( user == null ) {
         log.debug("admin user not found.. creating default");
@@ -23,7 +23,7 @@ class BootStrap {
         user.save()
       }
       else {
-        log.debug("Admin user verified");
+        log.debug("Repository Admin user verified");
       }
 
       log.debug("Validating default handler entries....");

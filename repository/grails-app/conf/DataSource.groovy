@@ -32,7 +32,7 @@ environments {
             driverClassName = "com.mysql.jdbc.Driver"
             username = "k-int"
             password = "k-int"
-            url = "jdbc:mysql://localhost/hreplive?autoReconnect=true&amp;characterEncoding=utf8"
+            url = "jdbc:mysql://localhost/Aggr3Live?autoReconnect=true&amp;characterEncoding=utf8"
         }
     }
 }
