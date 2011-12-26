@@ -12,15 +12,29 @@
 
 <g:if test="${eventLog}">
   <div id="eventLog">
-    <ul>
+    <table>
         <g:each in="${eventLog}" var="m">
-          <g:if test="{m.type=='msg'}">
-            <li>${m.msg}</li>
-          </g:if>
-          <g:if test="${m.type=='item'}">
-            <li>An item weas added</li>
-          </g:if>
+          <tr>
+            <td>${m.ts}</td>
+            <td>${m.type}</td>
+            <td>
+              <g:if test="${m.type=='msg'}">
+                ${m.msg}
+              </g:if>
+              <g:if test="${m.type=='ref'}">
+                <g:if test="${m.serviceref='mongo'}">
+                  Mongo uri : <a href="http://localhost:28017/${m.mongodb}/${m.mongoindex}/?filter__id=${m.mongoid}}">http://localhost:28017/${m.mongodb}/${m.mongoindex}/?filter__id=${m.mongoid}}</a>
+                </g:if>
+                <g:else>
+                  ref params: ${m}
+                </g:else>
+              </g:if>
+              <g:if test="${m.type=='item'}">
+                An item was added
+              </g:if>
+            </td>
+          </tr>
         </g:each>
-    </ul>
+    </table>
   </div>
 </g:if>

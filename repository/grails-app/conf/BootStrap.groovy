@@ -47,7 +47,7 @@ class BootStrap {
           break
         case 'production':
           log.debug("Configuring for production environment");
-          verifySetting('handlerServiceURL','http://aggrconf.k-int.com');
+          verifySetting('handlerServiceURL','http://localhost/HandlerRegistry');
           break
       }
       verifySetting('instanceid',java.util.UUID.randomUUID().toString());
