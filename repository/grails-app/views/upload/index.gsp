@@ -22,9 +22,16 @@
                 ${m.msg}
               </g:if>
               <g:if test="${m.type=='ref'}">
+                &nbsp;
                 <g:if test="${m.serviceref='mongo'}">
-                  Mongo uri : <a href="http://localhost:28017/${m.mongodb}/${m.mongoindex}/?filter__id=${m.mongoid}}">http://localhost:28017/${m.mongodb}/${m.mongoindex}/?filter__id=${m.mongoid}}</a>
+                  Mongo uri : <a href="http://localhost:28017/${m.mongodb}/${m.mongoindex}/?filter__id=${m.mongoid}">http://localhost:28017/${m.mongodb}/${m.mongoindex}/?filter__id=${m.mongoid}</a>
                 </g:if>
+                <g:elseif test="${m.serviceref='es'}">
+                  ElasticSearch : <a href="http://localhost:9200/${m.escollection}/${m.estype}/_search?q=${m.esid}">http://localhost:9200/${m.escollection}/${m.estype}/_search?q=${m.esid}</a>
+                </g:elseif>
+                <g:elseif test="${m.serviceref='xcriportal'}">
+                  ElasticSearch : <a href="http://localhost/XCRI/course/${m.id}">http://localhost/XCRI/course/${m.id}</a>
+                </g:elseif>
                 <g:else>
                   ref params: ${m}
                 </g:else>

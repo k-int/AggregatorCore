@@ -149,6 +149,15 @@ class XCRIHandler {
                                    serviceref:"xcriportal",
                                    id:course_as_pojo._id?.toString()]);
 
+      // Add an eventLog reponse that points to the entry for this course in the mongoDB
+      props.response.eventLog.add([ts:System.currentTimeMillis(),
+                                   type:"ref",
+                                   serviceref:"es",
+                                   escollection:"courses",
+                                   estype:"course",
+                                   esid:course_as_pojo._id?.toString()]);
+
+
       log.debug("Saved pojo: ${course_as_pojo} identifier will be \"${course_as_pojo['_id'].toString()}\"");
 
       if ( ( course_as_pojo != null ) && ( course_as_pojo['_id'] != null ) ) {
