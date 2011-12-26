@@ -102,7 +102,8 @@ class XCRIHandler {
         course_as_pojo = [:]
         // Gmongo driver doesn't seem good at passing back an _id, so we manually create one instead.
         // course_as_pojo._id = java.util.UUID.randomUUID().toString()
-        course_as_pojo._id = new com.mongodb.ObjectId()
+        // course_as_pojo._id = new com.mongodb.ObjectId()
+        course_as_pojo._id = new org.bson.types.ObjectId()
       }
 
       course_as_pojo.identifier = crs_internal_uri.toString();
