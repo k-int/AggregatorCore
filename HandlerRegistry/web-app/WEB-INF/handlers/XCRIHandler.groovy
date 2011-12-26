@@ -110,7 +110,8 @@ class XCRIHandler {
       course_as_pojo.title = crs.'xcri:title'?.text()?.toString();
       course_as_pojo.descriptions = [:]
       crs.'xcri:description'.each { desc ->
-        String desc_type = desc.@'xsi:type'?.text()?.toString()
+        String desc_type = desc.@'xsi:type'?.text()?.replaceAll(':','.').toString()
+
         if ( ( desc_type != null ) && ( desc_type.length() > 0 ) ) {
           course_as_pojo.descriptions[desc_type] = desc?.text()?.toString();
         }
