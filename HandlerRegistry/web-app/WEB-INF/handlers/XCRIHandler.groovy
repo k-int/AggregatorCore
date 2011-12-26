@@ -92,12 +92,17 @@ class XCRIHandler {
       log.debug("looking up course with identifier ${crs_internal_uri}");
       def course_as_pojo = db.courses.findOne(identifier: crs_internal_uri.toString())
 
+      def mongo_action = "updated"
       if ( course_as_pojo != null ) {
         log.debug("Located existing record... updating");
       }
       else {
+        mongo_action = "created"
         log.debug("No existing course information for ${crs_internal_uri}, create new record");
         course_as_pojo = [:]
+        // Gmongo driver doesn't seem good at passing back an _id, so we manually create one instead.
+        // course_as_pojo._id = java.util.UUID.randomUUID().toString()
+        course_as_pojo._id = new com.mongodb.ObjectId()
       }
 
       course_as_pojo.identifier = crs_internal_uri.toString();
@@ -119,12 +124,24 @@ class XCRIHandler {
       // log.debug("The course as JSON is ${course_as_json.toString()}");
       course_count++
 
-      log.debug("Saving mongo instance of course....${crs_internal_uri}");
+      log.debug("Saving mongo instance of course....${crs_internal_uri}, _id=${course_as_pojo['_id']?.toString()}");
 
       // db.courses.update([identifier:crs_internal_uri.toString()],course_as_pojo, true);
       def mongo_store_result = db.courses.save(course_as_pojo);
 
-      log.debug("Saved pojo: ${course_as_pojo} (${mongo_store_result}) identifier will be \"${course_as_pojo['_id'].toString()}\"");
+      log.debug("After call to courses.save, response was, get _id is ${course_as_pojo['_id']?.toString()}");
+
+      // Add an eventLog reponse that points to the entry for this course in the mongoDB
+      props.response.eventLog.add([ts:System.currentTimeMillis(),
+                                   type:"ref",
+                                   serviceref:"mongo",
+                                   mongoaction:mongo_action,
+                                   mongodb:"xcri",
+                                   mongoindex:"courses",
+                                   mongotype:"course",
+                                   mongoid:course_as_pojo._id?.toString()]);
+
+      log.debug("Saved pojo: ${course_as_pojo} identifier will be \"${course_as_pojo['_id'].toString()}\"");
 
       if ( ( course_as_pojo != null ) && ( course_as_pojo['_id'] != null ) ) {
         // Mongo inserts an _id into the record.. we can reuse that
