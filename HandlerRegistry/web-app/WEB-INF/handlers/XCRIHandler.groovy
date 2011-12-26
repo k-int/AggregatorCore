@@ -142,6 +142,12 @@ class XCRIHandler {
                                    mongotype:"course",
                                    mongoid:course_as_pojo._id?.toString()]);
 
+      // Add an eventLog reponse that points to public XCRI Portal
+      props.response.eventLog.add([ts:System.currentTimeMillis(),
+                                   type:"ref",
+                                   serviceref:"xcriportal",
+                                   id:course_as_pojo._id?.toString()]);
+
       log.debug("Saved pojo: ${course_as_pojo} identifier will be \"${course_as_pojo['_id'].toString()}\"");
 
       if ( ( course_as_pojo != null ) && ( course_as_pojo['_id'] != null ) ) {
