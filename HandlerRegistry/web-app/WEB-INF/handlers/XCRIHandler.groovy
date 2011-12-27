@@ -81,6 +81,10 @@ class XCRIHandler {
 
     props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Validation complete. No fatal errors."])
 
+    def prov_id = id1
+    def prov_title = d2.'xcri:provider'.'xcri:title'.text()
+    def prov_uri = d2.'xcri:provider'.'xcri:uri'.text()
+
     d2.'xcri:provider'.'xcri:course'.each { crs ->
 
       def crs_identifier = crs.'xcri:identifier'.text();
@@ -106,16 +110,31 @@ class XCRIHandler {
         course_as_pojo._id = new org.bson.types.ObjectId()
       }
 
+      course_as_pojo.provid = prov_id
+      course_as_pojo.provtitle = prov_title
+      course_as_pojo.provuri = prov_uri
+
       course_as_pojo.identifier = crs_internal_uri.toString();
       course_as_pojo.title = crs.'xcri:title'?.text()?.toString();
+      course_as_pojo.description = crs.'xcri:description'.text();
+
+      course_as_pojo.qual = [:]
+      course_as_pojo.qual.description = crs.'xcri:qualification'.'xcri:description'?.text()
+      course_as_pojo.qual.level = crs.'xcri:qualification'.'xcri:level'?.text()
+      course_as_pojo.qual.awardedBy = crs.'xcri:qualification'.'xcri:awardedBy'?.text()
+
       course_as_pojo.descriptions = [:]
       crs.'xcri:description'.each { desc ->
         String desc_type = desc.@'xsi:type'?.text()?.replaceAll(':','.').toString()
 
-        if ( ( desc_type != null ) && ( desc_type.length() > 0 ) ) {
+        if ( ( desc_type != null ) && 
+             ( desc_type.length() > 0 ) &&
+             ( desc.text() != null ) &&
+             ( desc.text().length() > 0 ) ) {
           course_as_pojo.descriptions[desc_type] = desc?.text()?.toString();
         }
       }
+
       course_as_pojo.url = crs.'xcri:url'?.text()?.toString()
       course_as_pojo.subject = []
       crs.'subject'.each { subj ->
