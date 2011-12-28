@@ -192,7 +192,7 @@ class XCRIHandler {
         log.debug("Indexed respidx:$future.response.index/resptp:$future.response.type/respid:$future.response.id")
       }
       else {
-        log.error("Failed to store course information");
+        log.error("Failed to store course information ${course_as_pojo}");
         props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"There was an unexpected error trying to store the course information"]);
       }
     }
