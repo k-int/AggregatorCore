@@ -98,7 +98,7 @@ class XCRIHandler {
 
       def mongo_action = "updated"
       if ( course_as_pojo != null ) {
-        log.debug("Located existing record... updating");
+        log.debug("Located existing record... updating course ${crs_identifier} internal GUID is ${course_as_pojo._id}");
       }
       else {
         mongo_action = "created"
