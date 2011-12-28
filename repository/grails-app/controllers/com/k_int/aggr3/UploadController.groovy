@@ -222,10 +222,15 @@ class UploadController {
               handlerSelectionService.executeHandler(handler_to_invoke,event_properties)
   
               // Handler should have set a resource_identifier and a resource_title
-              // log.debug("handler execution completed. Update file resource is ${response.resource_identifier} title is ${response.title}");
+              log.debug("handler execution completed. Update file resource is ${response.resource_identifier} title is ${response.title}");
   
               // response.code should be 0 == Processed, 1==In process, 2==Queued or Some other Error
-              updateResourceInfo(response.resource_identifier, response.title, de)
+              if ( ( response.resource_identifier != null ) && ( response.resource_identifier.length() > 0 ) ) {
+                updateResourceInfo(response.resource_identifier, response.title, de)
+              }
+              else {
+                log.error("Handler did not return resource identifier. unable to track!");
+              }
             }
             else {
               response.code = '-2';
