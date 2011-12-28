@@ -102,12 +102,12 @@ class XCRIHandler {
       }
       else {
         mongo_action = "created"
-        log.debug("No existing course information for ${crs_internal_uri}, create new record");
         course_as_pojo = [:]
         // Gmongo driver doesn't seem good at passing back an _id, so we manually create one instead.
         // course_as_pojo._id = java.util.UUID.randomUUID().toString()
         // course_as_pojo._id = new com.mongodb.ObjectId()
         course_as_pojo._id = new org.bson.types.ObjectId()
+        log.debug("No existing course information for ${crs_internal_uri}, create new record. new ID will be ${course_as_pojo._id}");
       }
 
       course_as_pojo.provid = prov_id
