@@ -337,8 +337,13 @@ class UploadController {
                                    title:title, 
                                    owner:deposit_event.dataProvider,
                                    status:"LIVE",
-                                   latestDeposit:deposit_event)
+                                   latestDeposit:deposit_event,
+                                   appLastMod:new java.util.Date())
       resource_info.save();
+    }
+    else {
+      resource_info.latestDeposit=deposit_event;
+      deposit_event.appLastMod = new java.util.Date()
     }
 
     deposit_event.relatedResource = resource_info;
