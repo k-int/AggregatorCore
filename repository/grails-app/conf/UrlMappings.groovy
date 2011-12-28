@@ -2,6 +2,8 @@ class UrlMappings {
 
 	static mappings = {
 
+               "/admin/reindex" ( controller:"reindex", action:"index" )
+
                "/$controller" {
                    action = [GET:"index", POST:"save"] // PUT:"update", DELETE:"delete", POST:"save"]
                    constraints {

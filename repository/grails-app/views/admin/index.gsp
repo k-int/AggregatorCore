@@ -1,4 +1,11 @@
-This is the index page - Open Data Aggregator - Instance ID : ${sysid}
+<html>
+  <head>
+    <title>Aggregator3 - Admin Home</title>
+    <meta name="layout" content="main" />
+  </head>
+  <body>
+
+This is the admin home page - Open Data Aggregator - Instance ID : ${sysid}
 
 <h2>Public Aggregation Endpoints For this ODA</h2>
 <p>
@@ -93,3 +100,7 @@ When deposited resources are not identified by any registered handler, the follo
 </g:each>
 </ul>
 </p>
+
+
+  </body>
+</html>

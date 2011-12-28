@@ -1,3 +1,10 @@
+<html>
+  <head>
+    <title>Welcome to Grails</title>
+    <meta name="layout" content="main" />
+  </head>
+  <body>
+
 ${grailsApplication.config.aggr.system.name} - Instance ID : ${sysid}
 
 <h2>Public Aggregation (Search/Retrieve) Endpoints For This Repository</h2>
@@ -93,3 +100,6 @@ When deposited resources are not identified by any registered handler, the follo
 </g:each>
 </ul>
 </p>
+
+  </body>
+</html>

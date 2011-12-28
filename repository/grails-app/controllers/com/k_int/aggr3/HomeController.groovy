@@ -14,6 +14,7 @@ class HomeController {
     // Get hold of mongodb 
     def result = [:]
 
+    log.debug("Get database links")
     def mongo = new com.gmongo.GMongo();
     def db = mongo.getDB("oda")
 
@@ -21,6 +22,8 @@ class HomeController {
     result.aggregations = [:]
     result.aggregations['es'] = db.aggregations.find(type: 'es')
     result.aggregations['mongo'] = []
+
+    log.debug("List mongo collections")
 
     // Ideally we would dynamically look up aggregation services here and auto discover any aggregations.
     // Look up any mongo headings
@@ -36,6 +39,7 @@ class HomeController {
       }
     }
 
+    log.debug("Listing event handlers")
     result.handlers = EventHandler.list()
     
     // es_aggregations.each { esa ->
