@@ -133,107 +133,137 @@ class UploadController {
       md5_is.close();
       byte[] md5sum = md5_digest.digest();
       String md5sumHex = new BigInteger(1, md5sum).toString(16);
+
+      // See if we have a live resource from this provider with this checksum
+      // Find any resource where status is live and  owner=owner and latestDeposit.checksum = X
+      def existing_resources = Resource.withCriteria {
+        eq("status","LIVE")
+        eq("owner",provider_object)
+        latestDeposit {
+          eq("checksum",md5sumHex)
+        }
+      }
+
+      log.debug("Existing resource check returned ${existing_resources}");
+      if ( existing_resources.size() == 0 ) {
+    
   
-      def content_type = file.contentType
-      def temp_file_name 
-      def context_dir
-      def t = new org.apache.tika.Tika()
-
-      validateUploadDir("./filestore");
-
-      // Store the uploaded file for future reference.
-
-      // bytes byte[] = file.getBytes()
-      log.debug( "Storring uploaded file in temporary storage.... (content_type=${content_type})")
-      def deposit_token = java.util.UUID.randomUUID().toString();
-
-      temp_file_name = "./filestore/${deposit_token}";
-      def temp_file = new File(temp_file_name);
-
-      // Copy the upload file to a temporary space
-      file.transferTo(temp_file);
-
-
-      if ( content_type == 'application/octet-stream' ) {
-        log.debug("Uploaded content stream is application/octet-stream, not ideal... Try and guess the content");
-        content_type = t.detect(temp_file)
-        log.debug("Detected content type is ${content_type}")
-      }
-
-      // If it's a compressed archive, we need to unpack it here too
-      if ( content_type == 'application/zip' ) {
-        log.debug("unpack compressed archive");
-        context_dir = "./filestore/${deposit_token}"
-        validateUploadDir(context_dir)
-        extract(temp_file, context_dir)
-
-        // After extracting, we look for a manifest file. If the request specified a manifest property, use that. Otherwise, look for manifest.xml
-        def manifest_filename = params.manifest ?: "manifest.xml";
-
-        def manifest_file = new File("${context_dir}/${manifest_filename}")
-        if ( manifest_file.exists() ) {
-          log.debug("Manifest file exists! ${manifest_filename}");
-          temp_file = manifest_file
-          content_type = t.detect(manifest_file)
+        // Process
+        def content_type = file.contentType
+        def temp_file_name 
+        def context_dir
+        def t = new org.apache.tika.Tika()
+  
+        validateUploadDir("./filestore");
+  
+        // Store the uploaded file for future reference.
+  
+        // bytes byte[] = file.getBytes()
+        log.debug( "Storring uploaded file in temporary storage.... (content_type=${content_type})")
+        def deposit_token = java.util.UUID.randomUUID().toString();
+  
+        temp_file_name = "./filestore/${deposit_token}";
+        def temp_file = new File(temp_file_name);
+  
+        // Copy the upload file to a temporary space
+        file.transferTo(temp_file);
+  
+  
+        if ( content_type == 'application/octet-stream' ) {
+          log.debug("Uploaded content stream is application/octet-stream, not ideal... Try and guess the content");
+          content_type = t.detect(temp_file)
+          log.debug("Detected content type is ${content_type}")
         }
-        else {
-          log.debug("Can't locate manifest file... ${manifest_filename}");
+  
+        // If it's a compressed archive, we need to unpack it here too
+        if ( content_type == 'application/zip' ) {
+          log.debug("unpack compressed archive");
+          context_dir = "./filestore/${deposit_token}"
+          validateUploadDir(context_dir)
+          extract(temp_file, context_dir)
+  
+          // After extracting, we look for a manifest file. If the request specified a manifest property, use that. Otherwise, look for manifest.xml
+          def manifest_filename = params.manifest ?: "manifest.xml";
+  
+          def manifest_file = new File("${context_dir}/${manifest_filename}")
+          if ( manifest_file.exists() ) {
+            log.debug("Manifest file exists! ${manifest_filename}");
+            temp_file = manifest_file
+            content_type = t.detect(manifest_file)
+          }
+          else {
+            log.debug("Can't locate manifest file... ${manifest_filename}");
+          }
         }
-      }
-
-      log.debug( "Create deposit event ${deposit_token}")
-      // DepositEvent de = new DepositEvent(depositToken:deposit_token, status:'1',uploadUser:user)
-      DepositEvent de = new DepositEvent(depositToken:deposit_token, 
-                                         status:'1',
-                                         dataProvider:provider_object,
-                                         checksum:md5sumHex)
-      if ( de.save() ) {
-        log.debug( "Created...")
-
-        // Set up the propeties for the upload event, in this case event=com.k_int.aggregator.event.upload and mimetype=<mimetype>
-        // We are looking for any handlers willing to accept this event given the appropriate properties
-        // def event_properties = ["content_type":content_type, "file":temp_file, "response":response, "upload_event_token":deposit_token, "user":user]
-        def event_properties = ["owner":provider,
-                                "content_type":content_type, 
-                                "file":temp_file, 
-                                "response":response, 
-                                "context_dir":context_dir,
-                                "upload_event_token":deposit_token]
-
-        // Firstly we need to select an appropriate handler for the com.k_int.aggregator.event.upload event
-        if ( handlerSelectionService ) {
-          def handler_to_invoke = handlerSelectionService.selectHandlersFor("com.k_int.aggregator.event.upload",event_properties)
-          if ( handler_to_invoke != null ) {
-            handlerSelectionService.executeHandler(handler_to_invoke,event_properties)
-
-            // Handler should have set a resource_identifier and a resource_title
-            // log.debug("handler execution completed. Update file resource is ${response.resource_identifier} title is ${response.title}");
-
-            // response.code should be 0 == Processed, 1==In process, 2==Queued or Some other Error
-            updateResourceInfo(response.resource_identifier, response.title, de)
+  
+        log.debug( "Create deposit event ${deposit_token}")
+        // DepositEvent de = new DepositEvent(depositToken:deposit_token, status:'1',uploadUser:user)
+        DepositEvent de = new DepositEvent(depositToken:deposit_token, 
+                                           status:'1',
+                                           dataProvider:provider_object,
+                                           checksum:md5sumHex)
+        if ( de.save() ) {
+          log.debug( "Created...")
+  
+          // Set up the propeties for the upload event, in this case event=com.k_int.aggregator.event.upload and mimetype=<mimetype>
+          // We are looking for any handlers willing to accept this event given the appropriate properties
+          // def event_properties = ["content_type":content_type, "file":temp_file, "response":response, "upload_event_token":deposit_token, "user":user]
+          def event_properties = ["owner":provider,
+                                  "content_type":content_type, 
+                                  "file":temp_file, 
+                                  "response":response, 
+                                  "context_dir":context_dir,
+                                  "upload_event_token":deposit_token]
+  
+          // Firstly we need to select an appropriate handler for the com.k_int.aggregator.event.upload event
+          if ( handlerSelectionService ) {
+            def handler_to_invoke = handlerSelectionService.selectHandlersFor("com.k_int.aggregator.event.upload",event_properties)
+            if ( handler_to_invoke != null ) {
+              handlerSelectionService.executeHandler(handler_to_invoke,event_properties)
+  
+              // Handler should have set a resource_identifier and a resource_title
+              // log.debug("handler execution completed. Update file resource is ${response.resource_identifier} title is ${response.title}");
+  
+              // response.code should be 0 == Processed, 1==In process, 2==Queued or Some other Error
+              updateResourceInfo(response.resource_identifier, response.title, de)
+            }
+            else {
+              response.code = '-2';
+              response.status = 'No handler available. Deposit is queued pending system configuration';
+              response.message = 'Unable to locate handler';
+            }
           }
           else {
             response.code = '-2';
-            response.status = 'No handler available. Deposit is queued pending system configuration';
-            response.message = 'Unable to locate handler';
+            response.status = 'Internal Error';
+            response.message = 'The handler selection service is not configured. This deposit has not been recorded, please contact the support and re-submit';
           }
+  
+          // update the status in the deposit event to whatever response.code is.
+          de.status = response.code;
+          de.save();
         }
         else {
           response.code = '-2';
           response.status = 'Internal Error';
-          response.message = 'The handler selection service is not configured. This deposit has not been recorded, please contact the support and re-submit';
+          response.message = 'Unable to create deposit event. This deposit has not been recorded, please contact support and re-submit.';
+          de.errors.allErrors.each {
+            log.error(it.defaultMessage)
+          }
         }
-
-        // update the status in the deposit event to whatever response.code is.
-        de.status = response.code;
-        de.save();
       }
       else {
-        response.code = '-2';
-        response.status = 'Internal Error';
-        response.message = 'Unable to create deposit event. This deposit has not been recorded, please contact support and re-submit.';
-        de.errors.allErrors.each {
-          log.error(it.defaultMessage)
+        if ( existing_resources.size() == 1 ) {
+          def res = existing_resources[0];
+          response.code = '-5';
+          response.status = 'Repeat upload';
+          response.message = "This file has been uploaded previously, and contains references to ${res.id}:${res.identifier}:${res.status}:${res.title}. Repeat processing aborted.";
+        }
+        else {
+          response.code = '-2';
+          response.status = 'Internal Error';
+          response.message = 'Multiple resources matched this checksum. This should never happen. Please contact support';
+          log.fatal("Multiple checksum match for this update file. Error!");
         }
       }
     }
@@ -303,7 +333,11 @@ class UploadController {
 
     if ( resource_info == null ) {
       log.debug("Create new resource")
-      resource_info = new Resource(identifier:resource_identifier,title:title, owner:deposit_event.dataProvider)
+      resource_info = new Resource(identifier:resource_identifier,
+                                   title:title, 
+                                   owner:deposit_event.dataProvider,
+                                   status:"LIVE",
+                                   latestDeposit:deposit_event)
       resource_info.save();
     }
 
