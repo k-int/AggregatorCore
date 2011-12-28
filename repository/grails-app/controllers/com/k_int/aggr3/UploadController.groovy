@@ -3,6 +3,7 @@ package com.k_int.aggr3
 import com.k_int.aggregator.*;
 import org.apache.shiro.SecurityUtils
 import grails.converters.*
+import java.security.MessageDigest
 
 class UploadController {
 
@@ -120,6 +121,19 @@ class UploadController {
     // }
 
     if ( file != null ) {
+
+      // Create a checksum for the file..
+      MessageDigest md5_digest = MessageDigest.getInstance("MD5");
+      InputStream md5_is = file.inputStream
+      byte[] md5_buffer = new byte[8192];
+      int md5_read = 0;
+      while( (md5_read = md5_is.read(md5_buffer)) >= 0) {
+        md5_digest.update(md5_buffer, 0, md5_read);
+      }
+      md5_is.close();
+      byte[] md5sum = md5_digest.digest();
+      String md5sumHex = new BigInteger(1, md5sum).toString(16);
+  
       def content_type = file.contentType
       def temp_file_name 
       def context_dir
@@ -138,6 +152,7 @@ class UploadController {
 
       // Copy the upload file to a temporary space
       file.transferTo(temp_file);
+
 
       if ( content_type == 'application/octet-stream' ) {
         log.debug("Uploaded content stream is application/octet-stream, not ideal... Try and guess the content");
@@ -169,7 +184,9 @@ class UploadController {
       log.debug( "Create deposit event ${deposit_token}")
       // DepositEvent de = new DepositEvent(depositToken:deposit_token, status:'1',uploadUser:user)
       DepositEvent de = new DepositEvent(depositToken:deposit_token, 
-                                         status:'1')
+                                         status:'1',
+                                         dataProvider:provider_object,
+                                         checksum:md5sumHex)
       if ( de.save() ) {
         log.debug( "Created...")
 
@@ -188,7 +205,12 @@ class UploadController {
           def handler_to_invoke = handlerSelectionService.selectHandlersFor("com.k_int.aggregator.event.upload",event_properties)
           if ( handler_to_invoke != null ) {
             handlerSelectionService.executeHandler(handler_to_invoke,event_properties)
+
+            // Handler should have set a resource_identifier and a resource_title
+            // log.debug("handler execution completed. Update file resource is ${response.resource_identifier} title is ${response.title}");
+
             // response.code should be 0 == Processed, 1==In process, 2==Queued or Some other Error
+            updateResourceInfo(response.resource_identifier, response.title, de)
           }
           else {
             response.code = '-2';
@@ -275,4 +297,17 @@ class UploadController {
     //}
   }
 
+  def updateResourceInfo(resource_identifier, title, deposit_event) {
+
+    def resource_info = Resource.findByIdentifier(resource_identifier)
+
+    if ( resource_info == null ) {
+      log.debug("Create new resource")
+      resource_info = new Resource(identifier:resource_identifier,title:title, owner:deposit_event.dataProvider)
+      resource_info.save();
+    }
+
+    deposit_event.relatedResource = resource_info;
+    deposit_event.save();
+  }
 }

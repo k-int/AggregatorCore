@@ -199,8 +199,22 @@ class XCRIHandler {
 
     def elapsed = System.currentTimeMillis() - start_time
     props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Completed processing of ${course_count} courses from catalog ${id1} for provider ${props.owner} in ${elapsed}ms"]);
+
+    log.debug("Adding title ${prov_title} and resource identifier ${prov_id}");
+
+    // These properties identify the processed file (resource) back to the coordination software
+    props.response.title = prov_title
+    props.response.resource_identifier = prov_id
+
+    log.debug("XCRI handler complete");
   }
 
+
+
+
+  /**
+   *  Initial handler installation, set up collections and other information
+   */
   def setup(ctx) {
     log.debug("This is the XCRI handler setup method");
 
