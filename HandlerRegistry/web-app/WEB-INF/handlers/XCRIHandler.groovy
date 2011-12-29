@@ -177,7 +177,7 @@ class XCRIHandler {
                                    esid:course_as_pojo._id?.toString()]);
 
 
-      log.debug("Saved pojo: ${course_as_pojo} identifier will be \"${course_as_pojo['_id'].toString()}\"");
+      log.debug("Saved pojo. identifier will be \"${course_as_pojo['_id'].toString()}\"");
 
       if ( ( course_as_pojo != null ) && ( course_as_pojo['_id'] != null ) ) {
         // Mongo inserts an _id into the record.. we can reuse that
