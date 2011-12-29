@@ -348,7 +348,7 @@ class UploadController {
     }
     else {
       resource_info.latestDeposit=deposit_event;
-      deposit_event.appLastMod = new java.util.Date()
+      resource_info.appLastMod = new java.util.Date()
     }
 
     deposit_event.relatedResource = resource_info;
