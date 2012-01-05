@@ -44,12 +44,16 @@ class BootStrap {
                                                                                                         active:true,
                                                                                                         preconditions:['p.content_type=="application/xml" || p.content_type=="text/xml"']).save()
 
-      log.debug("Verfy application settings");
+      log.debug("Verfy application settings ${ApplicationHolder.application.config.repo?.settings}");
       if ( ApplicationHolder.application.config.repo?.settings != null ) {
         def p = ApplicationHolder.application.config.repo?.settings.toProperties()
+        log.debug("Loading local defaults ${p}");
         p.propertyNames().each { pname ->
           verifySetting(pname, p[pname])
         }
+      }
+      else {
+        log.warn("No default settings found in local config....");
       }
 
       verifySetting('instanceid',java.util.UUID.randomUUID().toString());

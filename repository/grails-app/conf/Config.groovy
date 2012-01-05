@@ -1,7 +1,7 @@
 // locations to search for config files that get merged into the main config
 // config files can either be Java properties files or ConfigSlurper scripts
 
- grails.config.locations = [ // "classpath:${appName}-config.properties",
+grails.config.locations = [ // "classpath:${appName}-config.properties",
 //                             "classpath:${appName}-config.groovy",
 //                             "file:${userHome}/.grails/${appName}-config.properties",
                              "file:${userHome}/.grails/${appName}-config.groovy"]
@@ -47,8 +47,6 @@ grails.enable.native2ascii = true
 grails.logging.jul.usebridge = true
 // packages to include in Spring bean scanning
 grails.spring.bean.packages = []
-
-aggr.system.name='MEDIA Project Image Repository'
 
 // set per-environment serverURL stem for creating absolute links
 environments {

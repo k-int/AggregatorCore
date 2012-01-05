@@ -13,7 +13,7 @@ class RemoteHandlerRepositoryService implements ApplicationContextAware {
 
     def handlerExecutionService
     def sys_id = null
-    def remote_repo = null
+    def remote_repo_url = null
     def remote_user = null
     def remote_pass = null
 
@@ -21,7 +21,7 @@ class RemoteHandlerRepositoryService implements ApplicationContextAware {
     def init() {
       log.debug("Initialising Remote Handler Repository Service");
       sys_id = Setting.findByStKey('instanceid')?.stValue
-      remote_repo = Setting.findByStKey('url')?.stValue
+      remote_repo_url = Setting.findByStKey('url')?.stValue
       remote_user = Setting.findByStKey('user')?.stValue
       remote_pass = Setting.findByStKey('pass')?.stValue
       log.debug("At startup, this system is identified by repository id ${sys_id}. Remote repo is ${remote_repo}, user at remote repo is ${remote_user}/${remote_pass}")
@@ -33,8 +33,7 @@ class RemoteHandlerRepositoryService implements ApplicationContextAware {
 
       log.debug("Finding any remote handlers for properties : ${props.keySet()}, remote repo configured as ${remote_repo}");
 
-
-      def remote_repo = new RESTClient( remote_repo )
+      def remote_repo = new RESTClient( remote_repo_url )
       remote_repo.auth.basic remote_user, remote_pass
 
       def json_constraints = props as JSON
