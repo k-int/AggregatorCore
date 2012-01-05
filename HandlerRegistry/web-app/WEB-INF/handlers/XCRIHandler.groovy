@@ -131,7 +131,36 @@ class XCRIHandler {
              ( desc_type.length() > 0 ) &&
              ( desc.text() != null ) &&
              ( desc.text().length() > 0 ) ) {
-          course_as_pojo.descriptions[desc_type] = desc?.text()?.toString();
+          switch ( desc_type ) {
+            case 'xcri:metadataKeywords':
+              course_as_pojo.keywords = desc?.text()?.toString();
+              break;
+            case 'xcri:abstract':
+              course_as_pojo.courseAbstract = desc?.text()?.toString();
+              break;
+            case 'xcri:careerOutcome':
+              course_as_pojo.careerOutcome = desc?.text()?.toString();
+              break;
+            case 'xcri:prerequisites':
+              course_as_pojo.prerequisites = desc?.text()?.toString();
+              break;
+            case 'xcri:indicativeResource':
+              course_as_pojo.indicativeResource = desc?.text()?.toString();
+              break;
+            case 'xcri:assessmentStrategy':
+              course_as_pojo.assessmentStrategy = desc?.text()?.toString();
+              break;
+            case 'xcri:aim':
+              course_as_pojo.aim = desc?.text()?.toString();
+              break;
+            case 'xcri:learningOutcome':
+              course_as_pojo.learningOutcome = desc?.text()?.toString();
+              break;
+            default:
+              course_as_pojo.descriptions[desc_type] = desc?.text()?.toString();
+              break;
+        }
+        else {
         }
       }
 
