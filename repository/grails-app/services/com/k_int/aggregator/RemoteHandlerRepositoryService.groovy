@@ -24,14 +24,14 @@ class RemoteHandlerRepositoryService implements ApplicationContextAware {
       remote_repo_url = Setting.findByStKey('url')?.stValue
       remote_user = Setting.findByStKey('user')?.stValue
       remote_pass = Setting.findByStKey('pass')?.stValue
-      log.debug("At startup, this system is identified by repository id ${sys_id}. Remote repo is ${remote_repo}, user at remote repo is ${remote_user}/${remote_pass}")
+      log.debug("At startup, this system is identified by repository id ${sys_id}. Remote repo is ${remote_repo_url}, user at remote repo is ${remote_user}/${remote_pass}")
     }
 
     def findHandlerWhen(props) {
 
       def result = null;
 
-      log.debug("Finding any remote handlers for properties : ${props.keySet()}, remote repo configured as ${remote_repo}");
+      log.debug("Finding any remote handlers for properties : ${props.keySet()}, remote repo configured as ${remote_repo_url}");
 
       def remote_repo = new RESTClient( remote_repo_url )
       remote_repo.auth.basic remote_user, remote_pass
