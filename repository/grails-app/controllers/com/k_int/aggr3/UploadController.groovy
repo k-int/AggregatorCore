@@ -204,7 +204,7 @@ class UploadController {
                                            status:'1',
                                            dataProvider:provider_object,
                                            checksum:md5sumHex)
-        if ( de.save() ) {
+        if ( de.save(flush:true) ) {
           log.debug( "Created...")
   
           // Set up the propeties for the upload event, in this case event=com.k_int.aggregator.event.upload and mimetype=<mimetype>
@@ -248,7 +248,7 @@ class UploadController {
   
           // update the status in the deposit event to whatever response.code is.
           de.status = response.code;
-          de.save();
+          de.save(flush:true);
         }
         else {
           response.code = '-2';

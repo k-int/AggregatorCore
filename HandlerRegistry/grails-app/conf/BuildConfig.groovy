@@ -38,7 +38,7 @@ grails.project.dependency.resolution = {
         // The downside is plugins can only access jars that are imported here.
 
         compile 'org.codehaus.groovy:groovy-all:1.8.1'
-        runtime 'mysql:mysql-connector-java:5.1.14'
+        runtime 'mysql:mysql-connector-java:5.1.18'
         runtime 'com.gmongo:gmongo:0.9.2'
         runtime 'org.elasticsearch:elasticsearch-lang-groovy:0.18.4'
         runtime 'org.apache.tika:tika-core:0.9'
