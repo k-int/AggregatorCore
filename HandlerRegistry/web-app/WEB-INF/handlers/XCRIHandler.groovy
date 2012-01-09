@@ -73,6 +73,14 @@ class XCRIHandler {
     // Properties contain an xml element, which is the parsed document
     def id1 = d2.'xcri:provider'.'xcri:identifier'.text()
 
+
+    // N.B. XCRI documents can have many identifiers...
+    // def identifiers = []
+    // d2.'xcri:provider'.'xcri:identifier'.each { id ->
+    //   identifiers.add( [ context:"xcri:${dataprovider}:${type}", identifier:id.text() ] )
+    // }
+    // identifier = coreferenceService.unify(identifiers)
+
     props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Identifier for this XCRI document: ${id1}"])
 
     props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Starting feed validation"])
