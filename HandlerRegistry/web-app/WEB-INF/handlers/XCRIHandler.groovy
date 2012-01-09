@@ -159,6 +159,7 @@ class XCRIHandler {
             default:
               course_as_pojo.descriptions[desc_type] = desc?.text()?.toString();
               break;
+          }
         }
         else {
         }
