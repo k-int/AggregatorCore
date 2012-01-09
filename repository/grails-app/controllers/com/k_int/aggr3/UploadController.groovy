@@ -221,7 +221,9 @@ class UploadController {
           if ( handlerSelectionService ) {
             def handler_to_invoke = handlerSelectionService.selectHandlersFor("com.k_int.aggregator.event.upload",event_properties)
             if ( handler_to_invoke != null ) {
+              log.debug("Passing to handler execution service")
               handlerSelectionService.executeHandler(handler_to_invoke,event_properties)
+              log.debug("Handler Execution Service completed")
   
               // Handler should have set a resource_identifier and a resource_title
               log.debug("handler execution completed. Update file resource is ${response.resource_identifier} title is ${response.title}");
