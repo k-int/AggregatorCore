@@ -31,18 +31,24 @@ class BootStrap {
           if ( handler_file.toString().endsWith(".groovy") ) {
             try {
               // Class clazz = gcl.parseClass(handler_file.text);
+              log.debug("Compiling ${handler_file}");
+
               Class clazz = gcl.parseClass(handler_file)
               // log.debug("Number of annotations in ${handler_file} : ${clazz.annotations.length} (This should be >0 for classes with grape annotations)");
+
+              log.debug("Instatiating ${handler_file}");
               Object h = clazz.newInstance();
     
-              log.debug("Loading handler: ${h.getHandlerName()} revision: ${h.getRevision()}, preconditions: ${h.getPreconditions()}");
+              log.debug("Loaded handler: ${h.getHandlerName()} revision: ${h.getRevision()}, preconditions: ${h.getPreconditions()}");
               def nh = Handler.findByName(h.getHandlerName()) ?: new Handler(name:h.getHandlerName(), preconditions:h.getPreconditions()).save()
               def nr = new HandlerRevision(owner:nh, 
                                            revision:h.getRevision(), 
                                            handlerText:handler_file.text).save();
+
+              log.info("Created handler for ${h.getHandlerName()} - Compliation completed OK");
             }
             catch ( Exception e ) {
-              log.error("Unable to compile handler ${handler_file}");
+              log.error("Unable to compile handler ${handler_file}",e);
             }
           }
           else {
