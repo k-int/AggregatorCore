@@ -77,12 +77,25 @@ class XCRIHandler {
   
       // N.B. XCRI documents can have many identifiers...
       def identifiers = []
+      def identifier_count = 0
       d2.'xcri:provider'.'xcri:identifier'.each { id ->
         log.debug("Adding ${id.'@xsi:type'?.text()} : ${id.text()}");
-        identifiers.add( [ idtype:id.'@xsi:type'?.text(), idvalue:id.text() ] )
+        def identifier_value = id.text()
+        if ( ( identifier_value != null ) && ( identifier_value.length() > 0 ) ) {
+          identifiers.add( [ idtype:id.'@xsi:type'?.text(), idvalue:identifier_value ] )
+        }
       }
+
+      if ( identifiers.size() == 0 ) {
+        props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'warn',msg:"XCRI Document contains no valid (document level) identifiers."])
+        props.response.code=-6
+        props.response.status="Data error processing document"
+        props.response.message="The input document was missing a valid identifier at the top level. processing skipped"
+        throw new Exception("No valid document identifier at top level");
+      }
+
       def canonical_identifier = coreference.resolve(props.owner,identifiers)
-      log.debug("Coreference service returns ${canonical_identifier}");
+      log.debug("Coreference service returns ${canonical_identifier} (${canonical_identifier.canonicalIdentifier})");
   
       props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Identifier for this XCRI document: ${id1}"])
   
@@ -92,7 +105,7 @@ class XCRIHandler {
   
       props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Validation complete. No fatal errors."])
   
-      def prov_id = id1
+      def prov_id = canonical_identifier.canonicalIdentifier
       def prov_title = d2.'xcri:provider'.'xcri:title'.text()
       def prov_uri = d2.'xcri:provider'.'xcri:uri'.text()
   
@@ -250,10 +263,13 @@ class XCRIHandler {
     catch ( Exception e ) {
       log.error("Unexpected error",e);
       props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'error',msg:"Unexpected error ${e.message}"]);
+      // -6 == Data error
     }
     finally {
       log.debug("XCRI handler complete");
     }
+
+    
   }
 
   /**

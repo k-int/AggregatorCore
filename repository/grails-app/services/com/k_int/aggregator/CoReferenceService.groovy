@@ -6,7 +6,7 @@ class CoReferenceService {
   // Accept an array of identifers of the form [ [context:ctx, identifier:id], [context:ctx, identifier:id] ]
   // If any of the identifiers match existing entries, add any extra identifers to the coreference database for that item
   // otherwise create a new canonical identifier
-  def resolve(provier, identifiers) {
+  def resolve(provider, identifiers) {
 
     boolean matched = false;
     CanonicalIdentifier matched_with = null;
@@ -21,7 +21,7 @@ class CoReferenceService {
           eq("identifierType","undefined")
           eq("identifierValue",id.idvalue)
           owner {
-            eq(owner, provier)
+            eq(owner, provider)
           }
         }
       }
@@ -30,7 +30,7 @@ class CoReferenceService {
           eq("identifierType",id.idtype)
           eq("identifierValue",id.idvalue)
           owner {
-            eq("owner", provier)
+            eq("owner", provider)
           }
         }
       }
@@ -55,7 +55,20 @@ class CoReferenceService {
     }
     else {
       // No match found, create a new identifier
-      log.debug("Not Matched")
+      log.debug("Not Matched - creating new canonical identifier")
+      def new_canonical_identifier = java.util.UUID.randomUUID().toString()
+      matched_with = new CanonicalIdentifier(owner:provider,canonicalIdentifier:new_canonical_identifier).save(flush:true);
+      new IdentifierInstance(identifierType:'__canonical',
+                             identifierValue:new_canonical_identifier,
+                             owner:matched_with).save(flush:true)
+      identifiers.each { id ->
+        if ( id.idtype == null ) {
+          new IdentifierInstance(identifierType:'undefined',identifierValue:id.idvalue,owner:matched_with).save(flush:true)
+        }
+        else {
+          new IdentifierInstance(identifierType:id.idtype,identifierValue:id.idvalue,owner:matched_with).save(flush:true)
+        }
+      }
     }
 
     matched_with

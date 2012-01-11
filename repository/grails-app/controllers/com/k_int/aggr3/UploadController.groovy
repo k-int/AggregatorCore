@@ -45,7 +45,7 @@ class UploadController {
     def on_behalf_of = params.on_behalf_of;
 
     // Event Log - List of events
-    def response = ["code": 0, eventLog:[], additionalProps:[:]]
+    def response = [code: 0, eventLog:[], additionalProps:[:]]
     def file = request.getFile("upload")
 
     log.debug( "Validating provider : ${provider}")

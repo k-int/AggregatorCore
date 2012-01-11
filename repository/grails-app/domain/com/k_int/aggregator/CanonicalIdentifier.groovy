@@ -4,7 +4,7 @@ class CanonicalIdentifier {
 
   // The URI of the owner
   String owner
-  IdentifierInstance canonical_identifier
+  String canonicalIdentifier
 
   static constraints = {
   }
