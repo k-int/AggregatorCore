@@ -48,7 +48,7 @@ class HomeController {
 
     result.handlerrepos = []
     result.handlerrepos.add( [
-                              url:remoteHandlerRepositoryService.remote_repo,
+                              url:remoteHandlerRepositoryService.remote_repo_url,
                               user:remoteHandlerRepositoryService.remote_user])
     result.sysid = remoteHandlerRepositoryService.sys_id
 
