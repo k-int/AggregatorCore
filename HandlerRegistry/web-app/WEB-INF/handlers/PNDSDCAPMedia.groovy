@@ -49,6 +49,9 @@ class PNDSDCAPMedia {
   def process(props, ctx) {
     log.debug("process....");
 
+    // Remember props.context_dir is the dir of the unpacked resource
+    // file is the File containing the manifest.xml
+
     def start_time = System.currentTimeMillis();
     def course_count = 0;
 
