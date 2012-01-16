@@ -141,8 +141,10 @@ class XCRIHandler {
         course_as_pojo.identifier = crs_internal_uri.toString();
         course_as_pojo.title = crs.'xcri:title'?.text()?.toString();
         course_as_pojo.description = crs.'xcri:description'.text();
+        course_as_pojo.imageuri = crs.'xcri:image'?.@src?.text();
   
         course_as_pojo.qual = [:]
+        course_as_pojo.qual.title = crs.'xcri:qualification'.'xcri:title'?.text()
         course_as_pojo.qual.description = crs.'xcri:qualification'.'xcri:description'?.text()
         course_as_pojo.qual.level = crs.'xcri:qualification'.'xcri:level'?.text()
         course_as_pojo.qual.awardedBy = crs.'xcri:qualification'.'xcri:awardedBy'?.text()
@@ -304,9 +306,15 @@ class XCRIHandler {
               type = 'string'
               store = 'yes'
             }
-            widgetid {
+            subject {
               type = 'string'
               store = 'yes'
+              index = 'not_analyzed'
+            }
+            provid {
+              type = 'string'
+              store = 'yes'
+              index = 'not_analyzed'
             }
           }
         }
