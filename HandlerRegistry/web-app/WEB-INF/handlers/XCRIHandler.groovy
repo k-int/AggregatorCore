@@ -43,8 +43,6 @@ class XCRIHandler {
   def process(props, ctx) {
     log.debug("process....");
     try {
-      def start_time = System.currentTimeMillis();
-      def course_count = 0;
   
       // Get hold of some services we might use ;)
       def mongo = new com.gmongo.GMongo();
@@ -70,196 +68,200 @@ class XCRIHandler {
       log.debug("root element namespace: ${d2.namespaceURI()}");
       log.debug("lookup namespace: ${d2.lookupNamespace('xcri')}");
       log.debug("d2.name : ${d2.name()}");
-  
-      // Properties contain an xml element, which is the parsed document
-      def id1 = d2.'xcri:provider'.'xcri:identifier'.text()
-  
-  
-      // N.B. XCRI documents can have many identifiers...
-      def identifiers = []
-      def identifier_count = 0
-      d2.'xcri:provider'.'xcri:identifier'.each { id ->
-        log.debug("Adding ${id.'@xsi:type'?.text()} : ${id.text()}");
-        def identifier_value = id.text()
-        if ( ( identifier_value != null ) && ( identifier_value.length() > 0 ) ) {
-          identifiers.add( [ idtype:id.'@xsi:type'?.text(), idvalue:identifier_value ] )
-        }
-      }
 
-      if ( identifiers.size() == 0 ) {
-        props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'warn',msg:"XCRI Document contains no valid (document level) identifiers."])
-        props.response.code=-6
-        props.response.status="Data error processing document"
-        props.response.message="The input document was missing a valid identifier at the top level. processing skipped"
-        throw new Exception("No valid document identifier at top level");
-      }
+      d2.'xcri:provider'.each { provider ->
 
-      def canonical_identifier = coreference.resolve(props.owner,identifiers)
-      log.debug("Coreference service returns ${canonical_identifier} (${canonical_identifier.canonicalIdentifier})");
-  
-      props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Identifier for this XCRI document: ${id1}"])
-  
-      props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Starting feed validation"])
-  
-      // Validation tests
-  
-      props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Validation complete. No fatal errors."])
-  
-      def prov_id = canonical_identifier.canonicalIdentifier
-      def prov_title = d2.'xcri:provider'.'xcri:title'.text()
-      def prov_uri = d2.'xcri:provider'.'xcri:uri'.text()
-  
-      d2.'xcri:provider'.'xcri:course'.each { crs ->
-  
-        def crs_identifier = crs.'xcri:identifier'.text();
-        def crs_internal_uri = "uri:${props.owner}:xcri:${id1}:${crs_identifier}";
-  
-        log.debug("Processing course: ${crs_identifier}");
-        props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Validating course entry ${crs_internal_uri} - ${crs.'xcri:title'}"]);
-  
-        log.debug("looking up course with identifier ${crs_internal_uri}");
-        def course_as_pojo = db.courses.findOne(identifier: crs_internal_uri.toString())
-  
-        def mongo_action = "updated"
-        if ( course_as_pojo != null ) {
-          log.debug("Located existing record... updating course ${crs_identifier} internal GUID is ${course_as_pojo._id}");
-        }
-        else {
-          mongo_action = "created"
-          course_as_pojo = [:]
-          // Gmongo driver doesn't seem good at passing back an _id, so we manually create one instead.
-          // course_as_pojo._id = java.util.UUID.randomUUID().toString()
-          // course_as_pojo._id = new com.mongodb.ObjectId()
-          course_as_pojo._id = new org.bson.types.ObjectId()
-          log.debug("No existing course information for ${crs_internal_uri}, create new record. new ID will be ${course_as_pojo._id}");
+        def start_time = System.currentTimeMillis();
+        def course_count = 0;
+    
+        // Properties contain an xml element, which is the parsed document
+        // def id1 = provider.'xcri:identifier'.text()
+    
+        // N.B. XCRI documents can have many identifiers...
+        def identifiers = []
+        def identifier_count = 0
+        provider.'xcri:identifier'.each { id ->
+          log.debug("Adding ${id.'@xsi:type'?.text()} : ${id.text()}");
+          def identifier_value = id.text()
+          if ( ( identifier_value != null ) && ( identifier_value.length() > 0 ) ) {
+            identifiers.add( [ idtype:id.'@xsi:type'?.text(), idvalue:identifier_value ] )
+          }
         }
   
-        course_as_pojo.provid = prov_id
-        course_as_pojo.provtitle = prov_title
-        course_as_pojo.provuri = prov_uri
+        if ( identifiers.size() == 0 ) {
+          props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'warn',msg:"XCRI Document contains no valid (document level) identifiers."])
+          props.response.code=-6
+          props.response.status="Data error processing document"
+          props.response.message="The input document was missing a valid identifier at the top level. processing skipped"
+          throw new Exception("No valid document identifier at top level");
+        }
   
-        course_as_pojo.identifier = crs_internal_uri.toString();
-        course_as_pojo.title = crs.'xcri:title'?.text()?.toString();
-        course_as_pojo.description = crs.'xcri:description'.text();
-        course_as_pojo.imageuri = crs.'xcri:image'?.@src?.text();
-  
-        course_as_pojo.qual = [:]
-        course_as_pojo.qual.title = crs.'xcri:qualification'.'xcri:title'?.text()
-        course_as_pojo.qual.description = crs.'xcri:qualification'.'xcri:description'?.text()
-        course_as_pojo.qual.level = crs.'xcri:qualification'.'xcri:level'?.text()
-        course_as_pojo.qual.awardedBy = crs.'xcri:qualification'.'xcri:awardedBy'?.text()
-  
-        course_as_pojo.descriptions = [:]
-
-        crs.'xcri:description'.each { desc ->
-
-          String desc_type_lit = desc.@'xsi:type'?.text()
-          // String desc_type = desc.@'xsi:type'?.text()?.replaceAll(':','_').toString()
-          String desc_type = expandNamespacedLiteral(props.xml, desc_type_lit)
-
-          log.debug("Processing description ${desc_type} from ${desc_type_lit}");
-  
-          if ( ( desc_type != null ) && 
-               ( desc_type.length() > 0 ) &&
-               ( desc.text() != null ) &&
-               ( desc.text().length() > 0 ) ) {
-            switch ( desc_type ) {
-              case 'http://xcri.org/profiles/catalog#metadataKeywords': course_as_pojo.keywords = desc?.text()?.toString(); break;
-              case 'http://xcri.org/profiles/catalog#abstract': course_as_pojo.courseAbstract = desc?.text()?.toString(); break;
-              case 'http://xcri.org/profiles/catalog#careerOutcome': course_as_pojo.careerOutcome = desc?.text()?.toString(); break;
-              case 'http://xcri.org/profiles/catalog#prerequisites': course_as_pojo.prerequisites = desc?.text()?.toString(); break;
-              case 'http://xcri.org/profiles/catalog#indicativeResource': course_as_pojo.indicativeResource = desc?.text()?.toString(); break;
-              case 'http://xcri.org/profiles/catalog#assessmentStrategy': course_as_pojo.assessmentStrategy = desc?.text()?.toString(); break;
-              case 'http://xcri.org/profiles/catalog#aim': course_as_pojo.aim = desc?.text()?.toString(); break;
-              case 'http://xcri.org/profiles/catalog#learningOutcome': course_as_pojo.learningOutcome = desc?.text()?.toString(); break;
-              case 'http://xcri.org/profiles/catalog/terms#support': course_as_pojo.support = desc?.text()?.toString(); break;
-              case 'http://xcri.org/profiles/catalog/terms#teachingStrategy': course_as_pojo.support = desc?.text()?.toString(); break;
-              case 'http://xcri.org/profiles/catalog/terms#aim': course_as_pojo.aim = desc?.text()?.toString(); break;
-              case 'http://xcri.org/profiles/catalog/terms#structure': course_as_pojo.structure = desc?.text()?.toString(); break;
-              case 'http://xcri.org/profiles/catalog/terms#specialFeature': course_as_pojo.specialFeature = desc?.text()?.toString(); break;
-              case 'http://xcri.org/profiles/catalog/terms#assessmentStrategy': course_as_pojo.assessmentStrategy = desc?.text()?.toString(); break;
-              case 'http://xcri.org/profiles/catalog/terms#leadsTo': course_as_pojo.leadsTo = desc?.text()?.toString(); break;
-              case 'http://xcri.org/profiles/catalog/terms#requiredResource': course_as_pojo.requiredResource = desc?.text()?.toString(); break;
-              default:
-                log.debug("Unhandled description type : ${desc_type}");
-                course_as_pojo.descriptions[desc_type] = desc?.text()?.toString();
-                break;
-            }
+        def canonical_identifier = coreference.resolve(props.owner,identifiers)
+        log.debug("Coreference service returns ${canonical_identifier} (${canonical_identifier.canonicalIdentifier})");
+    
+        props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Identifier for this XCRI document: ${canonical_identifier}"])
+    
+        props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Starting feed validation"])
+    
+        // Validation tests
+    
+        props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Validation complete. No fatal errors."])
+    
+        def prov_id = canonical_identifier.canonicalIdentifier
+        def prov_title = provider.'xcri:title'.text()
+        def prov_uri = provider.'xcri:uri'.text()
+    
+        provider.'xcri:course'.each { crs ->
+    
+          def crs_identifier = crs.'xcri:identifier'.text();
+          def crs_internal_uri = "uri:${props.owner}:xcri:${canonical_identifier}:${crs_identifier}";
+    
+          log.debug("Processing course: ${crs_identifier}");
+          props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Validating course entry ${crs_internal_uri} - ${crs.'xcri:title'}"]);
+    
+          log.debug("looking up course with identifier ${crs_internal_uri}");
+          def course_as_pojo = db.courses.findOne(identifier: crs_internal_uri.toString())
+    
+          def mongo_action = "updated"
+          if ( course_as_pojo != null ) {
+            log.debug("Located existing record... updating course ${crs_identifier} internal GUID is ${course_as_pojo._id}");
           }
           else {
+            mongo_action = "created"
+            course_as_pojo = [:]
+            // Gmongo driver doesn't seem good at passing back an _id, so we manually create one instead.
+            // course_as_pojo._id = java.util.UUID.randomUUID().toString()
+            // course_as_pojo._id = new com.mongodb.ObjectId()
+            course_as_pojo._id = new org.bson.types.ObjectId()
+            log.debug("No existing course information for ${crs_internal_uri}, create new record. new ID will be ${course_as_pojo._id}");
+          }
+    
+          course_as_pojo.provid = prov_id
+          course_as_pojo.provtitle = prov_title
+          course_as_pojo.provuri = prov_uri
+    
+          course_as_pojo.identifier = crs_internal_uri.toString();
+          course_as_pojo.title = crs.'xcri:title'?.text()?.toString();
+          course_as_pojo.description = crs.'xcri:description'.text();
+          course_as_pojo.imageuri = crs.'xcri:image'?.@src?.text();
+    
+          course_as_pojo.qual = [:]
+          course_as_pojo.qual.title = crs.'xcri:qualification'.'xcri:title'?.text()
+          course_as_pojo.qual.description = crs.'xcri:qualification'.'xcri:description'?.text()
+          course_as_pojo.qual.level = crs.'xcri:qualification'.'xcri:level'?.text()
+          course_as_pojo.qual.awardedBy = crs.'xcri:qualification'.'xcri:awardedBy'?.text()
+    
+          course_as_pojo.descriptions = [:]
+  
+          crs.'xcri:description'.each { desc ->
+  
+            String desc_type_lit = desc.@'xsi:type'?.text()
+            // String desc_type = desc.@'xsi:type'?.text()?.replaceAll(':','_').toString()
+            String desc_type = expandNamespacedLiteral(props.xml, desc_type_lit)
+  
+            log.debug("Processing description ${desc_type} from ${desc_type_lit}");
+    
+            if ( ( desc_type != null ) && 
+                 ( desc_type.length() > 0 ) &&
+                 ( desc.text() != null ) &&
+                 ( desc.text().length() > 0 ) ) {
+              switch ( desc_type ) {
+                case 'http://xcri.org/profiles/catalog#metadataKeywords': course_as_pojo.keywords = desc?.text()?.toString(); break;
+                case 'http://xcri.org/profiles/catalog#abstract': course_as_pojo.courseAbstract = desc?.text()?.toString(); break;
+                case 'http://xcri.org/profiles/catalog#careerOutcome': course_as_pojo.careerOutcome = desc?.text()?.toString(); break;
+                case 'http://xcri.org/profiles/catalog#prerequisites': course_as_pojo.prerequisites = desc?.text()?.toString(); break;
+                case 'http://xcri.org/profiles/catalog#indicativeResource': course_as_pojo.indicativeResource = desc?.text()?.toString(); break;
+                case 'http://xcri.org/profiles/catalog#assessmentStrategy': course_as_pojo.assessmentStrategy = desc?.text()?.toString(); break;
+                case 'http://xcri.org/profiles/catalog#aim': course_as_pojo.aim = desc?.text()?.toString(); break;
+                case 'http://xcri.org/profiles/catalog#learningOutcome': course_as_pojo.learningOutcome = desc?.text()?.toString(); break;
+                case 'http://xcri.org/profiles/catalog/terms#support': course_as_pojo.support = desc?.text()?.toString(); break;
+                case 'http://xcri.org/profiles/catalog/terms#teachingStrategy': course_as_pojo.support = desc?.text()?.toString(); break;
+                case 'http://xcri.org/profiles/catalog/terms#aim': course_as_pojo.aim = desc?.text()?.toString(); break;
+                case 'http://xcri.org/profiles/catalog/terms#structure': course_as_pojo.structure = desc?.text()?.toString(); break;
+                case 'http://xcri.org/profiles/catalog/terms#specialFeature': course_as_pojo.specialFeature = desc?.text()?.toString(); break;
+                case 'http://xcri.org/profiles/catalog/terms#assessmentStrategy': course_as_pojo.assessmentStrategy = desc?.text()?.toString(); break;
+                case 'http://xcri.org/profiles/catalog/terms#leadsTo': course_as_pojo.leadsTo = desc?.text()?.toString(); break;
+                case 'http://xcri.org/profiles/catalog/terms#requiredResource': course_as_pojo.requiredResource = desc?.text()?.toString(); break;
+                default:
+                  log.debug("Unhandled description type : ${desc_type}");
+                  course_as_pojo.descriptions[desc_type] = desc?.text()?.toString();
+                  break;
+              }
+            }
+            else {
+            }
+          }
+    
+          course_as_pojo.url = crs.'xcri:url'?.text()?.toString()
+          course_as_pojo.subject = []
+          crs.'subject'.each { subj ->
+            course_as_pojo.subject.add( subj.text()?.toString() );
+          }
+    
+          // def course_as_json = course_as_pojo as JSON;
+          // log.debug("The course as JSON is ${course_as_json.toString()}");
+          course_count++
+    
+          log.debug("Saving mongo instance of course....${crs_internal_uri}, _id=${course_as_pojo['_id']?.toString()}");
+    
+          // db.courses.update([identifier:crs_internal_uri.toString()],course_as_pojo, true);
+          def mongo_store_result = db.courses.save(course_as_pojo);
+    
+          log.debug("After call to courses.save, response was, get _id is ${course_as_pojo['_id']?.toString()}");
+    
+          // Add an eventLog reponse that points to the entry for this course in the mongoDB
+          props.response.eventLog.add([ts:System.currentTimeMillis(),
+                                       type:"ref",
+                                       serviceref:"mongo",
+                                       mongoaction:mongo_action,
+                                       mongodb:"xcri",
+                                       mongoindex:"courses",
+                                       mongotype:"course",
+                                       mongoid:course_as_pojo._id?.toString()]);
+    
+          // Add an eventLog reponse that points to public XCRI Portal
+          props.response.eventLog.add([ts:System.currentTimeMillis(),
+                                       type:"ref",
+                                       serviceref:"xcriportal",
+                                       id:course_as_pojo._id?.toString()]);
+    
+          // Add an eventLog reponse that points to the entry for this course in the mongoDB
+          props.response.eventLog.add([ts:System.currentTimeMillis(),
+                                       type:"ref",
+                                       serviceref:"es",
+                                       escollection:"courses",
+                                       estype:"course",
+                                       esid:course_as_pojo._id?.toString()]);
+    
+    
+          log.debug("Saved pojo. identifier will be \"${course_as_pojo['_id'].toString()}\"");
+    
+          if ( ( course_as_pojo != null ) && ( course_as_pojo['_id'] != null ) ) {
+            // Mongo inserts an _id into the record.. we can reuse that
+    
+            log.debug("Sending record to es");
+            def future = esclient.index {
+              index "courses"
+              type "course"
+              id course_as_pojo['_id'].toString()
+              source course_as_pojo
+            }
+            log.debug("Indexed respidx:$future.response.index/resptp:$future.response.type/respid:$future.response.id")
+          }
+          else {
+            log.error("Failed to store course information ${course_as_pojo}");
+            props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"There was an unexpected error trying to store the course information"]);
           }
         }
-  
-        course_as_pojo.url = crs.'xcri:url'?.text()?.toString()
-        course_as_pojo.subject = []
-        crs.'subject'.each { subj ->
-          course_as_pojo.subject.add( subj.text()?.toString() );
-        }
-  
-        // def course_as_json = course_as_pojo as JSON;
-        // log.debug("The course as JSON is ${course_as_json.toString()}");
-        course_count++
-  
-        log.debug("Saving mongo instance of course....${crs_internal_uri}, _id=${course_as_pojo['_id']?.toString()}");
-  
-        // db.courses.update([identifier:crs_internal_uri.toString()],course_as_pojo, true);
-        def mongo_store_result = db.courses.save(course_as_pojo);
-  
-        log.debug("After call to courses.save, response was, get _id is ${course_as_pojo['_id']?.toString()}");
-  
-        // Add an eventLog reponse that points to the entry for this course in the mongoDB
-        props.response.eventLog.add([ts:System.currentTimeMillis(),
-                                     type:"ref",
-                                     serviceref:"mongo",
-                                     mongoaction:mongo_action,
-                                     mongodb:"xcri",
-                                     mongoindex:"courses",
-                                     mongotype:"course",
-                                     mongoid:course_as_pojo._id?.toString()]);
-  
-        // Add an eventLog reponse that points to public XCRI Portal
-        props.response.eventLog.add([ts:System.currentTimeMillis(),
-                                     type:"ref",
-                                     serviceref:"xcriportal",
-                                     id:course_as_pojo._id?.toString()]);
-  
-        // Add an eventLog reponse that points to the entry for this course in the mongoDB
-        props.response.eventLog.add([ts:System.currentTimeMillis(),
-                                     type:"ref",
-                                     serviceref:"es",
-                                     escollection:"courses",
-                                     estype:"course",
-                                     esid:course_as_pojo._id?.toString()]);
-  
-  
-        log.debug("Saved pojo. identifier will be \"${course_as_pojo['_id'].toString()}\"");
-  
-        if ( ( course_as_pojo != null ) && ( course_as_pojo['_id'] != null ) ) {
-          // Mongo inserts an _id into the record.. we can reuse that
-  
-          log.debug("Sending record to es");
-          def future = esclient.index {
-            index "courses"
-            type "course"
-            id course_as_pojo['_id'].toString()
-            source course_as_pojo
-          }
-          log.debug("Indexed respidx:$future.response.index/resptp:$future.response.type/respid:$future.response.id")
-        }
-        else {
-          log.error("Failed to store course information ${course_as_pojo}");
-          props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"There was an unexpected error trying to store the course information"]);
-        }
+
+        log.debug("Adding title ${prov_title} and resource identifier ${prov_id}");
+        // These properties identify the processed file (resource) back to the coordination software
+        props.response.title = prov_title
+        props.response.resource_identifier = prov_id
+
+        def elapsed = System.currentTimeMillis() - start_time
+        props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Completed processing of ${course_count} courses from catalog ${canonical_identifier} for provider ${props.owner} in ${elapsed}ms"]);
       }
-  
-      def elapsed = System.currentTimeMillis() - start_time
-      props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Completed processing of ${course_count} courses from catalog ${id1} for provider ${props.owner} in ${elapsed}ms"]);
-  
-      log.debug("Adding title ${prov_title} and resource identifier ${prov_id}");
-  
-      // These properties identify the processed file (resource) back to the coordination software
-      props.response.title = prov_title
-      props.response.resource_identifier = prov_id
     }
     catch ( Exception e ) {
       log.error("Unexpected error",e);
