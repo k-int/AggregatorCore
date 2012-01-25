@@ -77,8 +77,8 @@ class PNDSDCAPMedia {
                                          'e20cl':'http://www.20thcenturylondon.org.uk',
                                          'pnds_dc':'http://purl.org/mla/pnds/pndsdc/',
                                          'pndsterms':'http://purl.org/mla/pnds/terms/',
-                                         'dc':'http://purl.org/dc/elements/1.1/',
-                                         'culturegrid_item':'http://www.peoplesnetwork.gov.uk/schema/CultureGrid_Item'])
+                                         'dc':'http://purl.org/dc/elements/1.1/'])
+                                         
 
     log.debug("root element namespace: ${d2.namespaceURI()}");
     log.debug("lookup namespace: ${d2.lookupNamespace('xcri')}");
