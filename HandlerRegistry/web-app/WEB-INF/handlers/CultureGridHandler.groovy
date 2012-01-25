@@ -9,7 +9,7 @@ import com.gmongo.GMongo
 import org.apache.commons.logging.LogFactory
 import grails.converters.*
 
-class PNDSDCAPMedia {
+class CultureGridHandler {
 
   private static final log = LogFactory.getLog(this)
 
@@ -33,7 +33,7 @@ class PNDSDCAPMedia {
 
   // handlers have access to the repository mongo service.. suggest you use http://blog.paulopoiati.com/2010/06/20/gmongo-0-5-released/
   def getHandlerName() {
-    "PNDS_DCAP_Media"
+    "CultureGridItem"
   }
 
   def getRevision() {
@@ -42,7 +42,7 @@ class PNDSDCAPMedia {
 
   def getPreconditions() {
     [
-      'p.rootElementNamespace=="http://purl.org/mla/pnds/pndsdc/"'
+      'p.rootElementNamespace=="http://www.peoplesnetwork.gov.uk/schema/CultureGrid_Item"'
     ]
   }
 
