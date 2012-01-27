@@ -3,7 +3,7 @@ package com.k_int.repository.handlers
 @GrabResolver(name='es', root='https://oss.sonatype.org/content/repositories/releases')
 
 @Grab(group='com.gmongo', module='gmongo', version='0.9.2')
-@Grab(group='org.elasticsearch', module='elasticsearch-lang-groovy', version='0.17.8')
+@Grab(group='org.elasticsearch', module='elasticsearch-lang-groovy', version='1.0.0')
 
 import com.gmongo.GMongo
 import org.apache.commons.logging.LogFactory
@@ -12,6 +12,25 @@ import grails.converters.*
 class XCRIHandler {
 
   private static final log = LogFactory.getLog(this)
+  
+  /*private desc_mappings = [
+                              'metadataKeywords': [],
+                              'abstract': [],
+                              'careerOutcome': [],
+                              'prerequisites': [],
+                              'indicativeResource': [],
+                              'assessmentStrategy':[],
+                              'aim':[],
+                              'learningOutcome':[],
+                              'support': [],
+                              'teachingStrategy': [],
+                              'aim': [],
+                              'structure': [],
+                              'specialFeature': [],
+                              'assessmentStrategy': [],
+                              'leadsTo': [],
+                              'requiredResource':[] 
+                          ]*/
 
   // This handler processes XCRI documents... After the handler is invoked, the local mongodb
   // will contain a new database called xcri and a collection called courses. If rest = true is configured in
@@ -97,7 +116,7 @@ class XCRIHandler {
         }
   
         def canonical_identifier = coreference.resolve(props.owner,identifiers)
-        log.debug("Coreference service returns ${canonical_identifier} (${canonical_identifier.canonicalIdentifier})");
+        log.debug("Coreference service returns ${canonical_identifier} (${canonical_identifier.canonicalIdentifier})")
     
         props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Identifier for this XCRI document: ${canonical_identifier}"])
     
@@ -114,7 +133,7 @@ class XCRIHandler {
         provider.'xcri:course'.each { crs ->
     
           def crs_identifier = crs.'xcri:identifier'.text();
-          def crs_internal_uri = "uri:${props.owner}:xcri:${canonical_identifier}:${crs_identifier}";
+          def crs_internal_uri = "uri:${props.owner}:xcri:${canonical_identifier.canonicalIdentifier}:${crs_identifier}";
     
           log.debug("Processing course: ${crs_identifier}");
           props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Validating course entry ${crs_internal_uri} - ${crs.'xcri:title'}"]);
@@ -140,10 +159,10 @@ class XCRIHandler {
           course_as_pojo.provtitle = prov_title
           course_as_pojo.provuri = prov_uri
     
-          course_as_pojo.identifier = crs_internal_uri.toString();
-          course_as_pojo.title = crs.'xcri:title'?.text()?.toString();
-          course_as_pojo.description = crs.'xcri:description'.text();
-          course_as_pojo.imageuri = crs.'xcri:image'?.@src?.text();
+          course_as_pojo.identifier = crs_internal_uri.toString()
+          course_as_pojo.title = crs.'xcri:title'?.text()?.toString()
+          course_as_pojo.description = crs.'xcri:description'.text()
+          course_as_pojo.imageuri = crs.'xcri:image'?.@src?.text()
     
           course_as_pojo.qual = [:]
           course_as_pojo.qual.title = crs.'xcri:qualification'.'xcri:title'?.text()
@@ -175,7 +194,7 @@ class XCRIHandler {
                 case 'http://xcri.org/profiles/catalog#aim': course_as_pojo.aim = desc?.text()?.toString(); break;
                 case 'http://xcri.org/profiles/catalog#learningOutcome': course_as_pojo.learningOutcome = desc?.text()?.toString(); break;
                 case 'http://xcri.org/profiles/catalog/terms#support': course_as_pojo.support = desc?.text()?.toString(); break;
-                case 'http://xcri.org/profiles/catalog/terms#teachingStrategy': course_as_pojo.support = desc?.text()?.toString(); break;
+                case 'http://xcri.org/profiles/catalog/terms#teachingStrategy': course_as_pojo.teachingStrategy = desc?.text()?.toString(); break;
                 case 'http://xcri.org/profiles/catalog/terms#aim': course_as_pojo.aim = desc?.text()?.toString(); break;
                 case 'http://xcri.org/profiles/catalog/terms#structure': course_as_pojo.structure = desc?.text()?.toString(); break;
                 case 'http://xcri.org/profiles/catalog/terms#specialFeature': course_as_pojo.specialFeature = desc?.text()?.toString(); break;
@@ -191,23 +210,61 @@ class XCRIHandler {
             else {
             }
           }
-    
+          
+          course_as_pojo.credits = []
+          
+          crs.'xcri:credit'.each { cred ->       
+              def credit = [:]
+              credit.scheme = cred.'xcri:scheme'?.text()?.toString()
+              credit.level = cred.'xcri:level'?.text()?.toString()
+              credit.val = cred.'xcri:value'?.text()?.toString()
+              course_as_pojo.credits << credit
+          }
+          
+          course_as_pojo.presentations = []
+          
+          crs.'xcri:presentation'.each { pres ->
+              def presentation = [:]
+              presentation.identifier = pres.'xcri:identifier'.text()?.toString()
+              presentation.description = pres.'xcri:description'.text()?.toString()
+              presentation.cost = pres.'xcri:cost'.text()?.toString()
+              presentation.start = pres.'xcri:start'.text()?.toString()
+              presentation.end = pres.'xcri:end'.text()?.toString()
+              presentation.duration = pres.'xcri:duration'.text()?.toString()
+              presentation.applicationsOpen = pres.'xcri:applyFrom'.text()?.toString()
+              presentation.applicationsClose = pres.'xcri:applyUntil'.text()?.toString()
+              presentation.applicationsTo = pres.'xcri:applyTo'.text()?.toString()
+              presentation.enquireTo = pres.'xcri:enquireTo'.text()?.toString()  
+              presentation.studyMode = pres.'xcri:studyMode'.text()?.toString()
+              presentation.attendanceMode = pres.'xcri:attendanceMode'.text()?.toString()
+              presentation.attendancePattern = pres.'xcri:attendancePattern'.text()?.toString()
+              presentation.languageOfInstruction = pres.'xcri:languageOfInstruction'.text()?.toString()
+              presentation.languageOfAssessment = pres.'xcri:languageOfAssessment'.text()?.toString()
+              
+              presentation.venue = [:]
+              presentation.venue.description = pres.'xcri:venue'.'xcri:description'.text()?.toString()
+              presentation.venue.title = pres.'xcri:venue'.'xcri:title'.text()?.toString()
+              presentation.venue.url = pres.'xcri:venue'.'xcri:url'.text()?.toString()
+              
+              course_as_pojo.presentations << presentation
+          }
+                                    
           course_as_pojo.url = crs.'xcri:url'?.text()?.toString()
           course_as_pojo.subject = []
           crs.'subject'.each { subj ->
-            course_as_pojo.subject.add( subj.text()?.toString() );
+            course_as_pojo.subject.add( subj.text()?.toString() )
           }
     
           // def course_as_json = course_as_pojo as JSON;
           // log.debug("The course as JSON is ${course_as_json.toString()}");
           course_count++
     
-          log.debug("Saving mongo instance of course....${crs_internal_uri}, _id=${course_as_pojo['_id']?.toString()}");
+          log.debug("Saving mongo instance of course....${crs_internal_uri}, _id=${course_as_pojo['_id']?.toString()}")
     
           // db.courses.update([identifier:crs_internal_uri.toString()],course_as_pojo, true);
-          def mongo_store_result = db.courses.save(course_as_pojo);
+          def mongo_store_result = db.courses.save(course_as_pojo)
     
-          log.debug("After call to courses.save, response was, get _id is ${course_as_pojo['_id']?.toString()}");
+          log.debug("After call to courses.save, response was, get _id is ${course_as_pojo['_id']?.toString()}")
     
           // Add an eventLog reponse that points to the entry for this course in the mongoDB
           props.response.eventLog.add([ts:System.currentTimeMillis(),
