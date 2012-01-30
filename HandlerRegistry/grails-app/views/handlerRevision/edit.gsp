@@ -61,18 +61,21 @@
                   		</tr>
                   	</tbody>
                 </table>
-                <g:textArea name="handler" cols="40" rows="5" value="${handlerRevisionInstance?.handlerText}" />
+                <g:textArea name="handlerText" cols="40" rows="5" value="${handlerRevisionInstance?.handlerText}" />
                 </div>
                 <div id="tabs">
 					<ul>
 						<li><a href="#tabs-1">Console</a></li>
 					</ul>
 					<div id="tabs-1">
-						<p>Console messages here</p>
+					   <g:if test="${flash.compilation_error}">
+                            <p>${flash.compilation_error}</p>
+                       </g:if>
+
 					</div>
 				</div>  
                 <div class="buttons">
-                    <span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
+                    <span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.save.label', default: 'Save')}" /></span>
                     <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
                 </div>
             </g:form>
@@ -81,7 +84,7 @@
 		{
 			$( "#tabs" ).tabs();
 		
-     		var editor = CodeMirror.fromTextArea(document.getElementById("handler"), 
+     		var editor = CodeMirror.fromTextArea(document.getElementById("handlerText"), 
      		{
         		lineNumbers: true,
         		matchBrackets: true,
