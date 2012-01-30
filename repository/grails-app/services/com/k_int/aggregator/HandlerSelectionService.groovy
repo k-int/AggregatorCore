@@ -77,4 +77,12 @@ class HandlerSelectionService implements ApplicationContextAware {
         log.warn("Non service based handlers not implemented yet")
       }
     }
+
+  def clearDown() {
+    log.debug("Clear down");
+    EventHandler.findAll().each { eh ->
+      eh.delete(flush:true)
+    }
+    
+  }
 }

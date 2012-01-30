@@ -5,9 +5,24 @@
   </head>
   <body>
 
+    <g:if test='${flash.message}'>
+      <div class="FlashMessage"><g:message code="${flash.message}" args="${flash.args}" default="${flash.default}"/></div>
+    </g:if>
+
+<table>
+<tr>
+  <th>Static Information</th>
+  <th>Actions</th>
+</tr>
+<tr>
+<td>
+
+<hr/>
 This is the admin home page - Open Data Aggregator - Instance ID : ${sysid}
+<hr/>
 
 <h2>Public Aggregation Endpoints For this ODA</h2>
+
 <p>
 <ul>
   <li>ElasticSearch
@@ -100,6 +115,15 @@ When deposited resources are not identified by any registered handler, the follo
 </g:each>
 </ul>
 </p>
+
+        </td>
+        <td>
+          <ul>
+            <li><g:link action="clearHandlers">Clear down all handlers</g:link>
+          </ul>
+        </td>
+      </tr>
+    </table>
 
 
   </body>

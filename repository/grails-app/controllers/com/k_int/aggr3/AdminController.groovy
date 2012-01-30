@@ -6,11 +6,26 @@ import com.k_int.aggregator.*
 class AdminController {
 
   def remoteHandlerRepositoryService
+  def handlerSelectionService
 
   def index = {
-
     // Get hold of mongodb 
     def result = [:]
+    getDataForAdminHomePage(result)
+    result
+  }
+
+  def clearHandlers = {
+    flash.clear()
+    handlerSelectionService.clearDown();
+    flash.message = "handlers.clear.message"
+    // flash.args = []
+    flash.default = "Handlers Cleared Down."
+    redirect(action:'index')
+    // render(view:'index', model:result)
+  }
+
+  def getDataForAdminHomePage(result) {
 
     def mongo = new com.gmongo.GMongo();
     def db = mongo.getDB("oda")
@@ -42,11 +57,8 @@ class AdminController {
 
     result.handlerrepos = []
     result.handlerrepos.add( [
-                              url:remoteHandlerRepositoryService.remote_repo,
+                              url:remoteHandlerRepositoryService.remote_repo_url,
                               user:remoteHandlerRepositoryService.remote_user])
     result.sysid = remoteHandlerRepositoryService.sys_id
-
-    result
   }
-
 }

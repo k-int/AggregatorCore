@@ -9,91 +9,92 @@ import org.springframework.context.*
  
 class RemoteHandlerRepositoryService implements ApplicationContextAware {
 
-    ApplicationContext applicationContext
+  ApplicationContext applicationContext
 
-    def handlerExecutionService
-    def sys_id = null
-    def remote_repo_url = null
-    def remote_user = null
-    def remote_pass = null
+  def handlerExecutionService
+  def sys_id = null
+  def remote_repo_url = null
+  def remote_user = null
+  def remote_pass = null
 
-    @javax.annotation.PostConstruct
-    def init() {
-      log.debug("Initialising Remote Handler Repository Service");
-      sys_id = Setting.findByStKey('instanceid')?.stValue
-      remote_repo_url = Setting.findByStKey('url')?.stValue
-      remote_user = Setting.findByStKey('user')?.stValue
-      remote_pass = Setting.findByStKey('pass')?.stValue
-      log.debug("At startup, this system is identified by repository id ${sys_id}. Remote repo is ${remote_repo_url}, user at remote repo is ${remote_user}/${remote_pass}")
-    }
+  @javax.annotation.PostConstruct
+  def init() {
+    log.debug("Initialising Remote Handler Repository Service");
+    sys_id = Setting.findByStKey('instanceid')?.stValue
+    remote_repo_url = Setting.findByStKey('url')?.stValue
+    remote_user = Setting.findByStKey('user')?.stValue
+    remote_pass = Setting.findByStKey('pass')?.stValue
+    log.debug("At startup, this system is identified by repository id ${sys_id}. Remote repo is ${remote_repo_url}, user at remote repo is ${remote_user}/${remote_pass}")
+  }
 
-    def findHandlerWhen(props) {
+  def findHandlerWhen(props) {
 
-      def result = null;
+    def result = null;
 
-      log.debug("Finding any remote handlers for properties : ${props.keySet()}, remote repo configured as ${remote_repo_url}");
+    log.debug("Finding any remote handlers for properties : ${props.keySet()}, remote repo configured as ${remote_repo_url}");
 
-      try {
-        def remote_repo = new RESTClient( remote_repo_url )
-        remote_repo.auth.basic remote_user, remote_pass
+    try {
+      def remote_repo = new RESTClient( remote_repo_url )
+      remote_repo.auth.basic remote_user, remote_pass
 
-        def json_constraints = props as JSON
+      def json_constraints = props as JSON
 
-        def resp = remote_repo.post( 
-                       path : '/HandlerRegistry/findWhen',
-                       body : [ constraints:json_constraints?.toString(),
-                                remote_instance_id:sys_id ],
-                       requestContentType : URLENC )
+      def resp = remote_repo.post( 
+                     path : '/HandlerRegistry/findWhen',
+                     body : [ constraints:json_constraints?.toString(),
+                              remote_instance_id:sys_id ],
+                     requestContentType : URLENC )
  
-        // assert resp.status == 200
-        // assert ( resp.data instanceof GPathResult ) // parsed using XmlSlurper
-        // assert resp.data.text == msg
-        // assert resp.data.user.screen_name == userName
-        // def postID = resp.data.id.toInteger()
+      // assert resp.status == 200
+      // assert ( resp.data instanceof GPathResult ) // parsed using XmlSlurper
+      // assert resp.data.text == msg
+      // assert resp.data.user.screen_name == userName
+      // def postID = resp.data.id.toInteger()
 
    
-        log.debug("Result of findWhen on remote repository: resp.status=${resp.status}");
+      log.debug("Result of findWhen on remote repository: resp.status=${resp.status}");
 
-        if ( resp.data?.code == 0 ) {
-          log.debug("** Located remote handler with name ${resp.data.handlerName}, revision: ${resp.data.handler_revision}");
-          // log.debug("Handler: ${resp.data.handler}");
-          log.debug("EventCode: ${resp.data.eventCode}");
-          log.debug("Preconditions: ${resp.data.preconditions}");
+      if ( resp.data?.code == 0 ) {
+        log.debug("** Located remote handler with name ${resp.data.handlerName}, revision: ${resp.data.handler_revision}");
+        // log.debug("Handler: ${resp.data.handler}");
+        log.debug("EventCode: ${resp.data.eventCode}");
+        log.debug("Preconditions: ${resp.data.preconditions}");
 
-          result = new ScriptletEventHandler(
-            name: resp.data.handlerName,
-            eventCode: resp.data.eventCode,
-            preconditions: resp.data.preconditions,
-            scriptlet: resp.data.handler,
-            active: true
-          )
+        result = new ScriptletEventHandler(
+          name: resp.data.handlerName,
+          eventCode: resp.data.eventCode,
+          preconditions: resp.data.preconditions,
+          scriptlet: resp.data.handler,
+          active: true
+        )
 
-          if ( result.save(flush:true) ) {
-            log.debug("Saved new handler, Obtaining an instance of the new handler class");
-            def handler_instance = handlerExecutionService.getHandlerInstance(result);
-            if ( handler_instance.metaClass.respondsTo(handler_instance,"setup", applicationContext) ) {
-              log.debug("New handler has a setup method");
-              handler_instance.setup(applicationContext);
-            }
-          }
-          else {
-            log.error("Problem saving new event handler");
-            result.erorrs.each { err ->
-              log.error(err);
-            }
+        if ( result.save(flush:true) ) {
+          log.debug("Saved new handler, Obtaining an instance of the new handler class");
+          def handler_instance = handlerExecutionService.getHandlerInstance(result);
+          if ( handler_instance.metaClass.respondsTo(handler_instance,"setup", applicationContext) ) {
+            log.debug("New handler has a setup method");
+            handler_instance.setup(applicationContext);
           }
         }
         else {
-          log.warn("Error processing json response...");
+          log.error("Problem saving new event handler");
+          result.erorrs.each { err ->
+            log.error(err);
+          }
         }
       }
-      catch ( Exception e ) {
-        log.error("Problem performing lookup from remote handler registry",e)
+      else {
+        log.warn("Error processing json response...");
       }
-      finally {
-        log.debug("Completed findHandlerWhen");
-      }
-
-      result;
     }
+    catch ( Exception e ) {
+      log.error("Problem performing lookup from remote handler registry",e)
+    }
+    finally {
+      log.debug("Completed findHandlerWhen");
+    }
+
+    result;
+  }
+
 }

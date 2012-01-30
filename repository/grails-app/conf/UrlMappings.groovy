@@ -4,8 +4,9 @@ class UrlMappings {
 
                "/admin/reindex" ( controller:"reindex", action:"index" )
 
-               "/$controller" {
-                   action = [GET:"index", POST:"save"] // PUT:"update", DELETE:"delete", POST:"save"]
+               "/admin/$action?" {
+                   // action = [GET:"index", POST:"save"] // PUT:"update", DELETE:"delete", POST:"save"]
+                   controller = 'admin'
                    constraints {
                      // apply constraints here
                    }
