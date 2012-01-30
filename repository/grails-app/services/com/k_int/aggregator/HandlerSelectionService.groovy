@@ -80,11 +80,9 @@ class HandlerSelectionService implements ApplicationContextAware {
 
   def clearDown() {
     log.debug("Clear down handlers");
-    EventHandler.findAll().each { eh ->
-      if ( ( eh.name != 'defaultDepositHandler' ) && ( eh.name != 'XMLDepositHandler' ) ) {
-        log.debug("Clear down ${eh.name}");
-        eh.delete(flush:true)
-      }
+    ScriptletEventHandler.findAll().each { eh ->
+      log.debug("Clear down ${eh.name}");
+      eh.delete(flush:true)
     }
   }
 
