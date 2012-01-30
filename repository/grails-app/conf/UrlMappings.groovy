@@ -12,6 +12,10 @@ class UrlMappings {
                    }
                 }
 
+		"/$controller" {
+                  action = [GET:"index", POST:"save"] // PUT:"update", DELETE:"delete", POST:"save"]
+                }
+
 		"/$controller/$id?/$action?" {
 			constraints {
 				// apply constraints here

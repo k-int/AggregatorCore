@@ -104,6 +104,18 @@ This is the admin home page - Open Data Aggregator - Instance ID : ${sysid}
 </table>
 </p>
 
+<h2>Currently Cached Handlers</h2>
+<table border="1">
+  <tr>
+    <th>Handler Name</th>
+  </tr>
+<g:each in="${handler_cache}" var="hi">
+  <tr>
+    <td>${hi.value.getHandlerName()}</td>
+  </tr>
+</g:each>
+</table>
+
 <h2>Registered Remote Handler Repository for this ODA (${sysid})</h2>
 <p>
 When deposited resources are not identified by any registered handler, the following services will be consulted to see if an appropriate handler can be dynamically downloaded and installed

@@ -53,6 +53,8 @@ class AdminController {
 
     result.handlers = EventHandler.list()
 
+    result.handler_cache = handlerExecutionService.handler_cache
+
     // es_aggregations.each { esa ->
     //   log.debug(esa);
     // }

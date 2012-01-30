@@ -34,7 +34,7 @@ class UploadController {
   }
 
   def save = { 
-    log.debug("Save");
+    log.debug("Save Action");
     // println "Save.... User: ${SecurityUtils.getSubject()?.getPrincipal()}"
 
     // This is a secured resource... get user details
