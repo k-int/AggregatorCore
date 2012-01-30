@@ -7,6 +7,7 @@ class AdminController {
 
   def remoteHandlerRepositoryService
   def handlerSelectionService
+  def HandlerExecutionService
 
   def index = {
     // Get hold of mongodb 
@@ -18,6 +19,7 @@ class AdminController {
   def clearHandlers = {
     flash.clear()
     handlerSelectionService.clearDown();
+    HandlerExecutionService.clearDown();
     flash.message = "handlers.clear.message"
     // flash.args = []
     flash.default = "Handlers Cleared Down."
