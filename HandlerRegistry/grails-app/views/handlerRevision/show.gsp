@@ -28,14 +28,7 @@
                             <td valign="top" class="value">${fieldValue(bean: handlerRevisionInstance, field: "id")}</td>
                             
                         </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="handlerRevision.handler.label" default="Handler" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: handlerRevisionInstance, field: "handler")}</td>
-                            
-                        </tr>
-                    
+                                        
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="handlerRevision.owner.label" default="Owner" /></td>
                             

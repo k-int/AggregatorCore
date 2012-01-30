@@ -42,38 +42,13 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="liveRevision"><g:message code="handler.liveRevision.label" default="Live Revision" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: handlerInstance, field: 'liveRevision', 'errors')}">
-                                    <g:select name="liveRevision.id" from="${com.k_int.handlerregistry.HandlerRevision.list()}" optionKey="id" value="${handlerInstance?.liveRevision?.id}"  />
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
                                   <label for="name"><g:message code="handler.name.label" default="Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: handlerInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${handlerInstance?.name}" />
                                 </td>
                             </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="revisions"><g:message code="handler.revisions.label" default="Revisions" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: handlerInstance, field: 'revisions', 'errors')}">
-                                    
-<ul>
-<g:each in="${handlerInstance?.revisions?}" var="r">
-    <li><g:link controller="handlerRevision" action="show" id="${r.id}">${r?.encodeAsHTML()}</g:link></li>
-</g:each>
-</ul>
-<g:link controller="handlerRevision" action="create" params="['handler.id': handlerInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'handlerRevision.label', default: 'HandlerRevision')])}</g:link>
-
-                                </td>
-                            </tr>
-                        
+                                           
                         </tbody>
                     </table>
                 </div>
