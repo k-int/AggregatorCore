@@ -13,24 +13,26 @@ class XCRIHandler {
 
   private static final log = LogFactory.getLog(this)
   
-  /*private desc_mappings = [
-                              'metadataKeywords': [],
-                              'abstract': [],
-                              'careerOutcome': [],
-                              'prerequisites': [],
-                              'indicativeResource': [],
-                              'assessmentStrategy':[],
-                              'aim':[],
-                              'learningOutcome':[],
-                              'support': [],
-                              'teachingStrategy': [],
-                              'aim': [],
-                              'structure': [],
-                              'specialFeature': [],
-                              'assessmentStrategy': [],
-                              'leadsTo': [],
-                              'requiredResource':[] 
-                          ]*/
+  private desc_mappings = [
+                              'metadataKeywords': ['xcri:metadataKeywords','xcriterms:metadataKeywords'],
+                              'abstract': ['xcri:abstract','xcriTerms:abstract'],
+                              'careerOutcome': ['xcri:careerOutcome','xcriTerms:careerOutcome','Career Outcome'],
+                              'prerequisites': ['xcri:prerequisites','xcriTerms:prerequisites','Entry Profile'],
+                              'indicativeResource': ['xcri:indicativeResource','xcriTerms:indicativeResource','Indicative Resource'],
+                              'assessmentStrategy':['xcri:assessmentStrategy','xcriTerms:assessmentStrategy','Assessment Strategy'],
+                              'aim':['xcri:aim','xcriTerms:aim','Aim','terms:topic'],
+                              'learningOutcome':['xcri:learningOutcome','xcriTerms:learningOutcome','Learning Outcome'],
+                              'syllabus': ['xcri:syllabus','xcriTerms:syllabus','Syllabus'],   
+                              'support': ['xcri:support','xcriTerms:support','Support'],
+                              'teachingStrategy': ['xcri:teachingStrategy','xcriTerms:teachingStrategy','Teaching Strategy'],
+                              'structure': ['xcri:structure','xcriTerms:structure','Structure'],
+                              'specialFeature': ['xcri:specialFeature','xcriTerms:specialFeature','Special Feature'],
+                              'leadsTo': ['xcri:leadsTo','xcriTerms:leadsTo','Leads To'],
+                              'requiredResource':['xcri:requiredResource','xcriTerms:requiredResource','Required Resource'],
+                              'providedResource':['xcri:providedResource','xcriTerms:providedResource','Provided Resource'],
+                              'policy':['xcri:policy','xcriTerms:policy','Policy'],
+                              'regulations':['xcri:regulations','xcriTerms:regulations','Policy']
+                          ]  
 
   // This handler processes XCRI documents... After the handler is invoked, the local mongodb
   // will contain a new database called xcri and a collection called courses. If rest = true is configured in
@@ -80,7 +82,8 @@ class XCRIHandler {
   
       def d2 = props.xml.declareNamespace(['xcri':'http://xcri.org/profiles/catalog', 
                                            'xsi':'http://www.w3.org/2001/XMLSchema-instance',
-                                           'xhtml':'http://www.w3.org/1999/xhtml'])
+                                           'xhtml':'http://www.w3.org/1999/xhtml',
+                                           'dc':'http://purl.org/dc/elements/1.1/'])
   
       // def xcri = new groovy.xml.Namespace("http://xcri.org/profiles/catalog", 'xcri') 
   
@@ -160,55 +163,82 @@ class XCRIHandler {
           course_as_pojo.provuri = prov_uri
     
           course_as_pojo.identifier = crs_internal_uri.toString()
-          course_as_pojo.title = crs.'xcri:title'?.text()?.toString()
-          course_as_pojo.description = crs.'xcri:description'.text()
+          course_as_pojo.title = crs.'xcri:title'?.text()?.toString() 
           course_as_pojo.imageuri = crs.'xcri:image'?.@src?.text()
     
           course_as_pojo.qual = [:]
+          course_as_pojo.qual.type = crs.'xcri:qualification'.'xcri:type'?.text()
           course_as_pojo.qual.title = crs.'xcri:qualification'.'xcri:title'?.text()
           course_as_pojo.qual.description = crs.'xcri:qualification'.'xcri:description'?.text()
           course_as_pojo.qual.level = crs.'xcri:qualification'.'xcri:level'?.text()
           course_as_pojo.qual.awardedBy = crs.'xcri:qualification'.'xcri:awardedBy'?.text()
-    
+          course_as_pojo.qual.accreditedBy = crs.'xcri:qualification'.'xcri:accreditedBy'?.text()
+          
           course_as_pojo.descriptions = [:]
   
           crs.'xcri:description'.each { desc ->
-  
-            String desc_type_lit = desc.@'xsi:type'?.text()
-            // String desc_type = desc.@'xsi:type'?.text()?.replaceAll(':','_').toString()
-            String desc_type = expandNamespacedLiteral(props.xml, desc_type_lit)
-  
-            log.debug("Processing description ${desc_type} from ${desc_type_lit}");
-    
-            if ( ( desc_type != null ) && 
-                 ( desc_type.length() > 0 ) &&
-                 ( desc.text() != null ) &&
-                 ( desc.text().length() > 0 ) ) {
-              switch ( desc_type ) {
-                case 'http://xcri.org/profiles/catalog#metadataKeywords': course_as_pojo.keywords = desc?.text()?.toString(); break;
-                case 'http://xcri.org/profiles/catalog#abstract': course_as_pojo.courseAbstract = desc?.text()?.toString(); break;
-                case 'http://xcri.org/profiles/catalog#careerOutcome': course_as_pojo.careerOutcome = desc?.text()?.toString(); break;
-                case 'http://xcri.org/profiles/catalog#prerequisites': course_as_pojo.prerequisites = desc?.text()?.toString(); break;
-                case 'http://xcri.org/profiles/catalog#indicativeResource': course_as_pojo.indicativeResource = desc?.text()?.toString(); break;
-                case 'http://xcri.org/profiles/catalog#assessmentStrategy': course_as_pojo.assessmentStrategy = desc?.text()?.toString(); break;
-                case 'http://xcri.org/profiles/catalog#aim': course_as_pojo.aim = desc?.text()?.toString(); break;
-                case 'http://xcri.org/profiles/catalog#learningOutcome': course_as_pojo.learningOutcome = desc?.text()?.toString(); break;
-                case 'http://xcri.org/profiles/catalog/terms#support': course_as_pojo.support = desc?.text()?.toString(); break;
-                case 'http://xcri.org/profiles/catalog/terms#teachingStrategy': course_as_pojo.teachingStrategy = desc?.text()?.toString(); break;
-                case 'http://xcri.org/profiles/catalog/terms#aim': course_as_pojo.aim = desc?.text()?.toString(); break;
-                case 'http://xcri.org/profiles/catalog/terms#structure': course_as_pojo.structure = desc?.text()?.toString(); break;
-                case 'http://xcri.org/profiles/catalog/terms#specialFeature': course_as_pojo.specialFeature = desc?.text()?.toString(); break;
-                case 'http://xcri.org/profiles/catalog/terms#assessmentStrategy': course_as_pojo.assessmentStrategy = desc?.text()?.toString(); break;
-                case 'http://xcri.org/profiles/catalog/terms#leadsTo': course_as_pojo.leadsTo = desc?.text()?.toString(); break;
-                case 'http://xcri.org/profiles/catalog/terms#requiredResource': course_as_pojo.requiredResource = desc?.text()?.toString(); break;
-                default:
-                  log.debug("Unhandled description type : ${desc_type}");
-                  course_as_pojo.descriptions[desc_type] = desc?.text()?.toString();
-                  break;
-              }
-            }
-            else {
-            }
+              
+             if(desc.@'xsi:type')
+             {
+                 String desc_key = lookupDescMapping(desc.@'xsi:type'?.text())
+                 
+                 if(desc_key)                
+                     course_as_pojo[desc_key] = desc?.text()?.toString();
+                 else
+                     course_as_pojo.descriptions[expandNamespacedLiteral(doc, type_value)] = desc?.text()?.toString();
+             }
+             else if(desc.@'type')
+             { 
+                 String desc_key = lookupDescMapping(desc.@'type'?.text())
+                        
+                 if(desc_key)                
+                     course_as_pojo[desc_key] = desc?.text()?.toString();
+                 else
+                     course_as_pojo.descriptions[expandNamespacedLiteral(doc, type_value)] = desc?.text()?.toString();
+             }
+             else
+             {
+                 course_as_pojo.description = desc.text()
+             }     
+             
+                
+             
+//            String desc_type_lit = desc.@'xsi:type'?.text()
+//            // String desc_type = desc.@'xsi:type'?.text()?.replaceAll(':','_').toString()
+//            String desc_type = expandNamespacedLiteral(props.xml, desc_type_lit)
+//  
+//            log.debug("Processing description ${desc_type} from ${desc_type_lit}");
+//    
+//            if ( ( desc_type != null ) && 
+//                 ( desc_type.length() > 0 ) &&
+//                 ( desc.text() != null ) &&
+//                 ( desc.text().length() > 0 ) ) {
+//              switch ( desc_type ) {
+//                case 'http://xcri.org/profiles/catalog#metadataKeywords': course_as_pojo.keywords = desc?.text()?.toString(); break;
+//                case 'http://xcri.org/profiles/catalog#abstract': course_as_pojo.courseAbstract = desc?.text()?.toString(); break;
+//                case 'http://xcri.org/profiles/catalog#careerOutcome': course_as_pojo.careerOutcome = desc?.text()?.toString(); break;
+//                case 'http://xcri.org/profiles/catalog#prerequisites': course_as_pojo.prerequisites = desc?.text()?.toString(); break;
+//                case 'http://xcri.org/profiles/catalog#indicativeResource': course_as_pojo.indicativeResource = desc?.text()?.toString(); break;
+//                case 'http://xcri.org/profiles/catalog#assessmentStrategy': course_as_pojo.assessmentStrategy = desc?.text()?.toString(); break;
+//                case 'http://xcri.org/profiles/catalog#aim': course_as_pojo.aim = desc?.text()?.toString(); break;
+//                case 'http://xcri.org/profiles/catalog#learningOutcome': course_as_pojo.learningOutcome = desc?.text()?.toString(); break;
+//                case 'http://xcri.org/profiles/catalog/terms#support': course_as_pojo.support = desc?.text()?.toString(); break;
+//                case 'http://xcri.org/profiles/catalog/terms#teachingStrategy': course_as_pojo.teachingStrategy = desc?.text()?.toString(); break;
+//                case 'http://xcri.org/profiles/catalog/terms#aim': course_as_pojo.aim = desc?.text()?.toString(); break;
+//                case 'http://xcri.org/profiles/catalog/terms#structure': course_as_pojo.structure = desc?.text()?.toString(); break;
+//                case 'http://xcri.org/profiles/catalog/terms#specialFeature': course_as_pojo.specialFeature = desc?.text()?.toString(); break;
+//                case 'http://xcri.org/profiles/catalog/terms#assessmentStrategy': course_as_pojo.assessmentStrategy = desc?.text()?.toString(); break;
+//                case 'http://xcri.org/profiles/catalog/terms#leadsTo': course_as_pojo.leadsTo = desc?.text()?.toString(); break;
+//                case 'http://xcri.org/profiles/catalog/terms#requiredResource': course_as_pojo.requiredResource = desc?.text()?.toString(); break;
+//                default:
+//                  log.debug("Unhandled description type : ${desc_type}");
+//                  course_as_pojo.descriptions[desc_type] = desc?.text()?.toString();
+//                  break;
+//              }
+//            }
+//            else {
+//            }
+            
           }
           
           course_as_pojo.credits = []
@@ -233,7 +263,7 @@ class XCRIHandler {
               presentation.duration = pres.'xcri:duration'.text()?.toString()
               presentation.applicationsOpen = pres.'xcri:applyFrom'.text()?.toString()
               presentation.applicationsClose = pres.'xcri:applyUntil'.text()?.toString()
-              presentation.applicationsTo = pres.'xcri:applyTo'.text()?.toString()
+              presentation.applyTo = pres.'xcri:applyTo'.text()?.toString()
               presentation.enquireTo = pres.'xcri:enquireTo'.text()?.toString()  
               presentation.studyMode = pres.'xcri:studyMode'.text()?.toString()
               presentation.attendanceMode = pres.'xcri:attendanceMode'.text()?.toString()
@@ -242,18 +272,43 @@ class XCRIHandler {
               presentation.languageOfAssessment = pres.'xcri:languageOfAssessment'.text()?.toString()
               
               presentation.venue = [:]
+              presentation.venue.identifier = pres.'xcri:venue'.'xcri:identifier'.text()?.toString()
+              presentation.venue.name = pres.'xcri:venue'.'xcri:name'.text()?.toString()
+              presentation.venue.street = pres.'xcri:venue'.'xcri:street'.text()?.toString()
+              presentation.venue.town = pres.'xcri:venue'.'xcri:town'.text()?.toString()
+              presentation.venue.postcode = pres.'xcri:venue'.'xcri:postcode'.text()?.toString()
               presentation.venue.description = pres.'xcri:venue'.'xcri:description'.text()?.toString()
               presentation.venue.title = pres.'xcri:venue'.'xcri:title'.text()?.toString()
               presentation.venue.url = pres.'xcri:venue'.'xcri:url'.text()?.toString()
               
+              presentation.entryRequirements = []
+              
+              pres.'xcri:entryRequirements'.each { entryReq ->
+                  if(entryReq.'xcri:entryRequirements'.'xcri:description')
+                  {
+                      presentation.entryRequirements << entryReq.'xcri:description'.text()?.toString()
+                  }
+                  else
+                  {
+                      presentation.entryRequirements << entryReq.text()?.toString()
+                  }     
+              } 
+    
               course_as_pojo.presentations << presentation
           }
                                     
           course_as_pojo.url = crs.'xcri:url'?.text()?.toString()
           course_as_pojo.subject = []
-          crs.'subject'.each { subj ->
+          course_as_pojo.subjectKeywords = []
+          
+          crs.'xcri:subject'.each { subj ->
             course_as_pojo.subject.add( subj.text()?.toString() )
           }
+          
+          crs.'dc:subject'.each { subj ->
+              if(desc.@'xsi:type' && desc.@'xsi:type'?.text().equalsIgnoreCase("sfc:dpg")) { course_as_pojo.subject.add(subj.text()?.toString()) }
+              else if(desc.@'xsi:type' && desc.@'xsi:type'?.text().equalsIgnoreCase("asc:keyword")) { course_as_pojo.subjectKeywords.add(subj.text()?.toString()) }
+              else { course_as_pojo.subject.add(subj.text()?.toString()) }
     
           // def course_as_json = course_as_pojo as JSON;
           // log.debug("The course as JSON is ${course_as_json.toString()}");
@@ -318,6 +373,7 @@ class XCRIHandler {
 
         def elapsed = System.currentTimeMillis() - start_time
         props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Completed processing of ${course_count} courses from catalog ${canonical_identifier} for provider ${props.owner} in ${elapsed}ms"]);
+        }
       }
     }
     catch ( Exception e ) {
@@ -428,4 +484,14 @@ class XCRIHandler {
     log.debug("returning ${result}")
     result
   }
+  
+  def lookupDescMapping(type_value) {
+      
+      desc_mappings.each 
+      { 
+          if(it.value.contains(type_value)) return it.key
+      }
+
+      return null
+    }
 }
