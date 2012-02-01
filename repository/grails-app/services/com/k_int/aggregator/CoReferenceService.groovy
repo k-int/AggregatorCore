@@ -39,7 +39,7 @@ class CoReferenceService {
 
       if ( matched_identifiers.size() == 1 ) {
         matched = true
-        matched_with = matched_canonical[0].owner;
+        matched_with = matched_identifiers[0].owner;
       }
       else if ( matched_identifiers.size() > 1 ) {
         log.warn("Matched multiple identifiers.. Should not happen ${provider} ${identifiers}");
