@@ -198,7 +198,7 @@ class XCRIHandler {
              }
              else
              {
-                 course_as_pojo.description = desc.text()
+                 course_as_pojo.description = desc.text()?.toString();
              }     
              
                 
@@ -309,6 +309,8 @@ class XCRIHandler {
               if(desc.@'xsi:type' && desc.@'xsi:type'?.text().equalsIgnoreCase("sfc:dpg")) { course_as_pojo.subject.add(subj.text()?.toString()) }
               else if(desc.@'xsi:type' && desc.@'xsi:type'?.text().equalsIgnoreCase("asc:keyword")) { course_as_pojo.subjectKeywords.add(subj.text()?.toString()) }
               else { course_as_pojo.subject.add(subj.text()?.toString()) }
+          }
+          
     
           // def course_as_json = course_as_pojo as JSON;
           // log.debug("The course as JSON is ${course_as_json.toString()}");
@@ -373,7 +375,6 @@ class XCRIHandler {
 
         def elapsed = System.currentTimeMillis() - start_time
         props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Completed processing of ${course_count} courses from catalog ${canonical_identifier} for provider ${props.owner} in ${elapsed}ms"]);
-        }
       }
     }
     catch ( Exception e ) {
