@@ -185,7 +185,7 @@ class XCRIHandler {
                  if(desc_key)                
                      course_as_pojo[desc_key] = desc?.text()?.toString();
                  else
-                     course_as_pojo.descriptions[expandNamespacedLiteral(doc, desc.@'xsi:type'?.text())] = desc?.text()?.toString();
+                     course_as_pojo.descriptions[expandNamespacedLiteral(props.xml, desc.@'xsi:type'?.text())] = desc?.text()?.toString();
              }
              else if(desc.@'type')
              { 
