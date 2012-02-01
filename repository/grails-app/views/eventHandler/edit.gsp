@@ -21,7 +21,7 @@
             <span class="menuButton"><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></span>
             <span class="menuButton"><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></span>
         </div>
-        <g:form method="post" >
+        <g:form method="post" id="${eventHandlerInstance?.id}">
             <g:hiddenField name="id" value="${eventHandlerInstance?.id}" />
             <g:hiddenField name="version" value="${eventHandlerInstance?.version}" />
             <div class="dialog">
@@ -74,8 +74,16 @@
                               <label for="preconditions"><g:message code="eventHandler.preconditions.label" default="Preconditions" /></label>
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: eventHandlerInstance, field: 'preconditions', 'errors')}">
-                              ${eventHandlerInstance?.preconditions}                      
-                                
+                                <g:if test="${eventHandlerInstance?.preconditions && eventHandlerInstance?.preconditions.size() > 0}">
+                                <ul>
+                                    <g:each in="${eventHandlerInstance?.preconditions}">
+                                        <li>${it}</li>
+                                    </g:each> 
+                                </ul>   
+                                </g:if>  
+                                <g:else>
+                                    None
+                                </g:else>                     
                             </td>
                         </tr>
 
@@ -90,17 +98,17 @@
                     
                     </tbody>
                 </table>
-
-Event Handler Code <br/>
-              	<g:textArea name="eventCode" cols="40" rows="5" value="${eventHandlerInstance?.scriptlet}" />
-
+                Event Handler Code <br/>
+              	<g:textArea name="scriptlet" cols="40" rows="20" value="${eventHandlerInstance?.scriptlet}" />
             </div>
             <div id="tabs">
 				<ul>
 					<li><a href="#tabs-1">Console</a></li>
 				</ul>
 				<div id="tabs-1">
-					<p>Console messages here</p>
+					<g:if test="${flash.compilation_error}">
+                        <p>${flash.compilation_error}</p>
+                    </g:if>
 				</div>
 			</div>  
             <div class="buttons">
@@ -113,7 +121,7 @@ Event Handler Code <br/>
 		{
 			$( "#tabs" ).tabs();
 		
-     		var editor = CodeMirror.fromTextArea(document.getElementById("eventCode"), 
+     		var editor = CodeMirror.fromTextArea(document.getElementById("scriptlet"), 
      		{
         		lineNumbers: true,
         		matchBrackets: true,

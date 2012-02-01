@@ -1,5 +1,7 @@
 package com.k_int.aggregator
 
+import org.apache.commons.io.FileUtils;
+
 class EventHandlerController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -63,14 +65,45 @@ class EventHandlerController {
                     render(view: "edit", model: [eventHandlerInstance: eventHandlerInstance])
                     return
                 }
-            }
-            eventHandlerInstance.properties = params
-            if (!eventHandlerInstance.hasErrors() && eventHandlerInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'eventHandler.label', default: 'EventHandler'), eventHandlerInstance.id])}"
-                redirect(action: "show", id: eventHandlerInstance.id)
-            }
-            else {
-                render(view: "edit", model: [eventHandlerInstance: eventHandlerInstance])
+                
+                try {
+                    
+                    eventHandlerInstance.properties = params
+                    
+                    //Create the groovy file from the database string
+                    def handler_file = new File(eventHandlerInstance?.name + ".groovy");
+                    //fileStore.createNewFile();
+                    FileUtils.writeStringToFile(handler_file, eventHandlerInstance.scriptlet);
+                    
+                    // Class clazz = gcl.parseClass(handler_file.text);
+                    log.debug("Compiling ${handler_file}");
+        
+                    GroovyClassLoader gcl = new GroovyClassLoader();
+                    
+                    Class clazz = gcl.parseClass(handler_file)
+                    // log.debug("Number of annotations in ${handler_file} : ${clazz.annotations.length} (This should be >0 for classes with grape annotations)");
+        
+                    log.debug("Instatiating ${handler_file}");
+                    Object h = clazz.newInstance();
+            
+                    log.info("Created handler for ${h.getHandlerName()} - Compilation completed OK");
+                    
+                    //EVERYTHING 'OK' SO LETS SAVE     
+                    if (!eventHandlerInstance.hasErrors() && eventHandlerInstance.save(flush: true)) {
+                        flash.message = "${message(code: 'default.updated.message', args: [message(code: 'eventHandler.label', default: 'EventHandler'), eventHandlerInstance.id])}"
+                        redirect(action: "show", id: eventHandlerInstance.id)
+                    }
+                    else {
+                        render(view: "edit", model: [eventHandlerInstance: eventHandlerInstance])
+                    }
+                 }
+                 catch ( Exception e ) {
+                     //Problem occurred so do not save and return error to user
+                    log.error("Unable to compile handler",e);
+                    flash.message = "Unable to compile handler, see the console for more information."
+                    flash.compilation_error = e.toString()
+                    render(view: "edit", model: [eventHandlerInstance: eventHandlerInstance])
+                 }
             }
         }
         else {
