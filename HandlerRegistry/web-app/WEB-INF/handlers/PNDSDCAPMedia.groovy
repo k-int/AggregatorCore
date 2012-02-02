@@ -81,8 +81,7 @@ class PNDSDCAPMedia {
                                          
 
     log.debug("root element namespace: ${d2.namespaceURI()}");
-    log.debug("lookup namespace: ${d2.lookupNamespace('xcri')}");
-    log.debug("d2.name : ${d2.name()}");
+    log.debug("lookup namespace: ${d2.lookupNamespace('dc')}");
 
     // Properties contain an xml element, which is the parsed document
     def id1 = d2.'dc:identifier'.text()
