@@ -13,25 +13,25 @@ class XCRIHandler {
 
   private static final log = LogFactory.getLog(this)
   
-  private desc_mappings = [
-                              'metadataKeywords': ['xcri:metadataKeywords','xcriterms:metadataKeywords'],
-                              'abstract': ['xcri:abstract','xcriTerms:abstract'],
-                              'careerOutcome': ['xcri:careerOutcome','xcriTerms:careerOutcome','Career Outcome'],
-                              'prerequisites': ['xcri:prerequisites','xcriTerms:prerequisites','Entry Profile'],
-                              'indicativeResource': ['xcri:indicativeResource','xcriTerms:indicativeResource','Indicative Resource'],
-                              'assessmentStrategy':['xcri:assessmentStrategy','xcriTerms:assessmentStrategy','Assessment Strategy'],
-                              'aim':['xcri:aim','xcriTerms:aim','Aim','terms:topic'],
-                              'learningOutcome':['xcri:learningOutcome','xcriTerms:learningOutcome','Learning Outcome'],
-                              'syllabus': ['xcri:syllabus','xcriTerms:syllabus','Syllabus'],   
-                              'support': ['xcri:support','xcriTerms:support','Support'],
-                              'teachingStrategy': ['xcri:teachingStrategy','xcriTerms:teachingStrategy','Teaching Strategy'],
-                              'structure': ['xcri:structure','xcriTerms:structure','Structure'],
-                              'specialFeature': ['xcri:specialFeature','xcriTerms:specialFeature','Special Feature'],
-                              'leadsTo': ['xcri:leadsTo','xcriTerms:leadsTo','Leads To'],
-                              'requiredResource':['xcri:requiredResource','xcriTerms:requiredResource','Required Resource'],
-                              'providedResource':['xcri:providedResource','xcriTerms:providedResource','Provided Resource'],
-                              'policy':['xcri:policy','xcriTerms:policy','Policy'],
-                              'regulations':['xcri:regulations','xcriTerms:regulations','Policy']
+  def desc_mappings = [
+                              "metadataKeywords": ["xcri:metadataKeywords","xcriterms:metadataKeywords"],
+                              "abstract": ["xcri:abstract","xcriTerms:abstract"],
+                              "careerOutcome": ["xcri:careerOutcome","xcriTerms:careerOutcome","Career Outcome"],
+                              "prerequisites": ["xcri:prerequisites","xcriTerms:prerequisites","Entry Profile"],
+                              "indicativeResource": ["xcri:indicativeResource","xcriTerms:indicativeResource","Indicative Resource"],
+                              "assessmentStrategy":["xcri:assessmentStrategy","xcriTerms:assessmentStrategy","Assessment Strategy"],
+                              "aim":["xcri:aim","xcriTerms:aim","Aim","terms:topic"],
+                              "learningOutcome":["xcri:learningOutcome","xcriTerms:learningOutcome","Learning Outcome"],
+                              "syllabus": ["xcri:syllabus","xcriTerms:syllabus","Syllabus"],   
+                              "support": ["xcri:support","xcriTerms:support","Support"],
+                              "teachingStrategy": ["xcri:teachingStrategy","xcriTerms:teachingStrategy","Teaching Strategy"],
+                              "structure": ["xcri:structure","xcriTerms:structure","Structure"],
+                              "specialFeature": ["xcri:specialFeature","xcriTerms:specialFeature","Special Feature"],
+                              "leadsTo": ["xcri:leadsTo","xcriTerms:leadsTo","Leads To"],
+                              "requiredResource":["xcri:requiredResource","xcriTerms:requiredResource","Required Resource"],
+                              "providedResource":["xcri:providedResource","xcriTerms:providedResource","Provided Resource"],
+                              "policy":["xcri:policy","xcriTerms:policy","Policy"],
+                              "regulations":["xcri:regulations","xcriTerms:regulations","Policy"]
                           ]  
 
   // This handler processes XCRI documents... After the handler is invoked, the local mongodb
@@ -251,50 +251,54 @@ class XCRIHandler {
               course_as_pojo.credits << credit
           }
           
-          course_as_pojo.presentations = []
-          
-          crs.'xcri:presentation'.each { pres ->
-              def presentation = [:]
-              presentation.identifier = pres.'xcri:identifier'.text()?.toString()
-              presentation.description = pres.'xcri:description'.text()?.toString()
-              presentation.cost = pres.'xcri:cost'.text()?.toString()
-              presentation.start = pres.'xcri:start'.text()?.toString()
-              presentation.end = pres.'xcri:end'.text()?.toString()
-              presentation.duration = pres.'xcri:duration'.text()?.toString()
-              presentation.applicationsOpen = pres.'xcri:applyFrom'.text()?.toString()
-              presentation.applicationsClose = pres.'xcri:applyUntil'.text()?.toString()
-              presentation.applyTo = pres.'xcri:applyTo'.text()?.toString()
-              presentation.enquireTo = pres.'xcri:enquireTo'.text()?.toString()  
-              presentation.studyMode = pres.'xcri:studyMode'.text()?.toString()
-              presentation.attendanceMode = pres.'xcri:attendanceMode'.text()?.toString()
-              presentation.attendancePattern = pres.'xcri:attendancePattern'.text()?.toString()
-              presentation.languageOfInstruction = pres.'xcri:languageOfInstruction'.text()?.toString()
-              presentation.languageOfAssessment = pres.'xcri:languageOfAssessment'.text()?.toString()
+          if(crs.'xcri:presentation'){ 
+              course_as_pojo.presentations = []
               
-              presentation.venue = [:]
-              presentation.venue.identifier = pres.'xcri:venue'.'xcri:identifier'.text()?.toString()
-              presentation.venue.name = pres.'xcri:venue'.'xcri:name'.text()?.toString()
-              presentation.venue.street = pres.'xcri:venue'.'xcri:street'.text()?.toString()
-              presentation.venue.town = pres.'xcri:venue'.'xcri:town'.text()?.toString()
-              presentation.venue.postcode = pres.'xcri:venue'.'xcri:postcode'.text()?.toString()
-              presentation.venue.description = pres.'xcri:venue'.'xcri:description'.text()?.toString()
-              presentation.venue.title = pres.'xcri:venue'.'xcri:title'.text()?.toString()
-              presentation.venue.url = pres.'xcri:venue'.'xcri:url'.text()?.toString()
-              
-              presentation.entryRequirements = []
-              
-              pres.'xcri:entryRequirements'.each { entryReq ->
-                  if(entryReq.'xcri:entryRequirements'.'xcri:description')
-                  {
-                      presentation.entryRequirements << entryReq.'xcri:description'.text()?.toString()
+              crs.'xcri:presentation'.each { pres ->
+                  def presentation = [:]
+                  presentation.identifier = pres.'xcri:identifier'.text()?.toString()
+                  presentation.description = pres.'xcri:description'.text()?.toString()
+                  presentation.cost = pres.'xcri:cost'.text()?.toString()
+                  presentation.start = pres.'xcri:start'.text()?.toString()
+                  presentation.end = pres.'xcri:end'.text()?.toString()
+                  presentation.duration = pres.'xcri:duration'.text()?.toString()
+                  presentation.applicationsOpen = pres.'xcri:applyFrom'.text()?.toString()
+                  presentation.applicationsClose = pres.'xcri:applyUntil'.text()?.toString()
+                  presentation.applyTo = pres.'xcri:applyTo'.text()?.toString()
+                  presentation.enquireTo = pres.'xcri:enquireTo'.text()?.toString()  
+                  presentation.studyMode = pres.'xcri:studyMode'.text()?.toString()
+                  presentation.attendanceMode = pres.'xcri:attendanceMode'.text()?.toString()
+                  presentation.attendancePattern = pres.'xcri:attendancePattern'.text()?.toString()
+                  presentation.languageOfInstruction = pres.'xcri:languageOfInstruction'.text()?.toString()
+                  presentation.languageOfAssessment = pres.'xcri:languageOfAssessment'.text()?.toString()
+                  
+                  if(pres.'xcri:venue'){
+                      presentation.venue = [:]
+                      presentation.venue.identifier = pres.'xcri:venue'.'xcri:identifier'.text()?.toString()
+                      presentation.venue.name = pres.'xcri:venue'.'xcri:name'.text()?.toString()
+                      presentation.venue.street = pres.'xcri:venue'.'xcri:street'.text()?.toString()
+                      presentation.venue.town = pres.'xcri:venue'.'xcri:town'.text()?.toString()
+                      presentation.venue.postcode = pres.'xcri:venue'.'xcri:postcode'.text()?.toString()
+                      presentation.venue.description = pres.'xcri:venue'.'xcri:description'.text()?.toString()
+                      presentation.venue.title = pres.'xcri:venue'.'xcri:title'.text()?.toString()
+                      presentation.venue.url = pres.'xcri:venue'.'xcri:url'.text()?.toString()
                   }
-                  else
-                  {
-                      presentation.entryRequirements << entryReq.text()?.toString()
-                  }     
-              } 
-    
-              course_as_pojo.presentations << presentation
+                      
+                  presentation.entryRequirements = []
+                  
+                  pres.'xcri:entryRequirements'.each { entryReq ->
+                      if(entryReq.'xcri:entryRequirements'.'xcri:description')
+                      {
+                          presentation.entryRequirements << entryReq.'xcri:description'.text()?.toString()
+                      }
+                      else
+                      {
+                          presentation.entryRequirements << entryReq.text()?.toString()
+                      }     
+                  } 
+        
+                  course_as_pojo.presentations << presentation
+              }
           }
                                     
           course_as_pojo.url = crs.'xcri:url'?.text()?.toString()
@@ -306,8 +310,8 @@ class XCRIHandler {
           }
           
           crs.'dc:subject'.each { subj ->
-              if(desc.@'xsi:type' && desc.@'xsi:type'?.text().equalsIgnoreCase("sfc:dpg")) { course_as_pojo.subject.add(subj.text()?.toString()) }
-              else if(desc.@'xsi:type' && desc.@'xsi:type'?.text().equalsIgnoreCase("asc:keyword")) { course_as_pojo.subjectKeywords.add(subj.text()?.toString()) }
+              if(subj.@'xsi:type' && subj.@'xsi:type'?.text().equalsIgnoreCase("sfc:dpg")) { course_as_pojo.subject.add(subj.text()?.toString()) }
+              else if(subj.@'xsi:type' && subj.@'xsi:type'?.text().equalsIgnoreCase("asc:keyword")) { course_as_pojo.subjectKeywords.add(subj.text()?.toString()) }
               else { course_as_pojo.subject.add(subj.text()?.toString()) }
           }
           
@@ -488,11 +492,17 @@ class XCRIHandler {
   
   def lookupDescMapping(type_value) {
       
+      def result
+      
       desc_mappings.each 
       { 
-          if(it.value.contains(type_value)) return it.key
-      }
-
-      return null
+          k, v ->     
+           
+          if(v.contains(type_value))
+          {
+              result = k
+          }
+      }     
+      return result
     }
 }
