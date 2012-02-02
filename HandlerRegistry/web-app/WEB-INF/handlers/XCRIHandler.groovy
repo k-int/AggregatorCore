@@ -422,14 +422,33 @@ class XCRIHandler {
       source {
         course {       // Think this is the name of the mapping within the type
           properties {
-            title {
-              type = 'string'
-              store = 'yes'
+            title { // We declare a multi_field mapping so we can have a default "title" search with stemming, and an untouched title via origtitle
+              type = 'multi_field'
+              fields {
+                title { 
+                  type = 'string'
+                  analyzer = 'snowball'
+                }
+                origtitle {
+                  type = 'string'
+                  store = 'yes'
+                }
+              }
             }
             subject {
-              type = 'string'
-              store = 'yes'
-              index = 'not_analyzed'
+              type = 'multi_field'
+              fields {
+                subject {
+                  type = 'string'
+                  store = 'yes'
+                  index = 'not_analyzed'
+                }
+                subjectKeywords {
+                  type = 'string'
+                  analyzer = 'snowball'
+                }
+              }
+
             }
             provid {
               type = 'string'
