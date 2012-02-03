@@ -256,32 +256,32 @@ class XCRIHandler {
               
               crs.'xcri:presentation'.each { pres ->
                   def presentation = [:]
-                  presentation.identifier = pres.'xcri:identifier'.text()?.toString()
-                  presentation.description = pres.'xcri:description'.text()?.toString()
-                  presentation.cost = pres.'xcri:cost'.text()?.toString()
-                  presentation.start = pres.'xcri:start'.text()?.toString()
-                  presentation.end = pres.'xcri:end'.text()?.toString()
-                  presentation.duration = pres.'xcri:duration'.text()?.toString()
-                  presentation.applicationsOpen = pres.'xcri:applyFrom'.text()?.toString()
-                  presentation.applicationsClose = pres.'xcri:applyUntil'.text()?.toString()
-                  presentation.applyTo = pres.'xcri:applyTo'.text()?.toString()
-                  presentation.enquireTo = pres.'xcri:enquireTo'.text()?.toString()  
-                  presentation.studyMode = pres.'xcri:studyMode'.text()?.toString()
-                  presentation.attendanceMode = pres.'xcri:attendanceMode'.text()?.toString()
-                  presentation.attendancePattern = pres.'xcri:attendancePattern'.text()?.toString()
-                  presentation.languageOfInstruction = pres.'xcri:languageOfInstruction'.text()?.toString()
-                  presentation.languageOfAssessment = pres.'xcri:languageOfAssessment'.text()?.toString()
+                  presentation.identifier = elementStringOrNull(pres.'xcri:identifier')
+                  presentation.description = elementStringOrNull(pres.'xcri:description')
+                  presentation.cost = elementStringOrNull(pres.'xcri:cost')
+                  presentation.start = elementStringOrNull(pres.'xcri:start')
+                  presentation.end = elementStringOrNull(pres.'xcri:end')
+                  presentation.duration = elementStringOrNull(pres.'xcri:duration')
+                  presentation.applicationsOpen = elementStringOrNull(pres.'xcri:applyFrom')
+                  presentation.applicationsClose = elementStringOrNull(pres.'xcri:applyUntil')
+                  presentation.applyTo = elementStringOrNull(pres.'xcri:applyTo')
+                  presentation.enquireTo = elementStringOrNull(pres.'xcri:enquireTo')
+                  presentation.studyMode = elementStringOrNull(pres.'xcri:studyMode')
+                  presentation.attendanceMode = elementStringOrNull(pres.'xcri:attendanceMode')
+                  presentation.attendancePattern = elementStringOrNull(pres.'xcri:attendancePattern')
+                  presentation.languageOfInstruction = elementStringOrNull(pres.'xcri:languageOfInstruction')
+                  presentation.languageOfAssessment = elementStringOrNull(pres.'xcri:languageOfAssessment')
                   
                   if(pres.'xcri:venue'){
                       presentation.venue = [:]
-                      presentation.venue.identifier = pres.'xcri:venue'.'xcri:identifier'.text()?.toString()
-                      presentation.venue.name = pres.'xcri:venue'.'xcri:name'.text()?.toString()
-                      presentation.venue.street = pres.'xcri:venue'.'xcri:street'.text()?.toString()
-                      presentation.venue.town = pres.'xcri:venue'.'xcri:town'.text()?.toString()
-                      presentation.venue.postcode = pres.'xcri:venue'.'xcri:postcode'.text()?.toString()
-                      presentation.venue.description = pres.'xcri:venue'.'xcri:description'.text()?.toString()
-                      presentation.venue.title = pres.'xcri:venue'.'xcri:title'.text()?.toString()
-                      presentation.venue.url = pres.'xcri:venue'.'xcri:url'.text()?.toString()
+                      presentation.venue.identifier = elementStringOrNull(pres.'xcri:venue'.'xcri:identifier')
+                      presentation.venue.name = elementStringOrNull(pres.'xcri:venue'.'xcri:name')
+                      presentation.venue.street = elementStringOrNull(pres.'xcri:venue'.'xcri:street')
+                      presentation.venue.town = elementStringOrNull(pres.'xcri:venue'.'xcri:town')
+                      presentation.venue.postcode = elementStringOrNull(pres.'xcri:venue'.'xcri:postcode')
+                      presentation.venue.description = elementStringOrNull(pres.'xcri:venue'.'xcri:description')
+                      presentation.venue.title = elementStringOrNull(pres.'xcri:venue'.'xcri:title')
+                      presentation.venue.url = elementStringOrNull(pres.'xcri:venue'.'xcri:url')
                   }
                       
                   presentation.entryRequirements = []
@@ -510,18 +510,21 @@ class XCRIHandler {
   }
   
   def lookupDescMapping(type_value) {
-      
       def result
-      
-      desc_mappings.each 
-      { 
+      desc_mappings.each { 
           k, v ->     
            
-          if(v.contains(type_value))
-          {
+          if(v.contains(type_value)) {
               result = k
           }
       }     
       return result
     }
+
+  def elementStringOrNull(gpathresult) {
+    def result = gpathresult.text().toString()
+    if ( result?.length() == 0 )
+      result = null
+    result
+  }
 }
