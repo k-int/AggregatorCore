@@ -524,7 +524,7 @@ class XCRIHandler {
 
   def setIfPresent(gpathresult, obj, prop) {
     def result = gpathresult.text().toString()
-    if ( result?.length() == 0 )
+    if ( result?.length() != 0 )
       obj[prop] = result
   }
 }
