@@ -178,8 +178,7 @@ class XCRIHandler {
   
           crs.'xcri:description'.each { desc ->
               
-             if(desc.@'xsi:type')
-             {
+             if(desc.@'xsi:type') {
                  String desc_key = lookupDescMapping(desc.@'xsi:type'?.text())
                  
                  if(desc_key)                
@@ -187,8 +186,7 @@ class XCRIHandler {
                  else
                      course_as_pojo.descriptions[expandNamespacedLiteral(props.xml, desc.@'xsi:type'?.text())] = desc?.text()?.toString();
              }
-             else if(desc.@'type')
-             { 
+             else if(desc.@'type') { 
                  String desc_key = lookupDescMapping(desc.@'type'?.text())
                         
                  if(desc_key)                
@@ -196,49 +194,9 @@ class XCRIHandler {
                  else
                      course_as_pojo.descriptions[expandNamespacedLiteral(props.xml, desc.@'type'?.text())] = desc?.text()?.toString();
              }
-             else
-             {
+             else {
                  course_as_pojo.description = desc.text()?.toString();
              }     
-             
-                
-             
-//            String desc_type_lit = desc.@'xsi:type'?.text()
-//            // String desc_type = desc.@'xsi:type'?.text()?.replaceAll(':','_').toString()
-//            String desc_type = expandNamespacedLiteral(props.xml, desc_type_lit)
-//  
-//            log.debug("Processing description ${desc_type} from ${desc_type_lit}");
-//    
-//            if ( ( desc_type != null ) && 
-//                 ( desc_type.length() > 0 ) &&
-//                 ( desc.text() != null ) &&
-//                 ( desc.text().length() > 0 ) ) {
-//              switch ( desc_type ) {
-//                case 'http://xcri.org/profiles/catalog#metadataKeywords': course_as_pojo.keywords = desc?.text()?.toString(); break;
-//                case 'http://xcri.org/profiles/catalog#abstract': course_as_pojo.courseAbstract = desc?.text()?.toString(); break;
-//                case 'http://xcri.org/profiles/catalog#careerOutcome': course_as_pojo.careerOutcome = desc?.text()?.toString(); break;
-//                case 'http://xcri.org/profiles/catalog#prerequisites': course_as_pojo.prerequisites = desc?.text()?.toString(); break;
-//                case 'http://xcri.org/profiles/catalog#indicativeResource': course_as_pojo.indicativeResource = desc?.text()?.toString(); break;
-//                case 'http://xcri.org/profiles/catalog#assessmentStrategy': course_as_pojo.assessmentStrategy = desc?.text()?.toString(); break;
-//                case 'http://xcri.org/profiles/catalog#aim': course_as_pojo.aim = desc?.text()?.toString(); break;
-//                case 'http://xcri.org/profiles/catalog#learningOutcome': course_as_pojo.learningOutcome = desc?.text()?.toString(); break;
-//                case 'http://xcri.org/profiles/catalog/terms#support': course_as_pojo.support = desc?.text()?.toString(); break;
-//                case 'http://xcri.org/profiles/catalog/terms#teachingStrategy': course_as_pojo.teachingStrategy = desc?.text()?.toString(); break;
-//                case 'http://xcri.org/profiles/catalog/terms#aim': course_as_pojo.aim = desc?.text()?.toString(); break;
-//                case 'http://xcri.org/profiles/catalog/terms#structure': course_as_pojo.structure = desc?.text()?.toString(); break;
-//                case 'http://xcri.org/profiles/catalog/terms#specialFeature': course_as_pojo.specialFeature = desc?.text()?.toString(); break;
-//                case 'http://xcri.org/profiles/catalog/terms#assessmentStrategy': course_as_pojo.assessmentStrategy = desc?.text()?.toString(); break;
-//                case 'http://xcri.org/profiles/catalog/terms#leadsTo': course_as_pojo.leadsTo = desc?.text()?.toString(); break;
-//                case 'http://xcri.org/profiles/catalog/terms#requiredResource': course_as_pojo.requiredResource = desc?.text()?.toString(); break;
-//                default:
-//                  log.debug("Unhandled description type : ${desc_type}");
-//                  course_as_pojo.descriptions[desc_type] = desc?.text()?.toString();
-//                  break;
-//              }
-//            }
-//            else {
-//            }
-            
           }
           
           course_as_pojo.credits = []
@@ -288,12 +246,10 @@ class XCRIHandler {
                   presentation.entryRequirements = []
                   
                   pres.'xcri:entryRequirements'.each { entryReq ->
-                      if(entryReq.'xcri:entryRequirements'.'xcri:description')
-                      {
+                      if(entryReq.'xcri:entryRequirements'.'xcri:description') {
                           presentation.entryRequirements << entryReq.'xcri:description'.text()?.toString()
                       }
-                      else
-                      {
+                      else {
                           presentation.entryRequirements << entryReq.text()?.toString()
                       }     
                   } 
@@ -359,13 +315,21 @@ class XCRIHandler {
             // Mongo inserts an _id into the record.. we can reuse that
     
             log.debug("Sending record to es");
-            def future = esclient.index {
-              index "courses"
-              type "course"
-              id course_as_pojo['_id'].toString()
-              source course_as_pojo
+            try {
+              def future = esclient.index {
+                index "courses"
+                type "course"
+                id course_as_pojo['_id'].toString()
+                source course_as_pojo
+              }
+              log.debug("Indexed respidx:$future.response.index/resptp:$future.response.type/respid:$future.response.id")
             }
-            log.debug("Indexed respidx:$future.response.index/resptp:$future.response.type/respid:$future.response.id")
+            catch ( Exception e ) {
+              log.error("Problem indexing record ${course_as_pojo['_id'].toString()}: ${e.message}");
+              props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'error',msg:"Problem indexing record ${course_as_pojo['_id'].toString()}: ${e.message}"]);
+            }
+            finally {
+            }
           }
           else {
             log.error("Failed to store course information ${course_as_pojo}");
