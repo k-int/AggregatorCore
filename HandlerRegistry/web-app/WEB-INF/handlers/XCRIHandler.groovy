@@ -443,7 +443,7 @@ class XCRIHandler {
                   store = 'yes'
                   index = 'not_analyzed'
                 }
-                subjectKeywords {
+                subjectKw {
                   type = 'string'
                   analyzer = 'snowball'
                 }
