@@ -174,9 +174,16 @@ class XCRIHandler {
           course_as_pojo.qual.awardedBy = crs.'xcri:qualification'.'xcri:awardedBy'?.text()
           course_as_pojo.qual.accreditedBy = crs.'xcri:qualification'.'xcri:accreditedBy'?.text()
           
+          course_as_pojo.description = ''
+          
           course_as_pojo.descriptions = [:]
   
           crs.'xcri:description'.each { desc ->
+              
+             if(desc.text()?.toString().length() > 0){
+                 //append to core description
+                 course_as_pojo.description += desc.text()?.toString() + ' '
+             }
               
              if(desc.@'xsi:type') {
                  String desc_key = lookupDescMapping(desc.@'xsi:type'?.text())
@@ -186,7 +193,7 @@ class XCRIHandler {
                  else
                      course_as_pojo.descriptions[expandNamespacedLiteral(props.xml, desc.@'xsi:type'?.text())] = desc?.text()?.toString();
              }
-             else if(desc.@'type') { 
+             if(desc.@'type') { 
                  String desc_key = lookupDescMapping(desc.@'type'?.text())
                         
                  if(desc_key)                
@@ -194,9 +201,7 @@ class XCRIHandler {
                  else
                      course_as_pojo.descriptions[expandNamespacedLiteral(props.xml, desc.@'type'?.text())] = desc?.text()?.toString();
              }
-             else {
-                 course_as_pojo.description = desc.text()?.toString();
-             }     
+            
           }
           
           course_as_pojo.credits = []
