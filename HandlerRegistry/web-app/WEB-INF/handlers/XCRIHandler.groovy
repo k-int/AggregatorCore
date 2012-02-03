@@ -256,32 +256,33 @@ class XCRIHandler {
               
               crs.'xcri:presentation'.each { pres ->
                   def presentation = [:]
-                  presentation.identifier = elementStringOrNull(pres.'xcri:identifier')
-                  presentation.description = elementStringOrNull(pres.'xcri:description')
-                  presentation.cost = elementStringOrNull(pres.'xcri:cost')
-                  presentation.start = elementStringOrNull(pres.'xcri:start')
-                  presentation.end = elementStringOrNull(pres.'xcri:end')
-                  presentation.duration = elementStringOrNull(pres.'xcri:duration')
-                  presentation.applicationsOpen = elementStringOrNull(pres.'xcri:applyFrom')
-                  presentation.applicationsClose = elementStringOrNull(pres.'xcri:applyUntil')
-                  presentation.applyTo = elementStringOrNull(pres.'xcri:applyTo')
-                  presentation.enquireTo = elementStringOrNull(pres.'xcri:enquireTo')
-                  presentation.studyMode = elementStringOrNull(pres.'xcri:studyMode')
-                  presentation.attendanceMode = elementStringOrNull(pres.'xcri:attendanceMode')
-                  presentation.attendancePattern = elementStringOrNull(pres.'xcri:attendancePattern')
-                  presentation.languageOfInstruction = elementStringOrNull(pres.'xcri:languageOfInstruction')
-                  presentation.languageOfAssessment = elementStringOrNull(pres.'xcri:languageOfAssessment')
+                  setIfPresent(pres.'xcri:identifier',presentation,'identifier')
+                  setIfPresent(pres.'xcri:description',presentation,'description')
+                  setIfPresent(pres.'xcri:cost',presentation,'cost')
+                  setIfPresent(pres.'xcri:start',presentation,'start')
+                  setIfPresent(pres.'xcri:end',presentation,'end')
+                  setIfPresent(pres.'xcri:duration',presentation,'duration')
+                  setIfPresent(pres.'xcri:applyFrom',presentation,'applicationsOpen')
+                  setIfPresent(pres.'xcri:applyUntil',presentation,'applicationsClose')
+                  setIfPresent(pres.'xcri:applyTo',presentation,'applyTo')
+                  setIfPresent(pres.'xcri:enquireTo',presentation,'enquireTo')
+                  setIfPresent(pres.'xcri:studyMode',presentation,'studyMode')
+                  setIfPresent(pres.'xcri:attendanceMode',presentation,'attendanceMode')
+                  setIfPresent(pres.'xcri:attendancePattern',presentation,'attendancePattern')
+                  setIfPresent(pres.'xcri:languageOfInstruction',presentation,'languageOfInstruction')
+                  setIfPresent(pres.'xcri:languageOfAssessment',presentation,'languageOfAssessment')
                   
                   if(pres.'xcri:venue'){
                       presentation.venue = [:]
-                      presentation.venue.identifier = elementStringOrNull(pres.'xcri:venue'.'xcri:identifier')
-                      presentation.venue.name = elementStringOrNull(pres.'xcri:venue'.'xcri:name')
-                      presentation.venue.street = elementStringOrNull(pres.'xcri:venue'.'xcri:street')
-                      presentation.venue.town = elementStringOrNull(pres.'xcri:venue'.'xcri:town')
-                      presentation.venue.postcode = elementStringOrNull(pres.'xcri:venue'.'xcri:postcode')
-                      presentation.venue.description = elementStringOrNull(pres.'xcri:venue'.'xcri:description')
-                      presentation.venue.title = elementStringOrNull(pres.'xcri:venue'.'xcri:title')
-                      presentation.venue.url = elementStringOrNull(pres.'xcri:venue'.'xcri:url')
+                      def ven = pres.'xcri:venue'
+                      setIfPresent(ven.'xcri:identifier',presentation.venue,'identifier')
+                      setIfPresent(ven.'xcri:name',presentation.venue,'name')
+                      setIfPresent(ven.'xcri:street',presentation.venue,'street')
+                      setIfPresent(ven.'xcri:town',presentation.venue,'town')
+                      setIfPresent(ven.'xcri:postcode',presentation.venue,'postcode')
+                      setIfPresent(ven.'xcri:description',presentation.venue,'description')
+                      setIfPresent(ven.'xcri:title',presentation.venue,'title')
+                      setIfPresent(ven.'xcri:url',presentation.venue,'url')
                   }
                       
                   presentation.entryRequirements = []
@@ -521,10 +522,9 @@ class XCRIHandler {
       return result
     }
 
-  def elementStringOrNull(gpathresult) {
+  def setIfPresent(gpathresult, obj, prop) {
     def result = gpathresult.text().toString()
     if ( result?.length() == 0 )
-      result = null
-    result
+      obj[prop] = result
   }
 }
