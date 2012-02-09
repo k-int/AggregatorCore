@@ -95,6 +95,9 @@ class XCRIHandler {
 
         def start_time = System.currentTimeMillis();
         def course_count = 0;
+
+        def prov_title = provider.'xcri:title'.text()
+        def prov_uri = provider.'xcri:uri'.text()
     
         // Properties contain an xml element, which is the parsed document
         // def id1 = provider.'xcri:identifier'.text()
@@ -118,7 +121,23 @@ class XCRIHandler {
           throw new Exception("No valid document identifier at top level");
         }
   
-        def canonical_identifier = coreference.resolve(props.owner,identifiers)
+        def coreference_result = coreference.resolve(props.owner,identifiers)
+        def canonical_identifier = coreference_result.canonical_identifier;
+
+        if ( coreference_result.reason == 'new' ) {
+          // Coreference service has created a new canonical identifier.. We need to create a new term in the terminology service
+          def term = [
+            identifier = [canonical_identifier.canonicalIdentifier],
+            label = [ 'en_UK' : prov_title ]
+          ]
+
+          identifiers.each { id ->
+            term.identifier.add(id);
+          }
+
+          log.debug("New term for terminology service: ${term}");
+        }
+
         log.debug("Coreference service returns ${canonical_identifier} (${canonical_identifier.canonicalIdentifier})")
     
         props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Identifier for this XCRI document: ${canonical_identifier}"])
@@ -130,8 +149,6 @@ class XCRIHandler {
         props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Validation complete. No fatal errors."])
     
         def prov_id = canonical_identifier.canonicalIdentifier
-        def prov_title = provider.'xcri:title'.text()
-        def prov_uri = provider.'xcri:uri'.text()
     
         provider.'xcri:course'.each { crs ->
     

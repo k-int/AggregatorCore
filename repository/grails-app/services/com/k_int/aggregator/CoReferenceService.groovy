@@ -9,6 +9,7 @@ class CoReferenceService {
   def resolve(provider, identifiers) {
 
     boolean matched = false;
+    resolve_response = {:}
     CanonicalIdentifier matched_with = null;
     
     identifiers.find { id ->
@@ -52,10 +53,13 @@ class CoReferenceService {
     if ( matched ) {
       // Match found, return the canonical identifier
       log.debug("Matched")
+      resolve_response.reson='existing';
     }
     else {
       // No match found, create a new identifier
       log.debug("Not Matched - creating new canonical identifier")
+      resolve_response.reson='new';
+
       def new_canonical_identifier = java.util.UUID.randomUUID().toString()
       matched_with = new CanonicalIdentifier(owner:provider,canonicalIdentifier:new_canonical_identifier).save(flush:true);
       new IdentifierInstance(identifierType:'__canonical',
@@ -71,6 +75,8 @@ class CoReferenceService {
       }
     }
 
-    matched_with
+    resolve_response.canonical_identifier = matched_with
+
+    resolve_response
   }
 }
