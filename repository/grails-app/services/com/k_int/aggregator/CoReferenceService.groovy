@@ -9,7 +9,7 @@ class CoReferenceService {
   def resolve(provider, identifiers) {
 
     boolean matched = false;
-    resolve_response = {:}
+    def resolve_response = [:]
     CanonicalIdentifier matched_with = null;
     
     identifiers.find { id ->
