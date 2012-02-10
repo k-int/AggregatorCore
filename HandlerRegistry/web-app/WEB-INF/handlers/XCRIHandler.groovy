@@ -71,6 +71,7 @@ class XCRIHandler {
       // Object solrwrapper = ctx.getBean('SOLRWrapperService');
       Object eswrapper = ctx.getBean('ESWrapperService');
       Object coreference = ctx.getBean('coReferenceService');
+      Object termclient = ctx.getBean('terminologyClientService');
       org.elasticsearch.groovy.node.GNode esnode = eswrapper.getNode()
       org.elasticsearch.groovy.client.GClient esclient = esnode.getClient()
   
@@ -124,18 +125,18 @@ class XCRIHandler {
         def coreference_result = coreference.resolve(props.owner,identifiers)
         def canonical_identifier = coreference_result.canonical_identifier;
 
-        if ( coreference_result.reason == 'new' ) {
-          // Coreference service has created a new canonical identifier.. We need to create a new term in the terminology service
+
+        if ( !termclient.checkTermExists('xcri-providers', canonical_identifier.canonicalIdentifier) ) {
           def term = [
-            identifier = [canonical_identifier.canonicalIdentifier],
-            label = [ 'en_UK' : prov_title ]
+            identifier : [canonical_identifier.canonicalIdentifier],
+            label : [ 'en_UK' : prov_title ]
           ]
 
           identifiers.each { id ->
             term.identifier.add(id);
           }
 
-          log.debug("New term for terminology service: ${term}");
+          termclient.registerTerm('xcri-providers', term);
         }
 
         log.debug("Coreference service returns ${canonical_identifier} (${canonical_identifier.canonicalIdentifier})")
