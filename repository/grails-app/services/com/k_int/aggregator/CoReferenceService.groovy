@@ -53,12 +53,12 @@ class CoReferenceService {
     if ( matched ) {
       // Match found, return the canonical identifier
       log.debug("Matched")
-      resolve_response.reson='existing';
+      resolve_response.reason='existing';
     }
     else {
       // No match found, create a new identifier
       log.debug("Not Matched - creating new canonical identifier")
-      resolve_response.reson='new';
+      resolve_response.reason='new';
 
       def new_canonical_identifier = java.util.UUID.randomUUID().toString()
       matched_with = new CanonicalIdentifier(owner:provider,canonicalIdentifier:new_canonical_identifier).save(flush:true);

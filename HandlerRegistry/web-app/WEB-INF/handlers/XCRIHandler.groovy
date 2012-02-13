@@ -99,6 +99,9 @@ class XCRIHandler {
 
         def prov_title = provider.'xcri:title'.text()
         def prov_uri = provider.'xcri:uri'.text()
+
+        if ( ( prov_title == null ) || ( prov_title == '' ) )
+          prov_title = "Missing Provider Title"
     
         // Properties contain an xml element, which is the parsed document
         // def id1 = provider.'xcri:identifier'.text()
@@ -123,23 +126,20 @@ class XCRIHandler {
         }
   
         def coreference_result = coreference.resolve(props.owner,identifiers)
-        def canonical_identifier = coreference_result.canonical_identifier;
+        def canonical_identifier = coreference_result.canonical_identifier?.canonicalIdentifier;
 
-
-        if ( !termclient.checkTermExists('xcri-providers', canonical_identifier.canonicalIdentifier) ) {
-          def term = [
-            identifier : [canonical_identifier.canonicalIdentifier],
-            label : [ 'en_UK' : prov_title ]
-          ]
-
-          identifiers.each { id ->
-            term.identifier.add(id);
-          }
-
-          termclient.registerTerm('xcri-providers', term);
+        if ( coreference_result.reason == 'new' ) {
+          log.debug("New provider.. register");
+          def new_provider = [:];
+          new_provider.identifier = canonical_identifier
+          new_provider.label = prov_title
+          new_provider.langlabel = [:]
+          new_provider.langlabel['EN_uk'] = prov_title
+          new_provider.url = prov_uri
+          db.providers.save(new_provider)
         }
 
-        log.debug("Coreference service returns ${canonical_identifier} (${canonical_identifier.canonicalIdentifier})")
+        log.debug("Coreference service returns ${canonical_identifier} (${coreference_result.canonical_identifier})")
     
         props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Identifier for this XCRI document: ${canonical_identifier}"])
     
@@ -149,12 +149,12 @@ class XCRIHandler {
     
         props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Validation complete. No fatal errors."])
     
-        def prov_id = canonical_identifier.canonicalIdentifier
+        def prov_id = canonical_identifier
     
         provider.'xcri:course'.each { crs ->
     
           def crs_identifier = crs.'xcri:identifier'.text();
-          def crs_internal_uri = "uri:${props.owner}:xcri:${canonical_identifier.canonicalIdentifier}:${crs_identifier}";
+          def crs_internal_uri = "uri:${props.owner}:xcri:${canonical_identifier}:${crs_identifier}";
     
           log.debug("Processing course: ${crs_identifier}");
           props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Validating course entry ${crs_internal_uri} - ${crs.'xcri:title'}"]);
