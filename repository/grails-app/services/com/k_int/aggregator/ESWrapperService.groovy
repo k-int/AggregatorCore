@@ -36,16 +36,16 @@ class ESWrapperService {
       http {
         enabled = false
       }
-      discovery {
-        zen {
-          minimum_master_nodes=1
-          ping {
-            unicast {
-              hosts = [ "localhost" ] 
-            }
-          }
-        }
-      }
+      // discovery {
+      //   zen {
+      //     minimum_master_nodes=1
+      //     ping {
+      //       unicast {
+      //         hosts = [ "localhost" ] 
+      //       }
+      //     }
+      //   }
+      // }
     }
 
     log.debug("Constructing node...");
