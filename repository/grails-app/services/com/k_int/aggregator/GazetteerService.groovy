@@ -4,10 +4,10 @@ class GazetteerService {
 
   def ESWrapperService
 
-  def resolvePlaceName(esclient, query_input) {
+  def resolvePlaceName(query_input) {
 
-    def esnode = ESWrapperService.getNode();
-    GClient esclient = esnode.getClient();
+    org.elasticsearch.groovy.node.GNode esnode = ESWrapperService.getNode()
+    org.elasticsearch.groovy.client.GClient esclient = esnode.getClient()
 
     def gazresp = [:]
     gazresp.places = []
@@ -50,6 +50,7 @@ class GazetteerService {
           }
           println("Done Iterating hits...");
         }
+      }
     }
     catch( Exception e ) {
       log.error("Problem geocoding",e);
@@ -73,9 +74,12 @@ class GazetteerService {
           query_string (query: qry)
         }
         sort = [
-          type order = 'desc'
+          type {
+            order = 'desc'
+          }
         ]
       }
     }
+  }
 
 }
