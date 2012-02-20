@@ -72,11 +72,9 @@ class GazetteerService {
         query {
           query_string (query: qry)
         }
-        sort {
-          type {
-            order = 'desc'
-          }
-        }
+        sort = [
+          type order = 'desc'
+        ]
       }
     }
 
