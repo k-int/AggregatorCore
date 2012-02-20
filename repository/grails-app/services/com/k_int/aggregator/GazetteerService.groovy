@@ -56,7 +56,6 @@ class GazetteerService {
       log.error("Problem geocoding",e);
     }
     finally {
-      esclient.close()
     }
 
     gazresp
@@ -80,6 +79,11 @@ class GazetteerService {
         ]
       }
     }
+
+    def res = esclient.search(search_closure)
+    println "Search returned $res.response.hits.totalHits total hits"
+    res
+
   }
 
 }
