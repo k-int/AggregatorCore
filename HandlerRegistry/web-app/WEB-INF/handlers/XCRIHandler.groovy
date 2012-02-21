@@ -70,6 +70,7 @@ class XCRIHandler {
       def db = mongo.getDB("xcri")
       // Object solrwrapper = ctx.getBean('SOLRWrapperService');
       Object eswrapper = ctx.getBean('ESWrapperService');
+      Object gazetteer = ctx.getBean('GazetteerService');
       Object coreference = ctx.getBean('coReferenceService');
       Object termclient = ctx.getBean('terminologyClientService');
       org.elasticsearch.groovy.node.GNode esnode = eswrapper.getNode()
@@ -99,6 +100,17 @@ class XCRIHandler {
 
         def prov_title = provider.'xcri:title'.text()
         def prov_uri = provider.'xcri:uri'.text()
+        def prov_postcode = provider.'xcri:postcode'?.text()
+        def prov_location = [:]
+
+        if ( ( prov_postcode != null ) && ( prov_postcode.length() > 0 ) ) {
+          def gaz_response = gazetteer.resolvePlaceName(prov_postcode);
+          if ( ( gaz_response?.places != null ) && ( gaz_response.places.size() > 0 ) ) {
+            log.debug("Geocoded provider postcode OK ${gaz_response.places[0]}");
+            prov_location.lat = gaz_response.places[0].lat;
+            prov_location.lon = gaz_response.places[0].lon;
+          }
+        }
 
         if ( ( prov_title == null ) || ( prov_title == '' ) )
           prov_title = "Missing Provider Title"
@@ -178,6 +190,7 @@ class XCRIHandler {
     
           course_as_pojo.provid = prov_id
           course_as_pojo.provtitle = prov_title
+          course_as_pojo.provloc = prov_location
           course_as_pojo.provuri = prov_uri
     
           course_as_pojo.identifier = crs_internal_uri.toString()
@@ -442,6 +455,9 @@ class XCRIHandler {
               type = 'string'
               store = 'yes'
               index = 'not_analyzed'
+            }
+            provloc {
+              type = 'geo_point';
             }
           }
         }
