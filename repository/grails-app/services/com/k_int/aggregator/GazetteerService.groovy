@@ -1,10 +1,14 @@
 package com.k_int.aggregator
 
+import org.elasticsearch.groovy.common.xcontent.*
+
 class GazetteerService {
 
   def ESWrapperService
 
   def resolvePlaceName(query_input) {
+
+    log.debug("Resolve place name in ${query_input}")
 
     org.elasticsearch.groovy.node.GNode esnode = ESWrapperService.getNode()
     org.elasticsearch.groovy.client.GClient esclient = esnode.getClient()
@@ -14,15 +18,14 @@ class GazetteerService {
     gazresp.newq = "";
 
     try {
-      println "Resolve place name in ${query_input}"
   
       // Step 1 : See if the input place name matches a fully qualified place name
       println "exact match q params: ${query_input}"
   
       def result = search(esclient, "fqn.orig:\"${query_input}\"", 0, 10);
   
-      if ( result.response.hits.totalHits == 1 ) {
-        System.out.println("Exact match on fqn for ${query_input}");
+      if ( result?.response?.hits?.totalHits == 1 ) {
+        log.debug("Exact match on fqn for ${query_input}");
         def sr = [
              'lat':result.response.hits[0].source.location?.lat,
              'lon':result.response.hits[0].source.location?.lon,
@@ -33,10 +36,11 @@ class GazetteerService {
         gazresp.places.add(sr)
       }
       else {
-        System.out.println("No exact fqn match for ${query_input}, try sub match");
+        log.debug("No exact fqn match for ${query_input}, try sub match");
         result = search(esclient, "fqn:\"${query_input}\"", 0, 10);
-        System.out.println("Got ${result.response.hits} hits...");
-        if ( result.response.hits.totalHits > 0 ) {
+        // result = disMaxSearch(esclient, "fqn:\"${query_input}\"", 0, 10);
+        log.debug("Got ${result.response.hits} hits...");
+        if ( result?.response?.hits?.totalHits > 0 ) {
           println("Iterating hits...");
           result.response.hits.each { hit ->
             println("Adding ${hit.source}");
@@ -72,11 +76,11 @@ class GazetteerService {
         query {
           query_string (query: qry)
         }
-        sort = [
-          type {
+        sort {
+          pref {
             order = 'desc'
           }
-        ]
+        }
       }
     }
 
@@ -84,6 +88,47 @@ class GazetteerService {
     println "Search returned $res.response.hits.totalHits total hits"
     res
 
+  }
+
+  def disMaxSearch(esclient, qry, start, rows) {
+   println("Search for ${qry}");
+
+    def search_closure = {
+      source {
+        from = 0
+        size = 10
+        query {
+          dis_max {
+            queries = [
+              term {
+                fqn='hello'
+              },
+              term {
+                placeName='hello'
+              }
+            ]
+          }
+        }
+        sort {
+          pref {
+            order = 'desc'
+          }
+        }
+      }
+    }
+
+    testSearchClosure(search_closure);
+
+    def res = esclient.search(search_closure)
+    println "Search returned $res.response.hits.totalHits total hits"
+    res
+  }
+
+  def testSearchClosure(c) {
+    log.debug("testSearchClosure....");
+    def builder = new GXContentBuilder()
+    def b = builder.buildAsString(c)
+    log.debug(b.toString())
   }
 
 }
