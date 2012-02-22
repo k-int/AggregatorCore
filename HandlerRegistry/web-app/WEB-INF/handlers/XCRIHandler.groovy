@@ -99,6 +99,8 @@ class XCRIHandler {
         def course_count = 0;
 
         def prov_title = provider.'xcri:title'.text()
+        prov_title = prov_title? prov_title : provider.'xcri:name'.text() //if title not present try name
+        
         def prov_uri = provider.'xcri:uri'.text()
         def prov_postcode = provider.'xcri:postcode'?.text()
         def prov_location = [:]
