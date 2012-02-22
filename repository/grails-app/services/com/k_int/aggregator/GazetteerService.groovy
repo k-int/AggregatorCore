@@ -7,6 +7,19 @@ class GazetteerService {
   def ESWrapperService
 
   def resolvePlaceName(query_input) {
+    def gazresp = null;
+
+    try {
+      gazresp = doResolvePlaceName(query_input);
+    }
+    catch ( Exception e ) {
+      log.warn("Problem resolving place name ${e}");
+    }
+
+    gazresp
+  }
+
+  def doResolvePlaceName(query_input) {
 
     log.debug("Resolve place name in ${query_input}")
 
