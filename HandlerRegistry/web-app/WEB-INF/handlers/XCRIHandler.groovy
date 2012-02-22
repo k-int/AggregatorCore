@@ -70,7 +70,7 @@ class XCRIHandler {
       def db = mongo.getDB("xcri")
       // Object solrwrapper = ctx.getBean('SOLRWrapperService');
       Object eswrapper = ctx.getBean('ESWrapperService');
-      Object gazetteer = ctx.getBean('GazetteerService');
+      Object gazetteer = ctx.getBean('gazetteerService');
       Object coreference = ctx.getBean('coReferenceService');
       Object termclient = ctx.getBean('terminologyClientService');
       org.elasticsearch.groovy.node.GNode esnode = eswrapper.getNode()
@@ -99,6 +99,8 @@ class XCRIHandler {
         def course_count = 0;
 
         def prov_title = provider.'xcri:title'.text()
+        prov_title = prov_title? prov_title : provider.'xcri:name'.text() //if title not present try name
+        
         def prov_uri = provider.'xcri:uri'.text()
         def prov_postcode = provider.'xcri:postcode'?.text()
         def prov_location = [:]
