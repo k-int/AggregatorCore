@@ -415,6 +415,11 @@ class XCRIHandler {
     // Get hold of an index admin client
     org.elasticsearch.groovy.client.GIndicesAdminClient index_admin_client = new org.elasticsearch.groovy.client.GIndicesAdminClient(esclient);
 
+    // Create an index if none exists
+    def future = index_admin_client.create {
+      index 'courses'
+    }
+
     // use http://localhost:9200/_all/_mapping to list all installed mappings
 
     // Declare a mapping of type "course" that explains to ES how it should index course elements
