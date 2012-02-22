@@ -114,8 +114,10 @@ class XCRIHandler {
           }
         }
 
-        if ( ( prov_title == null ) || ( prov_title == '' ) )
-          prov_title = "Missing Provider Title"
+        if ( ( prov_title == null ) || ( prov_title == '' ) ) {
+          prov_title = "Missing Provider Title (${prov_uri})"
+          props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'warn',msg:"Missing Provider Title (${prov_uri})"])
+        }
     
         // Properties contain an xml element, which is the parsed document
         // def id1 = provider.'xcri:identifier'.text()
@@ -424,7 +426,7 @@ class XCRIHandler {
 
     // Declare a mapping of type "course" that explains to ES how it should index course elements
     log.debug("Attempting to put a mapping for course...");
-    def future = index_admin_client.putMapping {
+    future = index_admin_client.putMapping {
       indices 'courses'
       type 'course'
       source {
