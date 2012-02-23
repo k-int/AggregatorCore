@@ -3,6 +3,8 @@ package com.k_int.aggregator
 import org.elasticsearch.groovy.node.GNode
 import org.elasticsearch.groovy.node.GNodeBuilder
 import static org.elasticsearch.groovy.node.GNodeBuilder.*
+import org.codehaus.groovy.grails.commons.ApplicationHolder
+
 
 class ESWrapperService {
 
@@ -21,6 +23,11 @@ class ESWrapperService {
     // Settings s = ImmutableSettings.settingsBuilder() .put(m).build();
     // TransportClient client = new TransportClient(s);
 
+    // If there is a aggr.dev.es.cluster=iidevaggr setm us it, otherwise cluster name is aggr
+
+    def clus_nm = ApplicationHolder.application.config.aggr.es.cluster ?: "aggr"
+
+    log.info("Using ${clus_nm} as cluster name...");
 
     def nodeBuilder = new org.elasticsearch.groovy.node.GNodeBuilder()
 
@@ -31,7 +38,7 @@ class ESWrapperService {
         client = true
       }
       cluster {
-        name = "aggr"
+        name = clus_nm
       }
       http {
         enabled = false
