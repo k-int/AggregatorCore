@@ -469,11 +469,15 @@ class XCRIHandler {
               type = 'geo_point'
             }
             level {
-              type = 'geo_point'
+              type = 'string'
               index = 'not_analyzed'
             }
             studyMode {
-              type = 'geo_point'
+              type = 'string'
+              index = 'not_analyzed'
+            }
+            qual.level {
+              type = 'string'
               index = 'not_analyzed'
             }
           }
