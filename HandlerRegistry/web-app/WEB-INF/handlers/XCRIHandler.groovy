@@ -476,9 +476,13 @@ class XCRIHandler {
               type = 'string'
               index = 'not_analyzed'
             }
-            qual.level {
-              type = 'string'
-              index = 'not_analyzed'
+            qual {
+              properties {
+                level {
+                  type = 'string'
+                  index = 'not_analyzed'
+                }
+              }
             }
           }
         }
