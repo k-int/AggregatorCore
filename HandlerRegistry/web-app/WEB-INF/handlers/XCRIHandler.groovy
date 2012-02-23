@@ -472,6 +472,10 @@ class XCRIHandler {
               type = 'geo_point'
               index = 'not_analyzed'
             }
+            studyMode {
+              type = 'geo_point'
+              index = 'not_analyzed'
+            }
           }
         }
       }
