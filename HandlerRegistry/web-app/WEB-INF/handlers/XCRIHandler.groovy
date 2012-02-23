@@ -466,7 +466,11 @@ class XCRIHandler {
               index = 'not_analyzed'
             }
             provloc {
-              type = 'geo_point';
+              type = 'geo_point'
+            }
+            level {
+              type = 'geo_point'
+              index = 'not_analyzed'
             }
           }
         }
