@@ -82,22 +82,22 @@ class GazetteerService {
 
     println("Search for ${qry}");
 
-    def search_closure = {
+    def res = esclient.search {
+      indices "gaz"
       source {
         from = 0
         size = 10
         query {
           query_string (query: qry)
         }
-        sort {
-          pref {
-            order = 'desc'
-          }
-        }
+        sort = [
+          pref : [
+            order : 'desc'
+          ]
+        ]
       }
     }
 
-    def res = esclient.search(search_closure)
     println "Search returned $res.response.hits.totalHits total hits"
     res
 
