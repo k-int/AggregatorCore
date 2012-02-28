@@ -147,8 +147,7 @@ class UploadController {
       }
 
       log.debug("Existing resource check returned ${existing_resources}");
-      if ( existing_resources.size() == 0 ) {
-    
+      if ( ( existing_resources.size() == 0 ) || ( params.force == "true" ) ) {
   
         // Process
         def content_type = file.contentType
