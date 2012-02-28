@@ -206,7 +206,7 @@ class UploadController {
                                            checksum:md5sumHex)
         if ( de.save(flush:true) ) {
           log.debug( "Created...")
-  
+
           // Set up the propeties for the upload event, in this case event=com.k_int.aggregator.event.upload and mimetype=<mimetype>
           // We are looking for any handlers willing to accept this event given the appropriate properties
           // def event_properties = ["content_type":content_type, "file":temp_file, "response":response, "upload_event_token":deposit_token, "user":user]
@@ -216,6 +216,14 @@ class UploadController {
                                   "response":response, 
                                   "context_dir":context_dir,
                                   "upload_event_token":deposit_token]
+  
+          // Copy any ulparams.xxx to the event_properties.. This gives us a means of passing in handler specific
+          // values to the backend. For example, extra properties that determine if a record is public or private.
+          params.each { ent ->
+            if ( ent.key.startsWith('ulparam.') ) {
+              event_properties[ent.key] = ent.value
+            }
+          }
   
           // Firstly we need to select an appropriate handler for the com.k_int.aggregator.event.upload event
           if ( handlerSelectionService ) {
