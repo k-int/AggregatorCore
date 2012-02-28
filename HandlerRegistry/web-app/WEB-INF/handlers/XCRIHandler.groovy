@@ -311,7 +311,13 @@ class XCRIHandler {
               else if(subj.@'xsi:type' && subj.@'xsi:type'?.text().equalsIgnoreCase("asc:keyword")) { course_as_pojo.subjectKeywords.add(subj.text()?.toString()) }
               else { course_as_pojo.subject.add(subj.text()?.toString()) }
           }
-          
+
+          if ( props['ulparam.feedStatus'] ) {
+            course_as_pojo.recstatus = props['ulparam.feedStatus']
+          }
+          else {
+            course_as_pojo.recstatus = 'private';
+          }
     
           // def course_as_json = course_as_pojo as JSON;
           // log.debug("The course as JSON is ${course_as_json.toString()}");
