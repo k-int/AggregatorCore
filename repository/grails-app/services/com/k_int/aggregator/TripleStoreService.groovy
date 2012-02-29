@@ -25,28 +25,37 @@ class TripleStoreService {
   }
 
   def update(graph, graph_uri, mimetype) { // throws MalformedURLException, ProtocolException, IOException {
-    fourstore_endpoint.request(POST) { request ->
-      // requestContentType = 'multipart/form-data'
-      requestContentType = 'application/x-www-form-urlencoded'
 
-      uri.path = 'data/'
+    try {
+      log.debug("update ${graph_uri} - upload graph ${graph}");
 
-      body =  [ 
-        'mime-type' : 'mimetype' , 
-        'graph' : URLEncoder.encode(graph_uri, "UTF-8"),
-        'data' : URLEncoder.encode(graph, "UTF-8")
-      ] 
+      fourstore_endpoint.request(POST) { request ->
+        // requestContentType = 'multipart/form-data'
+        requestContentType = 'application/x-www-form-urlencoded'
 
-      response.success = { resp, data ->
-        log.debug("response status: ${resp.statusLine} ${data}")
-      }
+        uri.path = 'data/'
 
-      response.failure = { resp ->
-        log.error("Failure - ${resp}");
+        body =  [ 
+          'mime-type' : 'mimetype' , 
+          'graph' : URLEncoder.encode(graph_uri, "UTF-8"),
+          'data' : URLEncoder.encode(graph, "UTF-8")
+        ] 
+
+        response.success = { resp, data ->
+          log.debug("response status: ${resp.statusLine} ${data}")
+        }
+
+        response.failure = { resp ->
+          log.error("Failure - ${resp.statusLine} ${resp}");
+        }
       }
     }
-
-    log.debug("Complete");
+    catch ( Exception e ) {
+      log.error("Error updating triple store",e);
+    }
+    finally {
+      log.debug("Complete");
+    }
   }
 
   def removeGraph(graph_uri) {
