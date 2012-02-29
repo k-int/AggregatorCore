@@ -191,6 +191,8 @@ class XCRIHandler {
             course_as_pojo._id = new org.bson.types.ObjectId()
             log.debug("No existing course information for ${crs_internal_uri}, create new record. new ID will be ${course_as_pojo._id}");
           }
+
+          course_as_pojo.lastModified = System.currentTimeMillis()
     
           course_as_pojo.provid = prov_id
           course_as_pojo.provtitle = prov_title
