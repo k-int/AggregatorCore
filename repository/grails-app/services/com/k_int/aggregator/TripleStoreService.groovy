@@ -37,8 +37,10 @@ class TripleStoreService {
 
         body =  [ 
           'mime-type' : 'mimetype' , 
-          'graph' : URLEncoder.encode(graph_uri, "UTF-8"),
-          'data' : URLEncoder.encode(graph, "UTF-8")
+          'graph' : graph_uri,
+          'data' : graph
+          // 'graph' : URLEncoder.encode(graph_uri, "UTF-8"),
+          // 'data' : URLEncoder.encode(graph, "UTF-8")
         ] 
 
         response.success = { resp, data ->
