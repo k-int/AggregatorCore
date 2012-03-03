@@ -152,6 +152,10 @@ class XCRIHandler {
           new_provider.langlabel = [:]
           new_provider.langlabel['EN_uk'] = prov_title
           new_provider.url = prov_uri
+          new_provider.lastModified = System.currentTimeMillis();
+          new_provider.lat = prov_location.lat
+          new_provider.lon = prov_location.lon
+    
           db.providers.save(new_provider)
         }
 
