@@ -318,8 +318,8 @@ class XCRIHandler {
               else { course_as_pojo.subject.add(subj.text()?.toString()) }
           }
 
-          if ( props['ulparam.feedStatus'] ) {
-            course_as_pojo.recstatus = props['ulparam.feedStatus']
+          if ( props['ulparam_feedStatus'] ) {
+            course_as_pojo.recstatus = props['ulparam_feedStatus']
           }
           else {
             course_as_pojo.recstatus = 'private';
