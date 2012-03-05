@@ -48,7 +48,7 @@ class UploadController {
     def response = [code: 0, eventLog:[], additionalProps:[:]]
     def file = request.getFile("upload")
 
-    log.debug( "Validating provider : ${provider} (${params['ulparam.feedStatus']}, ${params['ulparam.force']})" );
+    log.debug( "Validating provider : ${provider} (${params['ulparam_feedStatus']}, ${params['ulparam_force']} ${params})" );
 
     // If none present, does the user have a default?
     // if ( ( provider == null ) || ( provider == '' ) ) {
@@ -219,7 +219,7 @@ class UploadController {
           // Copy any ulparams.xxx to the event_properties.. This gives us a means of passing in handler specific
           // values to the backend. For example, extra properties that determine if a record is public or private.
           params.each { ent ->
-            if ( ent.key.startsWith('ulparam.') ) {
+            if ( ent.key.startsWith('ulparam') ) {
               log.debug("Including upload param ${ent.key} = ${ent.value}");
               event_properties[ent.key] = ent.value
             }
