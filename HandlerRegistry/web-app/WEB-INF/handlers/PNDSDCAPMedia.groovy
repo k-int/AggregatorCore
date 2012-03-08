@@ -135,6 +135,10 @@ class PNDSDCAPMedia {
 
     db.work.save(work_information);
 
+    props.response.title = work_information.title
+    props.response.resource_identifier = work_information.identifier
+
+
     def elapsed = System.currentTimeMillis() - start_time
     props.response.eventLog.add([type:"msg",msg:"Completed processing of PNDS_DCAP encoded resource identified by ${id1}"]);
 
