@@ -68,7 +68,7 @@ class DefaultUploadEventHandlerService implements ApplicationContextAware {
   
           // Handler found, invoke it,
           if ( schema_handler instanceof ScriptletEventHandler  ) { 
-            log.debug("Located handler information - Scriptlet event handler")
+            log.debug("Located handler information - Scriptlet event handler - ${schema_handler.name}")
             def xml_params = new java.util.HashMap(props);
             xml_params["xml"] = xml;
             xml_params["rootElementNamespace"] = root_element_namespace
