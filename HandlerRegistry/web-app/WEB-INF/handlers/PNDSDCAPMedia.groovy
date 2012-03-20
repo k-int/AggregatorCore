@@ -145,6 +145,10 @@ class PNDSDCAPMedia {
     // create the denormalised retrieval records (Work and Manifestation)
   }
 
+  def fetchImage(uri) {
+    log.debug("Fetch image at ${uri}");
+  }
+
   def setup(ctx) {
     log.debug("This is the PNDS DCAP (Media) handler setup method");
     Object eswrapper = ctx.getBean('ESWrapperService');
