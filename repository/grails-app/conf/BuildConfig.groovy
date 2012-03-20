@@ -55,4 +55,8 @@ grails.project.dependency.resolution = {
 
         // runtime 'org.apache.tika:tika-parsers:0.9' // this is for actually parsing files
     }
+    // plugins {
+    //   compile ":resources:1.0 > *"
+    // }
+
 }
