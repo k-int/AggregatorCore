@@ -60,6 +60,10 @@ grails.logging.jul.usebridge = true
 // packages to include in Spring bean scanning
 grails.spring.bean.packages = []
 
+grails.plugins.twitterbootstrap.fixtaglib = true
+grails.plugins.twitterbootstrap.defaultBundle = 'bundle_bootstrap'
+grails.plugins.twitterbootstrap.customDir = 'less'
+
 // set per-environment serverURL stem for creating absolute links
 environments {
     production {
