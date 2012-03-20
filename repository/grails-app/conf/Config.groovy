@@ -1,17 +1,22 @@
 // locations to search for config files that get merged into the main config
 // config files can either be Java properties files or ConfigSlurper scripts
 
-println("Pre locations")
-println(grails.config);
-println("Company name: ${companyName}");
+// println("Pre locations")
+// println(grails.config);
+// println("System env version: ${System.env['companyName'].toString()}");
+// locvar = "${appName}.config.companyName".toString() 
+// println("Attempt 2: ${System.env[locvar].toString()}");
+// println("Company name: ${companyName}");
+
+// println(org.codehaus.groovy.grails.web.context.ServletContextHolder.getServletContext())
 
 grails.config.locations = [ // "classpath:${appName}-config.properties",
 //                             "classpath:${appName}-config.groovy",
 //                             "file:${userHome}/.grails/${appName}-config.properties",
                              "file:${userHome}/.grails/${appName}-config.groovy"]
 
-println("Post locations")
-println(grails.config);
+// println("Post locations")
+// println(grails.config);
 
 // if(System.properties["${appName}.config.location"]) {
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
