@@ -92,7 +92,7 @@
       <div class="span12">
         <div class="well">
           <h2>Registered Handlers for this ODA instance</h2>
-          <table border="1">
+          <table border="0" class="table table-striped table-bordered">
             <tr>
               <th>Handler Name</th>
               <th>Event Code</th>
@@ -121,7 +121,7 @@
         <div class="well">
           <h2>Currently Cached Handlers</h2>
           <g:if test="${handler_cache.size() > 0}">
-          <table border="1">
+          <table border="0" class="table table-striped table-bordered">
             <tr>
               <th>Handler Name</th><th>Actions</th>
             </tr>
