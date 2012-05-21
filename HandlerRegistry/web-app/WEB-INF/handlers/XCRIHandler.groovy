@@ -57,7 +57,7 @@ class XCRIHandler {
 
   def getPreconditions() {
     [
-      'p.rootElementNamespace=="http://xcri.org/profiles/catalog"'
+      'p.rootElementNamespace=="http://xcri.org/profiles/catalog" || p.rootElementNamespace=="http://xcri.org/profiles/1.2/catalog"'
     ]
   }
 
