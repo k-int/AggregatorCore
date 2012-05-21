@@ -62,6 +62,12 @@ class XCRIHandler {
   }
 
   def process(props, ctx) {
+
+    log.debug("Validate....");
+    if ( !validate() ) {
+      log.debug("Validation failed...");
+    }
+
     log.debug("process....");
     try {
   
@@ -566,5 +572,9 @@ class XCRIHandler {
     def result = gpathresult.text().toString()
     if ( result?.length() != 0 )
       obj[prop] = result
+  }
+
+  def validate() {
+    // Commented out call to validation service at http://validator.xcri.co.uk/API/Test for now.
   }
 }
