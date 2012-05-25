@@ -9,7 +9,7 @@ import com.gmongo.GMongo
 import org.apache.commons.logging.LogFactory
 import grails.converters.*
 
-class XCRIHandler {
+class XCRI12Handler {
 
   private static final log = LogFactory.getLog(this)
   
@@ -48,7 +48,7 @@ class XCRIHandler {
 
   // handlers have access to the repository mongo service.. suggest you use http://blog.paulopoiati.com/2010/06/20/gmongo-0-5-released/
   def getHandlerName() {
-    "XCRI_CAP"
+    "XCRI_12_CAP"
   }
 
   def getRevision() {
@@ -86,7 +86,7 @@ class XCRIHandler {
   
       // Start processing proper
   
-      props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"XCRI (CAP Profile) Document handler"])
+      props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"XCRI 1.2 (CAP Profile) Document handler"])
   
       def d2 = props.xml.declareNamespace(['xcri':'http://xcri.org/profiles/1.2/catalog', 
                                          'xsi':'http://www.w3.org/2001/XMLSchema-instance',
@@ -141,7 +141,7 @@ class XCRIHandler {
         }
   
         if ( identifiers.size() == 0 ) {
-          props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'warn',msg:"XCRI Document contains no valid (document level) identifiers."])
+          props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'warn',msg:"XCRI 1.2 Document contains no valid (document level) identifiers."])
           props.response.code=-6
           props.response.status="Data error processing document"
           props.response.message="The input document was missing a valid identifier at the top level. processing skipped"
@@ -168,7 +168,7 @@ class XCRIHandler {
 
         log.debug("Coreference service returns ${canonical_identifier} (${coreference_result.canonical_identifier})")
     
-        props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Identifier for this XCRI document: ${canonical_identifier}"])
+        props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Identifier for this XCRI 1.2 document: ${canonical_identifier}"])
     
         props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Starting feed validation"])
     
@@ -411,7 +411,7 @@ class XCRIHandler {
       // -6 == Data error
     }
     finally {
-      log.debug("XCRI handler complete");
+      log.debug("XCRI 1.2 handler complete");
     }
 
     
@@ -421,117 +421,8 @@ class XCRIHandler {
    *  Initial handler installation, set up collections and other information
    */
   def setup(ctx) {
-    log.debug("This is the XCRI handler setup method");
-
-    Object eswrapper = ctx.getBean('ESWrapperService');
-    // Object solrwrapper = ctx.getBean('SOLRWrapperService');
-
-    org.elasticsearch.groovy.node.GNode esnode = eswrapper.getNode()
-    org.elasticsearch.groovy.client.GClient esclient = esnode.getClient()
-
-    // Get hold of mongodb 
-    def mongo = new com.gmongo.GMongo();
-    def db = mongo.getDB("oda")
-
-    // Get hold of an index admin client
-    org.elasticsearch.groovy.client.GIndicesAdminClient index_admin_client = new org.elasticsearch.groovy.client.GIndicesAdminClient(esclient);
-
-    // Create an index if none exists
-    def future = index_admin_client.create {
-      index 'courses'
-    }
-
-    // use http://localhost:9200/_all/_mapping to list all installed mappings
-
-    // Declare a mapping of type "course" that explains to ES how it should index course elements
-    log.debug("Attempting to put a mapping for course...");
-    future = index_admin_client.putMapping {
-      indices 'courses'
-      type 'course'
-      source {
-        course {       // Think this is the name of the mapping within the type
-          properties {
-            title { // We declare a multi_field mapping so we can have a default "title" search with stemming, and an untouched title via origtitle
-              type = 'multi_field'
-              fields {
-                title { 
-                  type = 'string'
-                  analyzer = 'snowball'
-                }
-                origtitle {
-                  type = 'string'
-                  store = 'yes'
-                }
-              }
-            }
-            subject {
-              type = 'multi_field'
-              fields {
-                subject {
-                  type = 'string'
-                  store = 'yes'
-                  index = 'not_analyzed'
-                }
-                subjectKw {
-                  type = 'string'
-                  analyzer = 'snowball'
-                }
-              }
-
-            }
-            provid {
-              type = 'string'
-              store = 'yes'
-              index = 'not_analyzed'
-            }
-            provloc {
-              type = 'geo_point'
-            }
-            level {
-              type = 'string'
-              index = 'not_analyzed'
-            }
-            studyMode {
-              type = 'string'
-              index = 'not_analyzed'
-            }
-            qual {
-              properties {
-                level {
-                  type = 'string'
-                  index = 'not_analyzed'
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    log.debug("Installed course mapping ${future}");
-
-    // Store a definition of the searchable part of the resource in mongo
-    def courses_aggregation = db.aggregations.findOne(identifier: 'uri:aggr:cld:courses')
-
-    if ( courses_aggregation == null ) {
-      // Create a definition of a course CLD
-      courses_aggregation = [:]
-    }
-
-    courses_aggregation.identifier = 'uri:aggr:cld:courses'
-    courses_aggregation.type = 'es'
-    courses_aggregation.indexes = ['courses']
-    courses_aggregation.types = ['course']
-    courses_aggregation.title = 'All UK Courses'
-    courses_aggregation.description = 'An searchable aggregation of course descriptions from institutions in the UK'
-    courses_aggregation.access_points = [ 
-                                    [ field:'identifier', label:'Identifier' ], 
-                                    [ field:'title', label:'Title' ], 
-                                    [ field:'descriptions', label:'Description' ] ]
-    db.aggregations.save(courses_aggregation);
-
-
-    // Confirm SOLR setup for this aggregation
-    // solrwrapper.verifyCore('courses');
+    log.debug("This is the XCRI 1.2 handler setup method");
+    // All the work is done by the standard 1.0 handler
   }
 
   def expandNamespacedLiteral(doc, literal) {
