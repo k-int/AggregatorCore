@@ -91,6 +91,11 @@ class XCRI12Handler {
       def d2 = props.xml.declareNamespace(['xcri':'http://xcri.org/profiles/1.2/catalog', 
                                          'xsi':'http://www.w3.org/2001/XMLSchema-instance',
                                          'xhtml':'http://www.w3.org/1999/xhtml',
+	                                 'xcriTerms':'http://xcri.org/profiles/catalog/terms',
+	                                 'dcterms':'http://purl.org/dc/terms/',
+	                                 'credit':'http://purl.org/net/cm',
+	                                 'mlo':'http://purl.org/net/mlo',
+	                                 'courseDataProgramme':'http://xcri.co.uk',
                                          'dc':'http://purl.org/dc/elements/1.1/'])
 
   
@@ -105,11 +110,11 @@ class XCRI12Handler {
         def start_time = System.currentTimeMillis();
         def course_count = 0;
 
-        def prov_title = provider.'xcri:title'.text()
+        def prov_title = provider.'dc:title'.text()
         prov_title = prov_title? prov_title : provider.'xcri:name'.text() //if title not present try name
         
-        def prov_uri = provider.'xcri:uri'.text()
-        def prov_postcode = provider.'xcri:postcode'?.text()
+        def prov_uri = provider.'mlo:uri'.text()
+        def prov_postcode = provider.'mlo:location'.'mlo:postcode'?.text()
         def prov_location = [:]
 
         if ( ( prov_postcode != null ) && ( prov_postcode.length() > 0 ) ) {
@@ -132,7 +137,7 @@ class XCRI12Handler {
         // N.B. XCRI documents can have many identifiers...
         def identifiers = []
         def identifier_count = 0
-        provider.'xcri:identifier'.each { id ->
+        provider.'dc:identifier'.each { id ->
           log.debug("Adding ${id.'@xsi:type'?.text()} : ${id.text()}");
           def identifier_value = id.text()
           if ( ( identifier_value != null ) && ( identifier_value.length() > 0 ) ) {
@@ -180,7 +185,7 @@ class XCRI12Handler {
     
         provider.'xcri:course'.each { crs ->
     
-          def crs_identifier = crs.'xcri:identifier'.text();
+          def crs_identifier = crs.'dc:identifier'.text();
           def crs_internal_uri = "uri:${props.owner}:xcri:${canonical_identifier}:${crs_identifier}";
     
           log.debug("Processing course: ${crs_identifier}");
@@ -211,22 +216,22 @@ class XCRI12Handler {
           course_as_pojo.provuri = prov_uri
     
           course_as_pojo.identifier = crs_internal_uri.toString()
-          course_as_pojo.title = crs.'xcri:title'?.text()?.toString() 
+          course_as_pojo.title = crs.'dc:title'?.text()?.toString() 
           course_as_pojo.imageuri = crs.'xcri:image'?.@src?.text()
     
           course_as_pojo.qual = [:]
-          course_as_pojo.qual.type = crs.'xcri:qualification'.'xcri:type'?.text()
-          course_as_pojo.qual.title = crs.'xcri:qualification'.'xcri:title'?.text()
-          course_as_pojo.qual.description = crs.'xcri:qualification'.'xcri:description'?.text()
+          course_as_pojo.qual.type = crs.'mlo:qualification'.'xcri:type'?.text()
+          course_as_pojo.qual.title = crs.'mlo:qualification'.'dc:title'?.text()
+          course_as_pojo.qual.description = crs.'mlo:qualification'.'dc:description'?.text()
           course_as_pojo.qual.level = crs.'xcri:qualification'.'xcri:level'?.text()
-          course_as_pojo.qual.awardedBy = crs.'xcri:qualification'.'xcri:awardedBy'?.text()
-          course_as_pojo.qual.accreditedBy = crs.'xcri:qualification'.'xcri:accreditedBy'?.text()
+          course_as_pojo.qual.awardedBy = crs.'mlo:qualification'.'xcri:awardedBy'?.text()
+          course_as_pojo.qual.accreditedBy = crs.'mlo:qualification'.'xcri:accreditedBy'?.text()
           
           course_as_pojo.description = ''
           
           course_as_pojo.descriptions = [:]
   
-          crs.'xcri:description'.each { desc ->
+          crs.'dc:description'.each { desc ->
               
              if(desc.text()?.toString().length() > 0){
                  //append to core description
@@ -254,11 +259,11 @@ class XCRI12Handler {
           
           course_as_pojo.credits = []
           
-          crs.'xcri:credit'.each { cred ->       
+          crs.'mlo:credit'.each { cred ->       
               def credit = [:]
-              credit.scheme = cred.'xcri:scheme'?.text()?.toString()
-              credit.level = cred.'xcri:level'?.text()?.toString()
-              credit.val = cred.'xcri:value'?.text()?.toString()
+              credit.scheme = cred.'credit:scheme'?.text()?.toString()
+              credit.level = cred.'credit:level'?.text()?.toString()
+              credit.val = cred.'credit:value'?.text()?.toString()
               course_as_pojo.credits << credit
           }
           
@@ -267,8 +272,8 @@ class XCRI12Handler {
               
               crs.'xcri:presentation'.each { pres ->
                   def presentation = [:]
-                  setIfPresent(pres.'xcri:identifier',presentation,'identifier')
-                  setIfPresent(pres.'xcri:description',presentation,'description')
+                  setIfPresent(pres.'dc:identifier',presentation,'identifier')
+                  setIfPresent(pres.'dc:description',presentation,'description')
                   setIfPresent(pres.'xcri:cost',presentation,'cost')
                   setIfPresent(pres.'xcri:start',presentation,'start')
                   setIfPresent(pres.'xcri:end',presentation,'end')
@@ -285,15 +290,16 @@ class XCRI12Handler {
                   
                   if(pres.'xcri:venue'){
                       presentation.venue = [:]
-                      def ven = pres.'xcri:venue'
-                      setIfPresent(ven.'xcri:identifier',presentation.venue,'identifier')
-                      setIfPresent(ven.'xcri:name',presentation.venue,'name')
+                      def ven = pres.'xcri:venue'.'xcri:provider'
+                      setIfPresent(ven.'dc:identifier',presentation.venue,'identifier')
+                      setIfPresent(ven.'dc:title',presentation.venue,'name')
+                      setIfPresent(ven.'dc:description',presentation.venue,'description')
                       setIfPresent(ven.'xcri:street',presentation.venue,'street')
-                      setIfPresent(ven.'xcri:town',presentation.venue,'town')
-                      setIfPresent(ven.'xcri:postcode',presentation.venue,'postcode')
-                      setIfPresent(ven.'xcri:description',presentation.venue,'description')
-                      setIfPresent(ven.'xcri:title',presentation.venue,'title')
-                      setIfPresent(ven.'xcri:url',presentation.venue,'url')
+                      setIfPresent(ven.'mlo:url',presentation.venue,'url')
+                      ven.'xcri:location'.each { l ->
+                        setIfPresent(l.'mlo:town',presentation.venue,'town')
+                        setIfPresent(l.'mlo:postcode',presentation.venue,'postcode')
+                     }
                   }
                       
                   presentation.entryRequirements = []
