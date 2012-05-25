@@ -57,7 +57,7 @@ class XCRIHandler {
 
   def getPreconditions() {
     [
-      'p.rootElementNamespace=="http://xcri.org/profiles/catalog"'
+      'p.rootElementNamespace=="http://xcri.org/profiles/1.2/catalog"'
     ]
   }
 
@@ -88,19 +88,10 @@ class XCRIHandler {
   
       props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"XCRI (CAP Profile) Document handler"])
   
-      def d2 = null;
-      if ( props.xml.namespaceURI( 'http://xcri.org/profiles/catalog' ) ) {
-        d2 = props.xml.declareNamespace(['xcri':'http://xcri.org/profiles/catalog', 
+      def d2 = props.xml.declareNamespace(['xcri':'http://xcri.org/profiles/1.2/catalog', 
                                          'xsi':'http://www.w3.org/2001/XMLSchema-instance',
                                          'xhtml':'http://www.w3.org/1999/xhtml',
                                          'dc':'http://purl.org/dc/elements/1.1/'])
-      }
-      else {
-        d2 = props.xml.declareNamespace(['xcri':'http://xcri.org/profiles/1.2/catalog', 
-                                         'xsi':'http://www.w3.org/2001/XMLSchema-instance',
-                                         'xhtml':'http://www.w3.org/1999/xhtml',
-                                         'dc':'http://purl.org/dc/elements/1.1/'])
-      }
 
   
       // def xcri = new groovy.xml.Namespace("http://xcri.org/profiles/catalog", 'xcri') 
