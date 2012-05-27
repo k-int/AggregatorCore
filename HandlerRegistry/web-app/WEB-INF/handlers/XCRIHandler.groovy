@@ -500,6 +500,26 @@ class XCRIHandler {
                 }
               }
             }
+            presentation {
+              properties {
+                start {
+                  type = 'string'
+                  index = 'not_analyzed'
+                }
+                end {
+                  type = 'string'
+                  index = 'not_analyzed'
+                }
+                applyTo {
+                  type = 'string'
+                  index = 'not_analyzed'
+                }
+                enquireTo {
+                  type = 'string'
+                  index = 'not_analyzed'
+                }
+              }
+            }
           }
         }
       }
