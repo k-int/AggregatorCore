@@ -506,7 +506,15 @@ class XCRIHandler {
                   type = 'string'
                   index = 'not_analyzed'
                 }
+                startText {
+                  type = 'string'
+                  index = 'not_analyzed'
+                }
                 end {
+                  type = 'string'
+                  index = 'not_analyzed'
+                }
+                endText {
                   type = 'string'
                   index = 'not_analyzed'
                 }
@@ -514,7 +522,15 @@ class XCRIHandler {
                   type = 'string'
                   index = 'not_analyzed'
                 }
+                applyToText {
+                  type = 'string'
+                  index = 'not_analyzed'
+                }
                 enquireTo {
+                  type = 'string'
+                  index = 'not_analyzed'
+                }
+                enquireToText {
                   type = 'string'
                   index = 'not_analyzed'
                 }
