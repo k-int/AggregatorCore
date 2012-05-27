@@ -1,4 +1,4 @@
-papplyTeackage com.k_int.repository.handlers
+package com.k_int.repository.handlers
 
 @GrabResolver(name='es', root='https://oss.sonatype.org/content/repositories/releases')
 
@@ -448,6 +448,11 @@ class XCRIHandler {
       source {
         course {       // Think this is the name of the mapping within the type
           properties {
+            provid {
+              type = 'string'
+              store = 'yes'
+              index = 'not_analyzed'
+            }
             title { // We declare a multi_field mapping so we can have a default "title" search with stemming, and an untouched title via origtitle
               type = 'multi_field'
               fields {
@@ -474,12 +479,6 @@ class XCRIHandler {
                   analyzer = 'snowball'
                 }
               }
-
-            }
-            provid {
-              type = 'string'
-              store = 'yes'
-              index = 'not_analyzed'
             }
             provloc {
               type = 'geo_point'
