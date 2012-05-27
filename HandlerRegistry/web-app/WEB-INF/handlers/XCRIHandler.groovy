@@ -1,4 +1,4 @@
-package com.k_int.repository.handlers
+papplyTeackage com.k_int.repository.handlers
 
 @GrabResolver(name='es', root='https://oss.sonatype.org/content/repositories/releases')
 
