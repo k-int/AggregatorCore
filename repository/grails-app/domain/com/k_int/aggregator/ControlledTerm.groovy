@@ -4,13 +4,13 @@ class ControlledTerm {
 
   ControlledVocabulary owner;
   String term
-  String normTerm
-  String identifer
+  String normterm
+  String identifier
 
   static constraints = {
     owner(nullable:false, blank:false)
     term(nullable:false, blank:false)
-    normTerm(nullable:false, blank:false)
+    normterm(nullable:false, blank:false)
     identifier(nullable:false, blank:false)
   }
 }

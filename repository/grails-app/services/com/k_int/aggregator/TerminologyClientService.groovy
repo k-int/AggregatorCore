@@ -73,4 +73,15 @@ class TerminologyClientService implements ApplicationContextAware {
 
     located_context
   }
+
+  // Try and look up the term.. If no mapping is found remember the term.
+  def resolve(vocab, term) {
+    def normterm=term.trim().toLowerCase();
+    def cv = ControlledVocabulary.findByShortcode(vocab) ?: new ControlledVocabulary(name:shortcode, shortcode:shortcode,  identifier:java.util.UUID.randomUUID().toString()).save();
+    def ct = ControlledTerm.findByOwnerAndNormterm(cv, normterm) ?: new ControlledTerm(owner:cv,
+                                                                                       term:term,
+                                                                                       normterm:normterm,
+                                                                                       identifier:java.util.UUID.randomUUID().toString()).save();
+    ct
+  }
 }

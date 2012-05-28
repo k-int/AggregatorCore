@@ -60,23 +60,23 @@ class BootStrap {
 
       // Controlled vocabs
       def subjectVocab = ControlledVocabulary.findByShortcode('subject') ?: 
-              new ControlledVocabulary(shortcode:'subject', name:'Subjects', identifier:java.util.UUID.randomUUID().toString());
+              new ControlledVocabulary(shortcode:'subject', name:'Subjects', identifier:java.util.UUID.randomUUID().toString()).save();
       def qualVocab = ControlledVocabulary.findByShortcode('qualification') ?: 
-              new ControlledVocabulary(shortcode:'qualification', name:'Qualifications', identifier:java.util.UUID.randomUUID().toString());
+              new ControlledVocabulary(shortcode:'qualification', name:'Qualifications', identifier:java.util.UUID.randomUUID().toString()).save();
       def levelVocab = ControlledVocabulary.findByShortcode('level') ?: 
-              new ControlledVocabulary(shortcode:'level', name:'Levels', identifier:java.util.UUID.randomUUID().toString());
+              new ControlledVocabulary(shortcode:'level', name:'Levels', identifier:java.util.UUID.randomUUID().toString()).save();
       def schemeVocab = ControlledVocabulary.findByShortcode('scheme') ?: 
-              new ControlledVocabulary(shortcode:'scheme', name:'Schemes', identifier:java.util.UUID.randomUUID().toString());
+              new ControlledVocabulary(shortcode:'scheme', name:'Schemes', identifier:java.util.UUID.randomUUID().toString()).save();
       def langVocab = ControlledVocabulary.findByShortcode('language') ?: 
-              new ControlledVocabulary(shortcode:'language', name:'Language', identifier:java.util.UUID.randomUUID().toString());
+              new ControlledVocabulary(shortcode:'language', name:'Language', identifier:java.util.UUID.randomUUID().toString()).save();
       def studyModeVoc = ControlledVocabulary.findByShortcode('studyMode') ?: 
-              new ControlledVocabulary(shortcode:'studyMode', name:'Study Mode', identifier:java.util.UUID.randomUUID().toString());
+              new ControlledVocabulary(shortcode:'studyMode', name:'Study Mode', identifier:java.util.UUID.randomUUID().toString()).save();
       def attendanceModeVoc = ControlledVocabulary.findByShortcode('attendanceMode') ?: 
-              new ControlledVocabulary(shortcode:'attendanceMode', name:'Attendance Mode', identifier:java.util.UUID.randomUUID().toString());
+              new ControlledVocabulary(shortcode:'attendanceMode', name:'Attendance Mode', identifier:java.util.UUID.randomUUID().toString()).save();
       def attendancePatternVoc = ControlledVocabulary.findByShortcode('attendancePattern') ?: 
-              new ControlledVocabulary(shortcode:'attendancePattern', name:'Attendance Pattern', identifier:java.util.UUID.randomUUID().toString());
+              new ControlledVocabulary(shortcode:'attendancePattern', name:'Attendance Pattern', identifier:java.util.UUID.randomUUID().toString()).save();
       def languageVoc = ControlledVocabulary.findByShortcode('language') ?: 
-              new ControlledVocabulary(shortcode:'language', name:'Language', identifier:java.util.UUID.randomUUID().toString());
+              new ControlledVocabulary(shortcode:'language', name:'Language', identifier:java.util.UUID.randomUUID().toString()).save();
 
       log.debug("Completed veryfying default settings\n\n");
 
