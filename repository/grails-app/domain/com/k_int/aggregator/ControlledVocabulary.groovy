@@ -2,6 +2,13 @@ package com.k_int.aggregator
 
 class ControlledVocabulary {
 
-    static constraints = {
-    }
+  String shortcode
+  String name
+  String identifier
+
+  static constraints = {
+    shortcode(nullable:false, blank:false)
+    name(nullable:false, blank:false)
+    identifier(nullable:false, blank:false)
+  }
 }
