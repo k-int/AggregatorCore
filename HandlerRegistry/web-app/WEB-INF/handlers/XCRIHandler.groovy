@@ -79,6 +79,7 @@ class XCRIHandler {
       Object gazetteer = ctx.getBean('gazetteerService');
       Object coreference = ctx.getBean('coReferenceService');
       Object termclient = ctx.getBean('terminologyClientService');
+
       org.elasticsearch.groovy.node.GNode esnode = eswrapper.getNode()
       org.elasticsearch.groovy.client.GClient esclient = esnode.getClient()
   
@@ -218,6 +219,16 @@ class XCRIHandler {
           course_as_pojo.qual.level = crs.'xcri:qualification'.'xcri:level'?.text()
           course_as_pojo.qual.awardedBy = crs.'xcri:qualification'.'xcri:awardedBy'?.text()
           course_as_pojo.qual.accreditedBy = crs.'xcri:qualification'.'xcri:accreditedBy'?.text()
+
+          if ( course_as_pojo.qual.type ) {
+            def qual_entry = termclient.resolve('qualtype',course_as_pojo.qual.type);
+            course_as_pojo.qual.typeControlledTerm = qual_entry;
+          }
+
+          if ( course_as_pojo.qual.level ) {
+            def level_entry = termclient.resolve('level',course_as_pojo.qual.level);
+            course_as_pojo.qual.levelControlledTerm = level_entry.term
+          }
           
           course_as_pojo.description = ''
           
@@ -313,13 +324,23 @@ class XCRIHandler {
           course_as_pojo.subjectKeywords = []
           
           crs.'xcri:subject'.each { subj ->
-            course_as_pojo.subject.add( subj.text()?.toString() )
+            def subject_text = subj.text()?.toString();
+            def term_entry = termclient.resolve('subject',subject_text);
+            course_as_pojo.subject.add( term_entry.term )
           }
           
           crs.'dc:subject'.each { subj ->
-              if(subj.@'xsi:type' && subj.@'xsi:type'?.text().equalsIgnoreCase("sfc:dpg")) { course_as_pojo.subject.add(subj.text()?.toString()) }
+              if(subj.@'xsi:type' && subj.@'xsi:type'?.text().equalsIgnoreCase("sfc:dpg")) { 
+                def subject_text = subj.text()?.toString();
+                def term_entry = termclient.resolve('subject',subject_text);
+                course_as_pojo.subject.add( term_entry.term )
+              }
               else if(subj.@'xsi:type' && subj.@'xsi:type'?.text().equalsIgnoreCase("asc:keyword")) { course_as_pojo.subjectKeywords.add(subj.text()?.toString()) }
-              else { course_as_pojo.subject.add(subj.text()?.toString()) }
+              else { 
+                def subject_text = subj.text()?.toString();
+                def term_entry = termclient.resolve('subject',subject_text);
+                course_as_pojo.subject.add( term_entry.term )
+              }
           }
 
           if ( props['ulparam_feedStatus'] ) {
