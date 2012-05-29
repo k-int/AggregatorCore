@@ -97,7 +97,7 @@ class TerminologyClientService implements ApplicationContextAware {
     if ( !ct ) {
       log.debug("Unable to locate term for ${vocab}:${normterm} - Create entry");
       ct = [
-        _id:
+        _id: new org.bson.types.ObjectId(),
         term:term,
         normterm:normterm,
         owner:cv._id
