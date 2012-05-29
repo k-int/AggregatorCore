@@ -89,6 +89,4 @@ class BootStrap {
       }
     }
 
-  verifyControlledVocabulary(shortcode, name) {
-  }
 }
