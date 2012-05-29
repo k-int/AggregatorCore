@@ -29,6 +29,21 @@ class TerminologyClientService implements ApplicationContextAware {
   }
 
 
+  def checkVocabExists(shortcode, name) {
+    def located_voc =  termserv_db.vocabs.findOne(shortcode:shortcode);
+
+    if ( !located_voc ) {
+      located_voc = [
+                       _id: new org.bson.types.ObjectId(),
+                       shortcode:shortcode,
+                       name:name
+                    ]
+      termserv_db.vocabs.save(located_voc);
+    }
+
+    located_voc;
+  }
+
   // See if a term exists
   // lens is our local rewrite rules for this public vocabulary
   //
@@ -77,11 +92,25 @@ class TerminologyClientService implements ApplicationContextAware {
   // Try and look up the term.. If no mapping is found remember the term.
   def resolve(vocab, term) {
     def normterm=term.trim().toLowerCase();
-    def cv = ControlledVocabulary.findByShortcode(vocab) ?: new ControlledVocabulary(name:shortcode, shortcode:shortcode,  identifier:java.util.UUID.randomUUID().toString()).save();
-    def ct = ControlledTerm.findByOwnerAndNormterm(cv, normterm) ?: new ControlledTerm(owner:cv,
-                                                                                       term:term,
-                                                                                       normterm:normterm,
-                                                                                       identifier:java.util.UUID.randomUUID().toString()).save();
+    def cv = checkVocabExists(vocab, vocab);
+    def ct = termserv_db.terms.findOne(owner:cv._id, normterm: normterm)
+    if ( !ct ) {
+      log.debug("Unable to locate term for ${vocab}:${normterm} - Create entry");
+      ct = [
+        _id:
+        term:term,
+        normterm:normterm,
+        owner:cv._id
+      ]
+    }
+    else {
+      log.debug("Located term for ${vocab}:${normterm}");
+      if ( ct.use ) {
+        log.debug("Use parameter is set - returning ${ct.use.toString()}");
+        ct = termserv_db.terms.findOne(id:ct.use)
+      }
+    }
+
     ct
   }
 }
