@@ -499,7 +499,7 @@ class XCRIHandler {
                 }
               }
             }
-            presentation {
+            presentations {
               properties {
                 start {
                   type = 'string'
