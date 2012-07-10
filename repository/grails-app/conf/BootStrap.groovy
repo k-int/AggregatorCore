@@ -9,6 +9,7 @@ class BootStrap {
 
     def springSecurityService
     def ESWrapperService
+    def terminologyClientService
 
     def init = { servletContext ->
 
@@ -58,7 +59,22 @@ class BootStrap {
 
       verifySetting('instanceid',java.util.UUID.randomUUID().toString());
 
+      // Controlled vocabs
+      terminologyClientService.checkVocabExists('subject', 'Subjects');
+      terminologyClientService.checkVocabExists('qualification', 'Qualifications');
+      terminologyClientService.checkVocabExists('level', 'Levels');
+      terminologyClientService.checkVocabExists('scheme', 'Schemes');
+      terminologyClientService.checkVocabExists('language', 'Language');
+      terminologyClientService.checkVocabExists('studyMode', 'Study Mode');
+      terminologyClientService.checkVocabExists('attendanceMode', 'Attendance Mode');
+      terminologyClientService.checkVocabExists('attendancePattern', 'Attendance Pattern');
+      terminologyClientService.checkVocabExists('language', 'Language');
+
       log.debug("Completed veryfying default settings\n\n");
+
+
+
+    
     }
 
     def destroy = {
@@ -72,4 +88,5 @@ class BootStrap {
         setting.save()
       }
     }
+
 }

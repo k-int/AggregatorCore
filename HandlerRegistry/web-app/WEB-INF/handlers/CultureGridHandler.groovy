@@ -59,6 +59,8 @@ class CultureGridHandler {
     def mongo = new com.gmongo.GMongo();
     def db = mongo.getDB("frbr")
     Object eswrapper = ctx.getBean('ESWrapperService');
+    Object terminologyClient = ctx.getBean('terminologyClientService');
+
     org.elasticsearch.groovy.node.GNode esnode = eswrapper.getNode()
     org.elasticsearch.groovy.client.GClient esclient = esnode.getClient()
 

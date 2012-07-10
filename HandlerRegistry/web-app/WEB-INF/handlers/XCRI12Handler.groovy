@@ -322,6 +322,7 @@ class XCRI12Handler {
           }
                                     
           course_as_pojo.url = crs.'xcri:url'?.text()?.toString()
+          course_as_pojo.url = crs.'mlo:url'?.text()?.toString()
           course_as_pojo.subject = []
           course_as_pojo.subjectKeywords = []
           
