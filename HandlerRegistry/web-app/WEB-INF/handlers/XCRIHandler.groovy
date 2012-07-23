@@ -412,6 +412,16 @@ class XCRIHandler {
             log.error("Failed to store course information ${course_as_pojo}");
             props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"There was an unexpected error trying to store the course information"]);
           }
+
+          try {
+            // Take a break so we don't thrash the CPU
+            synchronized(this) {
+              Thread.yield();
+              Thread.sleep(500);
+            }
+          }
+          catch ( Exception e ) {
+          }
         }
 
         log.debug("Adding title ${prov_title} and resource identifier ${prov_id}");
