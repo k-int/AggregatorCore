@@ -142,17 +142,29 @@ log4j = {
 
 // /api/** = authcBasic 
 
-security { 
-    shiro { 
-        authc.required = false 
-        filter.config = """
-[filters] 
-# HTTP Basic authentication 
-authcBasic = org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter 
-authcBasic.applicationName = Repository
-[urls] 
-/upload* = authcBasic 
-""" 
-    } 
+// security { 
+//     shiro { 
+//         authc.required = false 
+//         filter.config = """
+// [filters] 
+// # HTTP Basic authentication 
+// authcBasic = org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter 
+// authcBasic.applicationName = Repository
+// [urls] 
+// /upload* = authcBasic 
+// """ 
+//     } 
+// 
+// } 
 
-} 
+security {
+  shiro {
+    authc.required = false 
+    filter {
+      basicAppName="Repository"
+      filterChainDefinitions = """
+/upload* = authcBasic
+"""
+    }
+  }
+}
