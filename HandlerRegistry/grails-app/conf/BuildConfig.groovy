@@ -49,5 +49,7 @@ grails.project.dependency.resolution = {
                    [group:'org.slf4j',name:'jcl-over-slf4j',version:'1.5.8'],
                    [group:'org.slf4j',name:'slf4j-log4j12',version:'1.5.8'])
         }
+        runtime ":hibernate:$grailsVersion"
+        build ":tomcat:$grailsVersion"
     }
 }
