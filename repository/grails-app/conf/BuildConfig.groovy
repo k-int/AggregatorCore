@@ -1,7 +1,9 @@
+grails.servlet.version = "2.5" // Change depending on target container compliance (2.5 or 3.0)
+grails.project.target.level = 1.6
+grails.project.source.level = 1.6
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
-grails.project.source.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
@@ -18,6 +20,7 @@ grails.project.dependency.resolution = {
     }
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     repositories {
+        inherits true
         grailsPlugins()
         grailsHome()
         grailsCentral()
@@ -49,8 +52,6 @@ grails.project.dependency.resolution = {
                    [group:'org.slf4j',name:'jcl-over-slf4j',version:'1.5.8'],
                    [group:'org.slf4j',name:'slf4j-log4j12',version:'1.5.8'])
         }
-        runtime ":hibernate:$grailsVersion"
-        build ":tomcat:$grailsVersion"
 
         //  Special dependencies because of solrj dep conflicts.
         // runtime 'org.slf4j:slf4j-api:1.6.4'
@@ -59,9 +60,11 @@ grails.project.dependency.resolution = {
 
         // runtime 'org.apache.tika:tika-parsers:0.9' // this is for actually parsing files
     }
-    // plugins {
+    plugins {
+      runtime ":hibernate:$grailsVersion"
+      build ":tomcat:$grailsVersion"
     //   compile ":resources:1.0 > *"
-    // }
+    }
 
 
 }
