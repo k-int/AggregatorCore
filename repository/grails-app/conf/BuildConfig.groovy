@@ -49,6 +49,9 @@ grails.project.dependency.resolution = {
                    [group:'org.slf4j',name:'jcl-over-slf4j',version:'1.5.8'],
                    [group:'org.slf4j',name:'slf4j-log4j12',version:'1.5.8'])
         }
+        runtime ":hibernate:$grailsVersion"
+        build ":tomcat:$grailsVersion"
+
         //  Special dependencies because of solrj dep conflicts.
         // runtime 'org.slf4j:slf4j-api:1.6.4'
         // runtime 'org.slf4j:slf4j-log4j12:1.6.4'
@@ -59,5 +62,6 @@ grails.project.dependency.resolution = {
     // plugins {
     //   compile ":resources:1.0 > *"
     // }
+
 
 }
