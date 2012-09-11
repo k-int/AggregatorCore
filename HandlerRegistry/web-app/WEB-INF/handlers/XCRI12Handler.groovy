@@ -479,5 +479,6 @@ class XCRI12Handler {
 
   def validate() {
     // Commented out call to validation service at http://validator.xcri.co.uk/API/Test for now.
+    true
   }
 }
