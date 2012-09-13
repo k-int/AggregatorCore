@@ -9,7 +9,7 @@ import com.gmongo.GMongo
 import org.apache.commons.logging.LogFactory
 import grails.converters.*
 
-class XCRIHandler {
+class XCRI10Handler {
 
   private static final log = LogFactory.getLog(this)
   
