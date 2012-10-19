@@ -3,7 +3,7 @@ import com.k_int.aggregator.*
 import org.apache.shiro.crypto.hash.Sha256Hash
 import grails.util.GrailsUtil
 import org.codehaus.groovy.grails.commons.ApplicationHolder
-
+import grails.converters.JSON
 
 class BootStrap {
 
@@ -72,8 +72,15 @@ class BootStrap {
 
       log.debug("Completed veryfying default settings\n\n");
 
-
-
+      //register JSON converter for CanonicalIdentifier
+      JSON.registerObjectMarshaller(CanonicalIdentifier) 
+      {
+          def returnArray = [:]
+          returnArray['id'] = it.id
+          returnArray['canonicalIdentifier'] = it.canonicalIdentifier
+          returnArray['owner'] = it.owner
+          return returnArray 
+      }
     
     }
 
@@ -88,5 +95,6 @@ class BootStrap {
         setting.save()
       }
     }
+    
 
 }
