@@ -160,7 +160,7 @@ class UploadController {
         // Store the uploaded file for future reference.
   
         // bytes byte[] = file.getBytes()
-        log.debug( "Storring uploaded file in temporary storage.... (content_type=${content_type})")
+        log.debug( "Storing uploaded file in temporary storage.... (content_type=${content_type})")
         def deposit_token = java.util.UUID.randomUUID().toString();
   
         temp_file_name = "./filestore/${deposit_token}";

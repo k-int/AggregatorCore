@@ -37,7 +37,7 @@ class PNDSDCAPMedia {
   }
 
   def getRevision() {
-    1
+    5
   }
 
   def getPreconditions() {
@@ -48,6 +48,8 @@ class PNDSDCAPMedia {
 
   def process(props, ctx) {
     log.debug("process....");
+
+    System.err.println("In the process method of the PNDSDCAP handler...");
 
     // Remember props.context_dir is the dir of the unpacked resource
     // file is the File containing the manifest.xml
@@ -91,16 +93,19 @@ class PNDSDCAPMedia {
     log.debug("looking up work with identifier ${id1}");
     // coref_service.registerIdentifier(id1);
 
-    def work_information = db.work.findOne(identifier: id1.toString())
+    def work_information = db.work.findOne({ identifier: id1.toString(),owner: props.owner})
+//	def work_information = db.work.findOne(identifier: id1.toString())
+	
+	log.error("###Got to here when processing a PNDSDCAP document");
     if ( work_information == null ) {
       log.debug("New work...");
       work_information = [:]
+	  work_information._id = java.util.UUID.randomUUID().toString()
     }
     else {
       log.debug("Updating existing work ${work_information._id}");
     }
 
-    work_information._id = java.util.UUID.randomUUID().toString()
     work_information.identifier = id1.toString();
     work_information.title = d2.'dc:title'?.text()?.toString();
     work_information.description = d2.'dc:description'?.text()?.toString();
@@ -119,6 +124,9 @@ class PNDSDCAPMedia {
       }
     }    
 
+	log.debug("Adding in information about the owner of the record");
+	work_information.owner = props.owner;
+	
     log.debug("Setting up expressions and manifestations");
 
     def exp1 = [:]
