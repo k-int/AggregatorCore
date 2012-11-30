@@ -1,8 +1,8 @@
 package com.k_int.handlerregistry
-
 import grails.converters.*
-import org.apache.shiro.SecurityUtils
+import grails.plugins.springsecurity.Secured
 
+@Secured(['IS_AUTHENTICATED_REMEMBERED'])
 class FindWhenController {
 
   def index = { 

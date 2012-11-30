@@ -2,7 +2,9 @@ package com.k_int.aggr3
 
 import com.gmongo.GMongo
 import com.k_int.aggregator.*
+import grails.plugins.springsecurity.Secured
 
+@Secured(['IS_AUTHENTICATED_REMEMBERED'])
 class AdminController {
 
   def remoteHandlerRepositoryService

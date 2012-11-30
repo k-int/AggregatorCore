@@ -1,9 +1,8 @@
 import com.k_int.aggregator.*
-
-import org.apache.shiro.crypto.hash.Sha256Hash
 import grails.util.GrailsUtil
 import org.codehaus.groovy.grails.commons.ApplicationHolder
 import grails.converters.JSON
+import spring.security.User
 
 class BootStrap {
 
@@ -12,20 +11,6 @@ class BootStrap {
     def terminologyClientService
 
     def init = { servletContext ->
-
-      log.debug("System name: ${ApplicationHolder.application.config.aggr.system.name}");
-
-      log.debug("Repository app : Verify default Shiro User");
-      def user = ShiroUser.findByUsername("admin")
-      if ( user == null ) {
-        log.debug("admin user not found.. creating default");
-        user = new ShiroUser(username: "admin", passwordHash: new Sha256Hash("password").toHex())
-        user.addToPermissions("*:*")
-        user.save()
-      }
-      else {
-        log.debug("Repository Admin user verified");
-      }
 
       log.debug("Validating default handler entries....");
 
@@ -83,6 +68,11 @@ class BootStrap {
       }
     
     }
+    
+               def adminUser = User.findByUsername('admin') ?: new User(
+               username: 'admin',
+               password: 'password',
+               enabled: true).save(failOnError: true)
 
     def destroy = {
     }

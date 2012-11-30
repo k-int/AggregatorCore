@@ -4,8 +4,9 @@ import org.springframework.http.ResponseEntity
 import grails.converters.*
 import com.k_int.aggregator.*
 import groovy.json.JsonSlurper
+import grails.plugins.springsecurity.Secured
 
-
+@Secured(['IS_AUTHENTICATED_REMEMBERED'])
 class CoReferenceController 
 {
     def index = {

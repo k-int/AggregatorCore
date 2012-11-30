@@ -1,10 +1,11 @@
 package com.k_int.aggr3
 
 import com.k_int.aggregator.*;
-import org.apache.shiro.SecurityUtils
 import grails.converters.*
 import java.security.MessageDigest
+import grails.plugins.springsecurity.Secured
 
+@Secured(['IS_AUTHENTICATED_REMEMBERED'])
 class UploadController {
 
   def grailsApplication

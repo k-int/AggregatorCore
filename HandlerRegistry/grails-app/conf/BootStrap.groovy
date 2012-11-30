@@ -1,8 +1,7 @@
 import com.k_int.handlerregistry.*
-
+import spring.security.User
 import org.springframework.core.io.Resource
 import org.codehaus.groovy.grails.commons.ApplicationAttributes 
-import org.apache.shiro.crypto.hash.Sha256Hash
 import grails.util.GrailsUtil
 
 class BootStrap {
@@ -11,6 +10,16 @@ class BootStrap {
 
     def init = { servletContext ->
 
+        def adminUser = User.findByUsername('admin') ?: new User(
+               username: 'admin',
+               password: 'admin',
+               enabled: true).save(failOnError: true)
+           
+        def anonUser = User.findByUsername('anonymous') ?: new User(
+               username: 'anonymous',
+               password: 'anonymous',
+               enabled: true).save(failOnError: true)
+        
       def ctx = servletContext.getAttribute(ApplicationAttributes.APPLICATION_CONTEXT) 
 
       log.debug("Loading handlers from disk cache");
@@ -56,32 +65,6 @@ class BootStrap {
           }
         }
       }
-
-      log.debug("Verify default anonymous User");
-      def anonymous_user = ShiroUser.findByUsername("anonymous")
-      if ( anonymous_user == null ) {
-        log.debug("anonymous user not found.. creating");
-        anonymous_user = new ShiroUser(username: "anonymous", passwordHash: new Sha256Hash("anonymous").toHex())
-        anonymous_user.addToPermissions("*:*")
-        anonymous_user.save()
-      }
-      else {
-        log.debug("anonymous user verified");
-      }
-
-      log.debug("Verify default admin User");
-      def admin_user = ShiroUser.findByUsername("admin")
-      if ( admin_user == null ) {
-        log.debug("anonymous user not found.. creating");
-        admin_user = new ShiroUser(username: "admin", passwordHash: new Sha256Hash("admin").toHex())
-        admin_user.addToPermissions("*:*")
-        admin_user.save()
-      }
-      else {
-        log.debug("admin user verified");
-      }
-
-
     }
 
     def destroy = {

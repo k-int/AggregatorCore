@@ -1,5 +1,8 @@
 package repository
 
+import grails.plugins.springsecurity.Secured
+
+@Secured(['IS_AUTHENTICATED_REMEMBERED'])
 class TesttripController {
 
   def tripleStoreService
