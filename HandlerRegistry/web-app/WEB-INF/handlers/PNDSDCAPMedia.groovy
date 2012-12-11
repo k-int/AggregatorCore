@@ -93,7 +93,7 @@ class PNDSDCAPMedia {
     log.debug("looking up work with identifier ${id1}");
     // coref_service.registerIdentifier(id1);
 
-    def work_information = db.work.findOne({ identifier: id1.toString(),owner: props.owner})
+    def work_information = db.work.findOne( identifier: id1.toString(),owner: props.owner)
 //	def work_information = db.work.findOne(identifier: id1.toString())
 	
 	log.error("###Got to here when processing a PNDSDCAP document");
