@@ -23,7 +23,7 @@ environments {
     test {
         dataSource {
             dbCreate = "update"
-            url = "jdbc:hsqldb:mem:testDb"
+            url = "jdbc:h2:mem:testDb;MVCC=TRUE"
         }
     }
     production {
