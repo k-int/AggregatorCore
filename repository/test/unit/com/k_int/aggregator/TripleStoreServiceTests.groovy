@@ -12,6 +12,5 @@ import org.junit.*
 class TripleStoreServiceTests {
 
     void testSomething() {
-        fail "Implement me"
     }
 }

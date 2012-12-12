@@ -144,4 +144,13 @@ class GazetteerService {
     log.debug(b.toString())
   }
 
+  def reverseGeocode(lat,lng) {
+    def result =[:]
+    result.county='STUB'
+    result.postcode='STUB'
+    result.street='STUB'
+    result.locality='STUB'
+    result
+  }
+
 }

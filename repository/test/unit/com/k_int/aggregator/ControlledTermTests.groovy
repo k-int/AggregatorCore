@@ -12,6 +12,5 @@ import org.junit.*
 class ControlledTermTests {
 
     void testSomething() {
-       fail "Implement me"
     }
 }

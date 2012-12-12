@@ -12,6 +12,5 @@ import org.junit.*
 class TerminologyClientServiceTests {
 
     void testSomething() {
-        fail "Implement me"
     }
 }

@@ -12,6 +12,5 @@ import org.junit.*
 class CanonicalIdentifierTests {
 
     void testSomething() {
-       fail "Implement me"
     }
 }

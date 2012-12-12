@@ -12,6 +12,5 @@ import org.junit.*
 class ControlledVocabularyTests {
 
     void testSomething() {
-       fail "Implement me"
     }
 }
