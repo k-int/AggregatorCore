@@ -12,6 +12,5 @@ class BuiltInHandlersServiceTests extends GrailsUnitTestCase {
     }
 
     void testSomething() {
-
     }
 }

@@ -1,5 +1,7 @@
 package com.k_int.handlerregistry
+import grails.plugins.springsecurity.Secured
 
+@Secured(['IS_AUTHENTICATED_REMEMBERED'])
 class HandlerController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]

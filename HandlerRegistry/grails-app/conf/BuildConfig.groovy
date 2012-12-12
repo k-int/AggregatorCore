@@ -1,6 +1,7 @@
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
+grails.project.source.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
@@ -40,7 +41,7 @@ grails.project.dependency.resolution = {
         compile 'org.codehaus.groovy:groovy-all:1.8.1'
         runtime 'mysql:mysql-connector-java:5.1.18'
         runtime 'com.gmongo:gmongo:0.9.2'
-        runtime 'org.elasticsearch:elasticsearch-lang-groovy:0.18.4'
+        runtime 'org.elasticsearch:elasticsearch-lang-groovy:1.1.0'
         runtime 'org.apache.tika:tika-core:0.9'
         // runtime (group:'org.apache.solr',name:'solr-solrj',version:'3.5.0', transitive:false)  // This seems to work!
         runtime (group:'org.apache.solr',name:'solr-solrj',version:'3.5.0') {
@@ -48,5 +49,9 @@ grails.project.dependency.resolution = {
                    [group:'org.slf4j',name:'jcl-over-slf4j',version:'1.5.8'],
                    [group:'org.slf4j',name:'slf4j-log4j12',version:'1.5.8'])
         }
+    }
+    plugins {
+        runtime ":hibernate:$grailsVersion"
+        build ":tomcat:$grailsVersion"
     }
 }

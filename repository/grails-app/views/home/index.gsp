@@ -1,12 +1,15 @@
 <html>
   <head>
-    <title>Welcome to Grails</title>
+    <title>${grailsApplication.config.aggr.system.name}</title>
     <meta name="layout" content="main" />
   </head>
   <body>
 
-${grailsApplication.config.aggr.system.name} - Instance ID : ${sysid}
+<div class="hero-unit">
+Aggregation Instance ID : ${sysid}
+</div>
 
+<div class="hero-unit">
 <h2>Public Aggregation (Search/Retrieve) Endpoints For This Repository</h2>
 <p>
 <ul>
@@ -60,6 +63,9 @@ ${grailsApplication.config.aggr.system.name} - Instance ID : ${sysid}
   </li>
 </ul>
 </p>
+</div>
+
+<div class="hero-unit">
 
 <h2>Registered Handlers for this repository instance</h2>
 <p>
@@ -88,18 +94,15 @@ ${grailsApplication.config.aggr.system.name} - Instance ID : ${sysid}
 </g:each>
 </table>
 </p>
-
-<h2>Registered Remote Handler Repository for this ODA (${sysid})</h2>
 <p>
 When deposited resources are not identified by any registered handler, the following services will be consulted to see if an appropriate handler can be dynamically downloaded and installed
-</p>
-<p>
 <ul>
 <g:each in="${handlerrepos}" var="hr">
   <li>${hr.url} using userid ${hr.user}</li>
 </g:each>
 </ul>
 </p>
+</div>
 
   </body>
 </html>

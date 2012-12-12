@@ -41,7 +41,7 @@ class HandlerSelectionService implements ApplicationContextAware {
         log.debug("Handler ${handler.name} matched ${matching_preconditions} out of a possible ${handler.preconditions.size()} preconditions. Current best is ${highest_match_so_far}")
 
         if ( ( matching_preconditions == handler.preconditions.length ) && ( matching_preconditions > highest_match_so_far ) ) { 
-          log.debug("Handler is a more specific match than any previous, and is selected")
+          log.debug("Handler (${handler.name}) is a more specific(${matching_preconditions} matches) than the current (${selected_handler?.name} with ${highest_match_so_far} matches)")
           selected_handler = handler 
           highest_match_so_far = matching_preconditions;
         }
@@ -51,7 +51,9 @@ class HandlerSelectionService implements ApplicationContextAware {
         log.debug("After evaluation, selected handler for this event is ${selected_handler.name}")
       }
       else {
+        log.debug("No handler found in registry, asking remote handler service to locate");
         selected_handler = remoteHandlerRepositoryService.findHandlerWhen(properties);
+        log.debug("Remote handler repository responds with ${selected_handler?.name}");
       }
 
       selected_handler
@@ -76,6 +78,8 @@ class HandlerSelectionService implements ApplicationContextAware {
       else {
         log.warn("Non service based handlers not implemented yet")
       }
+	  
+	  log.debug("About to return from the executeHandler method");
     }
 
   def clearDown() {

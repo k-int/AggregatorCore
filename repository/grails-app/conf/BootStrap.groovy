@@ -1,30 +1,16 @@
 import com.k_int.aggregator.*
-
-import org.apache.shiro.crypto.hash.Sha256Hash
 import grails.util.GrailsUtil
 import org.codehaus.groovy.grails.commons.ApplicationHolder
-
+import grails.converters.JSON
+import spring.security.User
 
 class BootStrap {
 
     def springSecurityService
     def ESWrapperService
+    def terminologyClientService
 
     def init = { servletContext ->
-
-      log.debug("System name: ${ApplicationHolder.application.config.aggr.system.name}");
-
-      log.debug("Repository app : Verify default Shiro User");
-      def user = ShiroUser.findByUsername("admin")
-      if ( user == null ) {
-        log.debug("admin user not found.. creating default");
-        user = new ShiroUser(username: "admin", passwordHash: new Sha256Hash("password").toHex())
-        user.addToPermissions("*:*")
-        user.save()
-      }
-      else {
-        log.debug("Repository Admin user verified");
-      }
 
       log.debug("Validating default handler entries....");
 
@@ -58,8 +44,35 @@ class BootStrap {
 
       verifySetting('instanceid',java.util.UUID.randomUUID().toString());
 
+      // Controlled vocabs
+      terminologyClientService.checkVocabExists('subject', 'Subjects');
+      terminologyClientService.checkVocabExists('qualification', 'Qualifications');
+      terminologyClientService.checkVocabExists('level', 'Levels');
+      terminologyClientService.checkVocabExists('scheme', 'Schemes');
+      terminologyClientService.checkVocabExists('language', 'Language');
+      terminologyClientService.checkVocabExists('studyMode', 'Study Mode');
+      terminologyClientService.checkVocabExists('attendanceMode', 'Attendance Mode');
+      terminologyClientService.checkVocabExists('attendancePattern', 'Attendance Pattern');
+      terminologyClientService.checkVocabExists('language', 'Language');
+
       log.debug("Completed veryfying default settings\n\n");
+
+      //register JSON converter for CanonicalIdentifier
+      JSON.registerObjectMarshaller(CanonicalIdentifier) 
+      {
+          def returnArray = [:]
+          returnArray['id'] = it.id
+          returnArray['canonicalIdentifier'] = it.canonicalIdentifier
+          returnArray['owner'] = it.owner
+          return returnArray 
+      }
+    
     }
+    
+               def adminUser = User.findByUsername('admin') ?: new User(
+               username: 'admin',
+               password: 'password',
+               enabled: true).save(failOnError: true)
 
     def destroy = {
     }
@@ -72,4 +85,6 @@ class BootStrap {
         setting.save()
       }
     }
+    
+
 }

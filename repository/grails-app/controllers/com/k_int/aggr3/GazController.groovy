@@ -5,8 +5,9 @@ import groovy.text.Template
 import groovy.text.SimpleTemplateEngine
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.commons.ApplicationHolder
+import grails.plugins.springsecurity.Secured
 
-
+@Secured(['IS_AUTHENTICATED_REMEMBERED'])
 class GazController {
 
   def gazetteerService

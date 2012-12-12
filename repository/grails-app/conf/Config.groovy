@@ -1,10 +1,22 @@
 // locations to search for config files that get merged into the main config
 // config files can either be Java properties files or ConfigSlurper scripts
 
+// println("Pre locations")
+// println(grails.config);
+// println("System env version: ${System.env['companyName'].toString()}");
+// locvar = "${appName}.config.companyName".toString() 
+// println("Attempt 2: ${System.env[locvar].toString()}");
+// println("Company name: ${companyName}");
+
+// println(org.codehaus.groovy.grails.web.context.ServletContextHolder.getServletContext())
+
 grails.config.locations = [ // "classpath:${appName}-config.properties",
 //                             "classpath:${appName}-config.groovy",
 //                             "file:${userHome}/.grails/${appName}-config.properties",
                              "file:${userHome}/.grails/${appName}-config.groovy"]
+
+// println("Post locations")
+// println(grails.config);
 
 // if(System.properties["${appName}.config.location"]) {
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
@@ -47,6 +59,10 @@ grails.enable.native2ascii = true
 grails.logging.jul.usebridge = true
 // packages to include in Spring bean scanning
 grails.spring.bean.packages = []
+
+grails.plugins.twitterbootstrap.fixtaglib = true
+grails.plugins.twitterbootstrap.defaultBundle = 'bundle_bootstrap'
+grails.plugins.twitterbootstrap.customDir = 'less'
 
 // set per-environment serverURL stem for creating absolute links
 environments {
@@ -126,17 +142,34 @@ log4j = {
 
 // /api/** = authcBasic 
 
-security { 
-    shiro { 
-        authc.required = false 
-        filter.config = """
-[filters] 
-# HTTP Basic authentication 
-authcBasic = org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter 
-authcBasic.applicationName = Repository
-[urls] 
-/upload* = authcBasic 
-""" 
-    } 
+// security { 
+//     shiro { 
+//         authc.required = false 
+//         filter.config = """
+// [filters] 
+// # HTTP Basic authentication 
+// authcBasic = org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter 
+// authcBasic.applicationName = Repository
+// [urls] 
+// /upload* = authcBasic 
+// """ 
+//     } 
+// 
+// } 
 
-} 
+security {
+  shiro {
+    authc.required = false 
+    filter {
+      basicAppName="Repository"
+      filterChainDefinitions = """
+/upload* = authcBasic
+"""
+    }
+  }
+}
+
+// Added by the Spring Security Core plugin:
+grails.plugins.springsecurity.userLookup.userDomainClassName = 'spring.security.User'
+grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'spring.security.UserRole'
+grails.plugins.springsecurity.authority.className = 'spring.security.Role'

@@ -1,10 +1,11 @@
 package com.k_int.aggr3
 
 import com.k_int.aggregator.*;
-import org.apache.shiro.SecurityUtils
 import grails.converters.*
 import java.security.MessageDigest
+import grails.plugins.springsecurity.Secured
 
+@Secured(['IS_AUTHENTICATED_REMEMBERED'])
 class UploadController {
 
   def grailsApplication
@@ -48,7 +49,7 @@ class UploadController {
     def response = [code: 0, eventLog:[], additionalProps:[:]]
     def file = request.getFile("upload")
 
-    log.debug( "Validating provider : ${provider}")
+    log.debug( "Validating provider : ${provider} (${params['ulparam_feedStatus']}, ${params['ulparam_force']} ${params})" );
 
     // If none present, does the user have a default?
     // if ( ( provider == null ) || ( provider == '' ) ) {
@@ -147,8 +148,7 @@ class UploadController {
       }
 
       log.debug("Existing resource check returned ${existing_resources}");
-      if ( existing_resources.size() == 0 ) {
-    
+      if ( ( existing_resources.size() == 0 ) || ( params.ulparam_force == "true" ) ) {
   
         // Process
         def content_type = file.contentType
@@ -161,7 +161,7 @@ class UploadController {
         // Store the uploaded file for future reference.
   
         // bytes byte[] = file.getBytes()
-        log.debug( "Storring uploaded file in temporary storage.... (content_type=${content_type})")
+        log.debug( "Storing uploaded file in temporary storage.... (content_type=${content_type})")
         def deposit_token = java.util.UUID.randomUUID().toString();
   
         temp_file_name = "./filestore/${deposit_token}";
@@ -206,7 +206,7 @@ class UploadController {
                                            checksum:md5sumHex)
         if ( de.save(flush:true) ) {
           log.debug( "Created...")
-  
+
           // Set up the propeties for the upload event, in this case event=com.k_int.aggregator.event.upload and mimetype=<mimetype>
           // We are looking for any handlers willing to accept this event given the appropriate properties
           // def event_properties = ["content_type":content_type, "file":temp_file, "response":response, "upload_event_token":deposit_token, "user":user]
@@ -216,6 +216,15 @@ class UploadController {
                                   "response":response, 
                                   "context_dir":context_dir,
                                   "upload_event_token":deposit_token]
+  
+          // Copy any ulparams.xxx to the event_properties.. This gives us a means of passing in handler specific
+          // values to the backend. For example, extra properties that determine if a record is public or private.
+          params.each { ent ->
+            if ( ent.key.startsWith('ulparam') ) {
+              log.debug("Including upload param ${ent.key} = ${ent.value}");
+              event_properties[ent.key] = ent.value
+            }
+          }
   
           // Firstly we need to select an appropriate handler for the com.k_int.aggregator.event.upload event
           if ( handlerSelectionService ) {

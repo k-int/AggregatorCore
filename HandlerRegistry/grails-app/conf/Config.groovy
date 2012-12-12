@@ -51,7 +51,7 @@ grails.spring.bean.packages = []
 // set per-environment serverURL stem for creating absolute links
 environments {
     production {
-        grails.serverURL = "http://www.changeme.com"
+        grails.serverURL = "/${appName}"
     }
     development {
         grails.serverURL = "http://localhost:8080/${appName}"
@@ -99,11 +99,19 @@ log4j = {
 
 // /** = authcBasic
 
-security.shiro.filter.config = """
-[filters]
-authcBasic = org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter
-authcBasic.applicationName='Repository Handler Registry'
-
-[urls]
+security {
+  shiro {
+    authc.required = false 
+    filter {
+      basicAppName="Repository Handler Registry"
+      filterChainDefinitions = """
 /findWhen* = authcBasic
 """
+    }
+  }
+}
+
+// Added by the Spring Security Core plugin:
+grails.plugins.springsecurity.userLookup.userDomainClassName = 'spring.security.User'
+grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'spring.security.UserRole'
+grails.plugins.springsecurity.authority.className = 'spring.security.Role'

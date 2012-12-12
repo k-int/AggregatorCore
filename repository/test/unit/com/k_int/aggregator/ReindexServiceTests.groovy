@@ -12,6 +12,5 @@ import org.junit.*
 class ReindexServiceTests {
 
     void testSomething() {
-        fail "Implement me"
     }
 }

@@ -11,7 +11,11 @@ import org.junit.*
 @TestFor(GazetteerService)
 class GazetteerServiceTests {
 
-    void testSomething() {
-        fail "Implement me"
+  def gazetteerService
+
+    void testReverseGeocode() {
+        def rev_lookup = gazetteerService.reverseGeocode('53.2281100000','-0.5499100000')
+        if ( ! rev_lookup.county == 'Lincolnshire' )
+          fail "Reverse Lookup Failed"
     }
 }

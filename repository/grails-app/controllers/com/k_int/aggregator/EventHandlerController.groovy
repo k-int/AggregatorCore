@@ -1,7 +1,9 @@
 package com.k_int.aggregator
 
 import org.apache.commons.io.FileUtils;
+import grails.plugins.springsecurity.Secured
 
+@Secured(['IS_AUTHENTICATED_REMEMBERED'])
 class EventHandlerController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]

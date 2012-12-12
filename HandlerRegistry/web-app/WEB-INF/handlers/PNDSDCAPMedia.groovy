@@ -37,7 +37,7 @@ class PNDSDCAPMedia {
   }
 
   def getRevision() {
-    1
+    5
   }
 
   def getPreconditions() {
@@ -48,6 +48,8 @@ class PNDSDCAPMedia {
 
   def process(props, ctx) {
     log.debug("process....");
+
+    System.err.println("In the process method of the PNDSDCAP handler...");
 
     // Remember props.context_dir is the dir of the unpacked resource
     // file is the File containing the manifest.xml
@@ -81,7 +83,7 @@ class PNDSDCAPMedia {
                                          
 
     log.debug("root element namespace: ${d2.namespaceURI()}");
-    log.debug("lookup namespace: ${d2.lookupNamespace('dc')}");
+    log.debug("lookup namespace 'dc': ${d2.lookupNamespace('dc')}");
 
     // Properties contain an xml element, which is the parsed document
     def id1 = d2.'dc:identifier'.text()
@@ -91,32 +93,68 @@ class PNDSDCAPMedia {
     log.debug("looking up work with identifier ${id1}");
     // coref_service.registerIdentifier(id1);
 
-    def work_information = db.work.findOne(identifier: id1.toString())
-    def expression_information = db.expression.findOne(identifier: id1.toString())
-
-    if ( work_information == null ) 
+    def work_information = db.work.findOne( identifier: id1.toString(),owner: props.owner)
+//	def work_information = db.work.findOne(identifier: id1.toString())
+	
+	log.error("###Got to here when processing a PNDSDCAP document");
+    if ( work_information == null ) {
+      log.debug("New work...");
       work_information = [:]
+	  work_information._id = java.util.UUID.randomUUID().toString()
+    }
+    else {
+      log.debug("Updating existing work ${work_information._id}");
+    }
 
-    if ( expression_information == null ) 
-      expression_information = [:]
-
-    work_information._id = java.util.UUID.randomUUID().toString()
     work_information.identifier = id1.toString();
     work_information.title = d2.'dc:title'?.text()?.toString();
+    work_information.description = d2.'dc:description'?.text()?.toString();
+    work_information.publisher = d2.'dc:publisher'?.text()?.toString();
+    work_information.type = d2.'dc:type'?.text()?.toString();
+    work_information.rightsholder = d2.'dcterms:rightsholder'?.text()?.toString();
+    work_information.subject = []
+    work_information.lastModified = System.currentTimeMillis();
 
-    expression_information._id = java.util.UUID.randomUUID().toString()
-    expression_information.pns_identifier = id1.toString();
-    expression_information.work_id = work_information._id;
+    log.debug("Adding subjects");
+    d2.'dc:subject'.each { subj ->
+      if ( ( subj != null ) && ( subj.toString().length() > 0 ) ) {
+        def newsubj = [:]
+        newsubj.label = subj?.text()?.toString();
+        work_information.subject.add(newsubj);
+      }
+    }    
 
-    log.debug("Saving expression instance: ${expression_information._id}, work instance:${work_information._id}");
+	log.debug("Adding in information about the owner of the record");
+	work_information.owner = props.owner;
+	
+    log.debug("Setting up expressions and manifestations");
 
-    db.expression.save(expression_information);
+    def exp1 = [:]
+    def man1 = [:]
+    work_information.expressions = [exp1]
+    
+    exp1.type = 'Image'
+    exp1.manifestations = [man1]
+
+    man1.uri = id1.toString();
+    man1.status = 'new';
+
+    log.debug("Saving work: ${work_information._id}");
+
     db.work.save(work_information);
+
+    props.response.title = work_information.title
+    props.response.resource_identifier = work_information.identifier
+
 
     def elapsed = System.currentTimeMillis() - start_time
     props.response.eventLog.add([type:"msg",msg:"Completed processing of PNDS_DCAP encoded resource identified by ${id1}"]);
 
     // create the denormalised retrieval records (Work and Manifestation)
+  }
+
+  def fetchImage(uri) {
+    log.debug("Fetch image at ${uri}");
   }
 
   def setup(ctx) {
@@ -131,6 +169,5 @@ class PNDSDCAPMedia {
 
     // Get hold of an index admin client
     org.elasticsearch.groovy.client.GIndicesAdminClient index_admin_client = new org.elasticsearch.groovy.client.GIndicesAdminClient(esclient);
-
   }
 }

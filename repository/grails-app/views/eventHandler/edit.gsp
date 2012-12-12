@@ -99,7 +99,18 @@
                     </tbody>
                 </table>
                 Event Handler Code <br/>
-              	<g:textArea name="scriptlet" cols="40" rows="20" value="${eventHandlerInstance?.scriptlet}" />
+                <%
+					boolean hasScriptlet = false;
+					try{
+						if ( eventHandlerInstance?.scriptlet )
+						  hasScriptlet = true;
+					} catch (Exception e) {
+					    hasScriptlet = false;
+					}
+			    %>
+                <g:if test="${hasScriptlet}">
+               	    <g:textArea name="scriptlet" id="scriptlet" cols="40" rows="20" value="${eventHandlerInstance?.scriptlet}" />
+               	</g:if>
             </div>
             <div id="tabs">
 				<ul>
