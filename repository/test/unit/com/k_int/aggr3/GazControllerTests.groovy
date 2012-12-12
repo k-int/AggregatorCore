@@ -12,6 +12,5 @@ import org.junit.*
 class GazControllerTests {
 
     void testSomething() {
-       fail "Implement me"
     }
 }
