@@ -97,19 +97,13 @@ log4j = {
     warn   'org.mortbay.log'
 }
 
-// /** = authcBasic
+grails.plugins.springsecurity.useBasicAuth = true
+grails.plugins.springsecurity.basic.realmName = "HandlerRegistry"
 
-security {
-  shiro {
-    authc.required = false 
-    filter {
-      basicAppName="Repository Handler Registry"
-      filterChainDefinitions = """
-/findWhen* = authcBasic
-"""
-    }
-  }
-}
+grails.plugins.springsecurity.filterChain.chainMap = [
+   '/findWhen*': 'JOINED_FILTERS,-exceptionTranslationFilter',
+   '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
+]
 
 // Added by the Spring Security Core plugin:
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'spring.security.User'
