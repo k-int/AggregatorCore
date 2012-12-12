@@ -157,17 +157,14 @@ log4j = {
 // 
 // } 
 
-security {
-  shiro {
-    authc.required = false 
-    filter {
-      basicAppName="Repository"
-      filterChainDefinitions = """
-/upload* = authcBasic
-"""
-    }
-  }
-}
+
+grails.plugins.springsecurity.useBasicAuth = true
+grails.plugins.springsecurity.basic.realmName = "repository"
+
+grails.plugins.springsecurity.filterChain.chainMap = [
+   '/upload*': 'JOINED_FILTERS,-exceptionTranslationFilter',
+   '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
+]
 
 // Added by the Spring Security Core plugin:
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'spring.security.User'
