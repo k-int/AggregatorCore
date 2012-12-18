@@ -109,6 +109,7 @@ class XCRI10Handler {
         def prov_uri = provider.'xcri:uri'.text()
         def prov_postcode = provider.'xcri:postcode'?.text()
         def prov_location = [:]
+        def prov_county
 
         if ( ( prov_postcode != null ) && ( prov_postcode.length() > 0 ) ) {
           def gaz_response = gazetteer.resolvePlaceName(prov_postcode);
@@ -116,6 +117,8 @@ class XCRI10Handler {
             log.debug("Geocoded provider postcode OK ${gaz_response.places[0]}");
             prov_location.lat = gaz_response.places[0].lat;
             prov_location.lon = gaz_response.places[0].lon;
+            def gaz_geo = gazetteer.reverseGeocode(prov_location.lat, prov_location.lon);
+            prov_county = gaz_geo.county
           }
         }
 
@@ -160,6 +163,7 @@ class XCRI10Handler {
           new_provider.lastModified = System.currentTimeMillis();
           new_provider.lat = prov_location.lat
           new_provider.lon = prov_location.lon
+          new_provider.county = prov_county
     
           db.providers.save(new_provider)
         }
@@ -206,6 +210,7 @@ class XCRI10Handler {
           course_as_pojo.provid = prov_id
           course_as_pojo.provtitle = prov_title
           course_as_pojo.provloc = prov_location
+          course_as_pojo.county = prov_county
           course_as_pojo.provuri = prov_uri
     
           course_as_pojo.identifier = crs_internal_uri.toString()

@@ -5,6 +5,8 @@ import grails.plugins.springsecurity.Secured
 @Secured(['IS_AUTHENTICATED_REMEMBERED'])
 class FindWhenController {
 
+    def springSecurityService;
+    
   def index = { 
     log.debug("action called with stringified json constraints: ${params.constraints}");
 
@@ -59,7 +61,7 @@ class FindWhenController {
         result.code = 0;
         result.handlerName = selected_handler.name;
 
-        def log_entry = new FindWhenLogEntry(remoteUserId:SecurityUtils.subject.principal,
+        def log_entry = new FindWhenLogEntry(remoteUserId:springSecurityService.principal,
                                              remoteSystemId:params.remote_instance_id,
                                              remoteConstraints:params.constraints,
                                              selectedHandler:selected_handler,
@@ -74,7 +76,7 @@ class FindWhenController {
           }
         }
 
-        log.debug("Selected handler ${selected_handler.name} for request from remote system with id ${params.remote_instance_id}. Remote user is..${SecurityUtils.subject?.principal}");
+        log.debug("Selected handler ${selected_handler.name} for request from remote system with id ${params.remote_instance_id}. Remote user is..${springSecurityService.principal}");
       }
 
     }
