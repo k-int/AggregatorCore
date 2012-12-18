@@ -116,7 +116,7 @@ class XCRI12Handler {
         def prov_uri = provider.'mlo:uri'.text()
         def prov_postcode = provider.'mlo:location'.'mlo:postcode'?.text()
         def prov_location = [:]
-        def prov_county
+        def prov_geoCounty
 
         if ( ( prov_postcode != null ) && ( prov_postcode.length() > 0 ) ) {
           def gaz_response = gazetteer.resolvePlaceName(prov_postcode);
@@ -125,8 +125,8 @@ class XCRI12Handler {
             log.debug("Geocoded provider postcode OK ${gaz_response.places[0]}");
             prov_location.lat = gaz_response.places[0].lat;
             prov_location.lon = gaz_response.places[0].lon;
-            def gaz_geo = gazetteer.reverseGeocode(prov_location.lat, prov_location.lon);
-            prov_county = gaz_geo.county
+            def gaz_geo = gazetteer.reverseGeocode(gaz_response.places[0].lat, gaz_response.places[0].lon);
+            prov_geoCounty = gaz_geo.county
           }
         }
         
@@ -174,7 +174,7 @@ class XCRI12Handler {
           new_provider.lastModified = System.currentTimeMillis();
           new_provider.lat = prov_location.lat
           new_provider.lon = prov_location.lon
-          new_provider.county = prov_county
+          new_provider.geoCounty = prov_geoCounty
     
           db.providers.save(new_provider)
         }
@@ -221,7 +221,8 @@ class XCRI12Handler {
           course_as_pojo.provid = prov_id
           course_as_pojo.provtitle = prov_title
           course_as_pojo.provloc = prov_location
-          course_as_pojo.county = prov_county
+       //   log.debug("My county is: ${prov_geoCounty}");
+          course_as_pojo.geoCounty = prov_geoCounty
           course_as_pojo.provuri = prov_uri
     
           course_as_pojo.identifier = crs_internal_uri.toString()
@@ -394,6 +395,7 @@ class XCRI12Handler {
             // Mongo inserts an _id into the record.. we can reuse that
     
             log.debug("Sending record to es");
+    //        log.debug("My recrd is  is: ${course_as_pojo}");
             try {
               def future = esclient.index {
                 index "courses"
