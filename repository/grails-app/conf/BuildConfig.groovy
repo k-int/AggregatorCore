@@ -42,7 +42,7 @@ grails.project.dependency.resolution = {
         // runtime 'mysql:mysql-connector-java:5.1.13'
         // compile 'org.codehaus.groovy:groovy-all:1.8.1'
         runtime 'mysql:mysql-connector-java:5.1.18'
-        runtime 'com.gmongo:gmongo:0.9.2'
+        runtime 'com.gmongo:gmongo:1.0'
         runtime 'org.elasticsearch:elasticsearch:0.19.4'
         runtime 'org.elasticsearch:elasticsearch-lang-groovy:1.1.0'
         runtime 'org.apache.tika:tika-core:0.9'
