@@ -163,6 +163,7 @@ grails.plugins.springsecurity.basic.realmName = "repository"
 
 grails.plugins.springsecurity.filterChain.chainMap = [
    '/upload*': 'JOINED_FILTERS,-exceptionTranslationFilter',
+   '/admin/coReference*': 'JOINED_FILTERS,-exceptionTranslationFilter',
    '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
 ]
 
