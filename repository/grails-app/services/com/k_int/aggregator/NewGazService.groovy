@@ -7,6 +7,7 @@ import groovyx.net.http.*
 class NewGazService {
 
   def mongoService
+  def geocode_count = 0;
 
   def geocode(address) {
     def gazcache_db = mongoService.getMongo().getDB("gazcache")
@@ -40,6 +41,9 @@ class NewGazService {
         gazcache_db.entries.save(cache_entry);
       }
     }
+
+    geocode_count++
+
     result
   }
 }

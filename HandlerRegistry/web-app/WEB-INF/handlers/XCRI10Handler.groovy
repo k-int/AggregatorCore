@@ -117,8 +117,13 @@ class XCRI10Handler {
             log.debug("Geocoded provider postcode OK ${gaz_response.places[0]}");
             prov_location.lat = gaz_response.places[0].lat;
             prov_location.lon = gaz_response.places[0].lon;
-            def gaz_geo = gazetteer.reverseGeocode(gaz_response.places[0].lat, gaz_response.places[0].lon);
-            prov_geoCounty = gaz_geo.county
+            try {
+              def gaz_geo = gazetteer.reverseGeocode(gaz_response.places[0].lat, gaz_response.places[0].lon);
+              prov_geoCounty = gaz_geo.county
+            }
+            catch ( Exception e ) {
+              log.error("Probem attempting reverse geocode",e)
+            }
           }
         }
 
