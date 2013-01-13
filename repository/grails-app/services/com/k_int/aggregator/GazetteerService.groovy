@@ -9,6 +9,7 @@ class GazetteerService {
 
   def ESWrapperService
   def mongoService
+  static transactional = false;
 
 
     def resolvePlaceName(query_input) {
@@ -151,8 +152,13 @@ class GazetteerService {
 
     def reverseGeocode(lat,lng) {
         
+      if ( lat == "0.0000000000" && lon == "0.0000000000" )
+        return null;
+
       def gazcache_db = mongoService.getMongo().getDB("googlegazcache")
       def result = getCacheEntry(gazcache_db,"${lat}:${lng}");
+
+      
 
         if ( result == null ) {
           result = [:]
@@ -164,7 +170,9 @@ class GazetteerService {
             uri.query = [ 'latlng' : "$lat,$lng",
 'sensor' : 'false' ]
             response.success = {resp, json ->
-                if ( json.results[0].address_components ) {
+                if ( ( json.results ) &&
+                     ( json.results.length > 0 ) &&
+                     ( json.results[0].address_components ) ) {
                   json.results[0].address_components.each { ac ->
                       def i = 0
                       while (i<4){

@@ -2,7 +2,7 @@ package com.k_int.aggregator
 
 class BuiltInHandlersService {
 
-    static transactional = true
+    static transactional = false
 
     def handleDCDescription() {
     }
