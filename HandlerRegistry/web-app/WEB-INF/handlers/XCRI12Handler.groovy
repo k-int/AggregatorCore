@@ -31,7 +31,8 @@ class XCRI12Handler {
                               "requiredResource":["xcri:requiredResource","xcriTerms:requiredResource","Required Resource"],
                               "providedResource":["xcri:providedResource","xcriTerms:providedResource","Provided Resource"],
                               "policy":["xcri:policy","xcriTerms:policy","Policy"],
-                              "regulations":["xcri:regulations","xcriTerms:regulations","Policy"]
+                              "regulations":["xcri:regulations","xcriTerms:regulations","Policy"],
+                              "topic":["xcri:topic","xcriTerms:topic","topic"]
                           ]  
 
   // This handler processes XCRI documents... After the handler is invoked, the local mongodb
@@ -260,16 +261,20 @@ class XCRI12Handler {
                  
                  if(desc_key)                
                      course_as_pojo[desc_key] = desc?.text()?.toString();
-                 else
-                     course_as_pojo.descriptions[expandNamespacedLiteral(props.xml, desc.@'xsi:type'?.text())] = desc?.text()?.toString();
+                 else {
+                     def escaped_key = expandNamespacedLiteral(props.xml, desc.@'xsi:type'?.text()).replaceAll(".","_");
+                     course_as_pojo.descriptions[escaped_key] = desc?.text()?.toString();
+                 }
              }
              if(desc.@'type') { 
                  String desc_key = lookupDescMapping(desc.@'type'?.text())
                         
                  if(desc_key)                
                      course_as_pojo[desc_key] = desc?.text()?.toString();
-                 else
-                     course_as_pojo.descriptions[expandNamespacedLiteral(props.xml, desc.@'type'?.text())] = desc?.text()?.toString();
+                 else {
+                     def escaped_key = expandNamespacedLiteral(props.xml, desc.@'type'?.text()).replaceAll(".","_");
+                     course_as_pojo.descriptions[escaped_key] = desc?.text()?.toString();
+                 }
              }
             
           }

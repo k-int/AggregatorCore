@@ -31,7 +31,9 @@ class XCRI10Handler {
                               "requiredResource":["xcri:requiredResource","xcriTerms:requiredResource","Required Resource"],
                               "providedResource":["xcri:providedResource","xcriTerms:providedResource","Provided Resource"],
                               "policy":["xcri:policy","xcriTerms:policy","Policy"],
-                              "regulations":["xcri:regulations","xcriTerms:regulations","Policy"]
+                              "regulations":["xcri:regulations","xcriTerms:regulations","Policy"],
+                              "topic":["xcri:topic","xcriTerms:topic","topic"]
+
                           ]  
 
   // This handler processes XCRI documents... After the handler is invoked, the local mongodb
