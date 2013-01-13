@@ -187,9 +187,15 @@ class GazetteerService {
 
   def getCacheEntry(gazcache_db,key) {
     def result = null
-    def lookup_result = gazcache_db.reversecache.findOne(key:key)
-    if ( lookup_result )
-      result = lookup_result.entry;
+    try {
+      def lookup_result = gazcache_db.reversecache.findOne(key:key)
+      if ( lookup_result )
+        result = lookup_result.entry;
+    }
+    catch ( Exception e ) {
+      log.debug("problem looking up reverse geocode entry for ${key}:",e);
+    }
+
     result
     
   }
