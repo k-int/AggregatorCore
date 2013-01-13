@@ -182,7 +182,7 @@ class GazetteerService {
 
   def getCacheEntry(gazcache_db,key) {
     def result = null
-    def lookup_result = gazcache_db.reversecache.find(key:key)
+    def lookup_result = gazcache_db.reversecache.findOne(key:key)
     if ( lookup_result )
       result = lookup_result.entry;
     result
