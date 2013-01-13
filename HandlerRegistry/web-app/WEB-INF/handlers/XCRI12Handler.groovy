@@ -17,7 +17,7 @@ class XCRI12Handler {
                               "metadataKeywords": ["xcri:metadataKeywords","xcriterms:metadataKeywords"],
                               "abstract": ["xcri:abstract","xcriTerms:abstract"],
                               "careerOutcome": ["xcri:careerOutcome","xcriTerms:careerOutcome","Career Outcome"],
-                              "prerequisites": ["xcri:prerequisites","xcriTerms:prerequisites","Entry Profile"],
+                              "prerequisites": ["xcri:prerequisites","xcriTerms:prerequisites","Entry Profile", "prerequisites"],
                               "indicativeResource": ["xcri:indicativeResource","xcriTerms:indicativeResource","Indicative Resource"],
                               "assessmentStrategy":["xcri:assessmentStrategy","xcriTerms:assessmentStrategy","Assessment Strategy"],
                               "aim":["xcri:aim","xcriTerms:aim","Aim","terms:topic"],

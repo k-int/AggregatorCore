@@ -17,7 +17,7 @@ class XCRI10Handler {
                               "metadataKeywords": ["xcri:metadataKeywords","xcriterms:metadataKeywords"],
                               "abstract": ["xcri:abstract","xcriTerms:abstract"],
                               "careerOutcome": ["xcri:careerOutcome","xcriTerms:careerOutcome","Career Outcome"],
-                              "prerequisites": ["xcri:prerequisites","xcriTerms:prerequisites","Entry Profile"],
+                              "prerequisites": ["xcri:prerequisites","xcriTerms:prerequisites","Entry Profile", "prerequisites"],
                               "indicativeResource": ["xcri:indicativeResource","xcriTerms:indicativeResource","Indicative Resource"],
                               "assessmentStrategy":["xcri:assessmentStrategy","xcriTerms:assessmentStrategy","Assessment Strategy"],
                               "aim":["xcri:aim","xcriTerms:aim","Aim","terms:topic"],
@@ -261,16 +261,20 @@ class XCRI10Handler {
                  
                  if(desc_key)                
                      course_as_pojo[desc_key] = desc?.text()?.toString();
-                 else
-                     course_as_pojo.descriptions[expandNamespacedLiteral(props.xml, desc.@'xsi:type'?.text())] = desc?.text()?.toString();
+                 else {
+                     def escaped_key = expandNamespacedLiteral(props.xml, desc.@'xsi:type'?.text()).replaceAll(".","_");
+                     course_as_pojo.descriptions[escaped_key] = desc?.text()?.toString();
+                 }
              }
              if(desc.@'type') { 
                  String desc_key = lookupDescMapping(desc.@'type'?.text())
                         
                  if(desc_key)                
                      course_as_pojo[desc_key] = desc?.text()?.toString();
-                 else
-                     course_as_pojo.descriptions[expandNamespacedLiteral(props.xml, desc.@'type'?.text())] = desc?.text()?.toString();
+                 else {
+                     def escaped_key = expandNamespacedLiteral(props.xml, desc.@'type'?.text()).replaceAll(".","_");
+                     course_as_pojo.descriptions[escaped_key] = desc?.text()?.toString();
+                 }
              }
             
           }
