@@ -164,16 +164,21 @@ class GazetteerService {
             uri.query = [ 'latlng' : "$lat,$lng",
 'sensor' : 'false' ]
             response.success = {resp, json ->
-                json.results[0].address_components.each { ac ->
-                    def i = 0
-                    while (i<4){
-                        if ( ac.types.contains(searches[i]) ) {
-                            result[geoLocation[i]]="${ac.long_name}"
-                        }
-                        i++
-                    }
+                if ( json.results[0].address_components ) {
+                  json.results[0].address_components.each { ac ->
+                      def i = 0
+                      while (i<4){
+                          if ( ac.types.contains(searches[i]) ) {
+                              result[geoLocation[i]]="${ac.long_name}"
+                          }
+                          i++
+                      }
+                  }
+                  storeCacheEntry(gazcache_db,"${lat}:${lng}",result);
                 }
-                storeCacheEntry(gazcache_db,"${lat}:${lng}",result);
+                else {
+                  log.error("Gaz lookup has no address components: ${json}");
+                }
             }
           }
         }
