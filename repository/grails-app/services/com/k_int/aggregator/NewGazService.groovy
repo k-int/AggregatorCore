@@ -10,7 +10,7 @@ class NewGazService {
   def geocode_count = 0;
 
   def geocode(address) {
-    def gazcache_db = mongoService.getMongo().getDB("gazcache")
+    def gazcache_db = mongoService.getMongo().getDB("googlegazcache")
     def geo_result = gazcache_db.entries.findOne(address:address)
     if ( !geo_result ) {
       log.debug("No cache hit for ${address}, lookup");

@@ -7,7 +7,9 @@ import static groovyx.net.http.ContentType.JSON
 
 class GazetteerService {
 
-    def ESWrapperService
+  def ESWrapperService
+  def mongoService
+
 
     def resolvePlaceName(query_input) {
         def gazresp = null;
@@ -149,11 +151,15 @@ class GazetteerService {
 
     def reverseGeocode(lat,lng) {
         
-        def searches = ["administrative_area_level_2","postal_code_prefix","route","locality"]
-        def geoLocation = ['county','postcode','street','locality']
-        def result =[:]
-        def http = new HTTPBuilder("http://maps.googleapis.com");
-        http.request(Method.valueOf("GET"), JSON) {
+      def gazcache_db = mongoService.getMongo().getDB("googlegazcache")
+      def result = getCacheEntry(gazcache_db,"${lat}:${lng}");
+
+        if ( result == null ) {
+          result = [:]
+          def searches = ["administrative_area_level_2","postal_code_prefix","route","locality"]
+          def geoLocation = ['county','postcode','street','locality']
+          def http = new HTTPBuilder("http://maps.googleapis.com");
+          http.request(Method.valueOf("GET"), JSON) {
             uri.path = '/maps/api/geocode/json'
             uri.query = [ 'latlng' : "$lat,$lng",
 'sensor' : 'false' ]
@@ -167,8 +173,26 @@ class GazetteerService {
                         i++
                     }
                 }
+                storeCacheEntry(gazcache_db,"${lat}:${lng}",result);
             }
+          }
         }
         result
     }
+
+  def getCacheEntry(gazcache_db,key) {
+    def result = null
+    def lookup_result = gazcache_db.reversecache.find(key:key)
+    if ( lookup_result )
+      result = lookup_result.entry;
+    result
+    
+  }
+
+  def storeCacheEntry(gazcache_db,key,result) {
+    def store = [:]
+    store.key = key
+    store.entry = result;
+    gazcache_db.reversecache.save(store)
+  }
 }
