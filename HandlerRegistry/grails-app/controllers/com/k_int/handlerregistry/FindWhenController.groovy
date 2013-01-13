@@ -61,7 +61,7 @@ class FindWhenController {
         result.code = 0;
         result.handlerName = selected_handler.name;
 
-        def log_entry = new FindWhenLogEntry(remoteUserId:springSecurityService.principal,
+        def log_entry = new FindWhenLogEntry(remoteUserId:springSecurityService.principal?.toString(),
                                              remoteSystemId:params.remote_instance_id,
                                              remoteConstraints:params.constraints,
                                              selectedHandler:selected_handler,
