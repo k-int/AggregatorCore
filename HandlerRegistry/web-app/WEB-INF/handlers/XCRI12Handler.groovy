@@ -170,7 +170,7 @@ class XCRI12Handler {
         def canonical_identifier = coreference_result.canonical_identifier?.canonicalIdentifier;
 
         // This is no longer a safe assumption. Instead we should see if a provider with the canonical id exists: if ( coreference_result.reason == 'new' ) {
-        def prov_rec_test = db.providers.find(identifier:canonical_identifier)
+        def prov_rec_test = db.providers.findOne(identifier:canonical_identifier)
         if ( prov_rec_test == null ) {
           log.debug("New provider.. register");
           def new_provider = [:];
@@ -186,6 +186,10 @@ class XCRI12Handler {
     
           db.providers.save(new_provider)
         }
+        else {
+          log.debug("Located provider with ID ${canonical_identifier} : ${prov_rec_test}. No need to create")
+        }
+        
 
         log.debug("Coreference service returns ${canonical_identifier} (${coreference_result.canonical_identifier})")
     

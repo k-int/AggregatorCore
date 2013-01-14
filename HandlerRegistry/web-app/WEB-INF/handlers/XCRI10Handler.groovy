@@ -176,6 +176,9 @@ class XCRI10Handler {
     
           db.providers.save(new_provider)
         }
+        else {
+          log.debug("Located provider with ID ${canonical_identifier} : ${prov_rec_test}. No need to create")
+        }
 
         log.debug("Coreference service returns ${canonical_identifier} (${coreference_result.canonical_identifier})")
     
