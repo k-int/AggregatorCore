@@ -152,7 +152,7 @@ class GazetteerService {
 
     def reverseGeocode(lat,lng) {
         
-      if ( lat == "0.0000000000" && lon == "0.0000000000" )
+      if ( lat == "0.0000000000" && lng == "0.0000000000" )
         return null;
 
       def gazcache_db = mongoService.getMongo().getDB("googlegazcache")
