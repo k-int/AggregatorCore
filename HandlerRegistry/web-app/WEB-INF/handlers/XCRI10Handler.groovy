@@ -121,7 +121,7 @@ class XCRI10Handler {
             prov_location.lon = gaz_response.places[0].lon;
             try {
               def gaz_geo = gazetteer.reverseGeocode(gaz_response.places[0].lat, gaz_response.places[0].lon);
-              prov_geoCounty = gaz_geo.county
+              prov_geoCounty = gaz_geo?.county
             }
             catch ( Exception e ) {
               log.error("Probem attempting reverse geocode",e)
