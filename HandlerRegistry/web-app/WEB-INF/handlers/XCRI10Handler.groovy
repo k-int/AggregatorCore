@@ -17,7 +17,7 @@ class XCRI10Handler {
                               "metadataKeywords": ["xcri:metadataKeywords","xcriterms:metadataKeywords"],
                               "abstract": ["xcri:abstract","xcriTerms:abstract"],
                               "careerOutcome": ["xcri:careerOutcome","xcriTerms:careerOutcome","Career Outcome"],
-                              "prerequisites": ["xcri:prerequisites","xcriTerms:prerequisites","Entry Profile", "prerequisites"],
+                              "prerequisites": ["xcri:prerequisites","xcriTerms:prerequisites","Entry Profile"],
                               "indicativeResource": ["xcri:indicativeResource","xcriTerms:indicativeResource","Indicative Resource"],
                               "assessmentStrategy":["xcri:assessmentStrategy","xcriTerms:assessmentStrategy","Assessment Strategy"],
                               "aim":["xcri:aim","xcriTerms:aim","Aim","terms:topic"],
@@ -31,9 +31,7 @@ class XCRI10Handler {
                               "requiredResource":["xcri:requiredResource","xcriTerms:requiredResource","Required Resource"],
                               "providedResource":["xcri:providedResource","xcriTerms:providedResource","Provided Resource"],
                               "policy":["xcri:policy","xcriTerms:policy","Policy"],
-                              "regulations":["xcri:regulations","xcriTerms:regulations","Policy"],
-                              "topic":["xcri:topic","xcriTerms:topic","topic"]
-
+                              "regulations":["xcri:regulations","xcriTerms:regulations","Policy"]
                           ]  
 
   // This handler processes XCRI documents... After the handler is invoked, the local mongodb
@@ -78,7 +76,7 @@ class XCRI10Handler {
       def db = mongo.getDB("xcri")
       // Object solrwrapper = ctx.getBean('SOLRWrapperService');
       Object eswrapper = ctx.getBean('ESWrapperService');
-      Object gazetteer = ctx.getBean('gazetteerService');
+      Object gazetteer = ctx.getBean('newGazService');
       Object coreference = ctx.getBean('coReferenceService');
       Object termclient = ctx.getBean('terminologyClientService');
 
@@ -114,19 +112,10 @@ class XCRI10Handler {
         def prov_geoCounty
 
         if ( ( prov_postcode != null ) && ( prov_postcode.length() > 0 ) ) {
-          def gaz_response = gazetteer.resolvePlaceName(prov_postcode);
-          if ( ( gaz_response?.places != null ) && ( gaz_response.places.size() > 0 ) ) {
-            log.debug("Geocoded provider postcode OK ${gaz_response.places[0]}");
-            prov_location.lat = gaz_response.places[0].lat;
-            prov_location.lon = gaz_response.places[0].lon;
-            try {
-              def gaz_geo = gazetteer.reverseGeocode(gaz_response.places[0].lat, gaz_response.places[0].lon);
-              prov_geoCounty = gaz_geo?.county
-            }
-            catch ( Exception e ) {
-              log.error("Probem attempting reverse geocode",e)
-            }
-          }
+          def gaz_response = gazetteer.processedGeocode(prov_postcode);
+            prov_location.lat = gaz_response.lat;
+            prov_location.lon = gaz_response.lon;
+            prov_geoCounty = gaz_response.county;
         }
 
         if ( ( prov_title == null ) || ( prov_title == '' ) ) {
@@ -159,9 +148,7 @@ class XCRI10Handler {
         def coreference_result = coreference.resolve(props.owner,identifiers)
         def canonical_identifier = coreference_result.canonical_identifier?.canonicalIdentifier;
 
-        // This is no longer a safe assumption. Instead we should see if a provider with the canonical id exists: if ( coreference_result.reason == 'new' ) {
-        def prov_rec_test = db.providers.find(identifier:canonical_identifier)
-        if ( prov_rec_test == null ) {
+        if ( coreference_result.reason == 'new' ) {
           log.debug("New provider.. register");
           def new_provider = [:];
           new_provider.identifier = canonical_identifier
@@ -175,9 +162,6 @@ class XCRI10Handler {
           new_provider.geoCounty = prov_geoCounty
     
           db.providers.save(new_provider)
-        }
-        else {
-          log.debug("Located provider with ID ${canonical_identifier} : ${prov_rec_test}. No need to create")
         }
 
         log.debug("Coreference service returns ${canonical_identifier} (${coreference_result.canonical_identifier})")
@@ -264,20 +248,16 @@ class XCRI10Handler {
                  
                  if(desc_key)                
                      course_as_pojo[desc_key] = desc?.text()?.toString();
-                 else {
-                     def escaped_key = expandNamespacedLiteral(props.xml, desc.@'xsi:type'?.text()).replaceAll(".","_");
-                     course_as_pojo.descriptions[escaped_key] = desc?.text()?.toString();
-                 }
+                 else
+                     course_as_pojo.descriptions[expandNamespacedLiteral(props.xml, desc.@'xsi:type'?.text())] = desc?.text()?.toString();
              }
              if(desc.@'type') { 
                  String desc_key = lookupDescMapping(desc.@'type'?.text())
                         
                  if(desc_key)                
                      course_as_pojo[desc_key] = desc?.text()?.toString();
-                 else {
-                     def escaped_key = expandNamespacedLiteral(props.xml, desc.@'type'?.text()).replaceAll(".","_");
-                     course_as_pojo.descriptions[escaped_key] = desc?.text()?.toString();
-                 }
+                 else
+                     course_as_pojo.descriptions[expandNamespacedLiteral(props.xml, desc.@'type'?.text())] = desc?.text()?.toString();
              }
             
           }

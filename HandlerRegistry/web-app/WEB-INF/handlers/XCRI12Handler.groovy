@@ -77,7 +77,7 @@ class XCRI12Handler {
       def db = mongo.getDB("xcri")
       // Object solrwrapper = ctx.getBean('SOLRWrapperService');
       Object eswrapper = ctx.getBean('ESWrapperService');
-      Object gazetteer = ctx.getBean('gazetteerService');
+      Object gazetteer = ctx.getBean('newGazService');
       Object coreference = ctx.getBean('coReferenceService');
       Object termclient = ctx.getBean('terminologyClientService');
       org.elasticsearch.groovy.node.GNode esnode = eswrapper.getNode()
@@ -116,28 +116,22 @@ class XCRI12Handler {
         
         def prov_uri = provider.'mlo:uri'.text()
         def prov_postcode = provider.'mlo:location'.'mlo:postcode'?.text()
+        if (prov_postcode.length() < 3){
+  
+            prov_postcode = provider.course[0].presentation[0].venue.provider.'mlo:location'.'mlo:postcode'?.text()
+        }
+             //   log.debug("My postcode is: ${prov_postcode}");
+        
         def prov_location = [:]
         def prov_geoCounty
 
         if ( ( prov_postcode != null ) && ( prov_postcode.length() > 0 ) ) {
-          def gaz_response = gazetteer.resolvePlaceName(prov_postcode);
-          
-          if ( ( gaz_response?.places != null ) && ( gaz_response.places.size() > 0 ) ) {
-            log.debug("Geocoded provider postcode OK ${gaz_response.places[0]}");
-            prov_location.lat = gaz_response.places[0].lat;
-            prov_location.lon = gaz_response.places[0].lon;
-            try {
-              def gaz_geo = gazetteer.reverseGeocode(gaz_response.places[0].lat, gaz_response.places[0].lon);
-              prov_geoCounty = gaz_geo?.county
-            }
-            catch ( Exception e ) {
-              log.error("Probem attempting reverse geocode",e)
-            }
-          }
+        def gaz_response = gazetteer.processedGeocode(prov_postcode);
+        //    log.debug("My responsee is: ${gaz_response}");
+            prov_location.lat = gaz_response.lat;
+            prov_location.lon = gaz_response.lon;
+            prov_geoCounty = gaz_response.county;
         }
-        
-          
-                
 
         if ( ( prov_title == null ) || ( prov_title == '' ) ) {
           prov_title = "Missing Provider Title (${prov_uri})"
