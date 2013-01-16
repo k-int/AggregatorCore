@@ -171,11 +171,9 @@ class GazetteerService {
 'sensor' : 'false' ]
             response.success = {resp, json ->
                 if ( ( json.results ) &&
-                     ( json.results.length > 0 ) &&
                      ( json.results[0].address_components ) ) {
                   json.results[0].address_components.each { ac ->
-                      def i = 0
-                      while (i<4){
+                      for (int i = 0; i < searches.size; i++) {
                           if ( ac.types.contains(searches[i]) ) {
                               result[geoLocation[i]]="${ac.long_name}"
                           }
