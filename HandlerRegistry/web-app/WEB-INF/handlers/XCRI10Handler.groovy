@@ -267,16 +267,20 @@ class XCRI10Handler {
                  
                  if(desc_key)                
                      course_as_pojo[desc_key] = desc?.text()?.toString();
-                 else
-                     course_as_pojo.descriptions[expandNamespacedLiteral(props.xml, desc.@'xsi:type'?.text())] = desc?.text()?.toString();
+                 else {
+                     def escaped_key = expandNamespacedLiteral(props.xml, desc.@'xsi:type'?.text()).replaceAll(".","_");
+                     course_as_pojo.descriptions[escaped_key] = desc?.text()?.toString();
+                 }
              }
              if(desc.@'type') { 
                  String desc_key = lookupDescMapping(desc.@'type'?.text())
                         
                  if(desc_key)                
                      course_as_pojo[desc_key] = desc?.text()?.toString();
-                 else
-                     course_as_pojo.descriptions[expandNamespacedLiteral(props.xml, desc.@'type'?.text())] = desc?.text()?.toString();
+                 else {
+                     def escaped_key = expandNamespacedLiteral(props.xml, desc.@'type'?.text()).replaceAll(".","_");
+                     course_as_pojo.descriptions[escaped_key] = desc?.text()?.toString();
+                 }
              }
             
           }
