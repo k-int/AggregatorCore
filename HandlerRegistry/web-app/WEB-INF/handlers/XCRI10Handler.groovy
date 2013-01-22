@@ -148,7 +148,8 @@ class XCRI10Handler {
         def coreference_result = coreference.resolve(props.owner,identifiers)
         def canonical_identifier = coreference_result.canonical_identifier?.canonicalIdentifier;
 
-        if ( coreference_result.reason == 'new' ) {
+        def prov_rec_test = db.providers.findOne(identifier:canonical_identifier)
+        if ( prov_rec_test == null ) {
           log.debug("New provider.. register");
           def new_provider = [:];
           new_provider.identifier = canonical_identifier
@@ -160,8 +161,26 @@ class XCRI10Handler {
           new_provider.lat = prov_location.lat
           new_provider.lon = prov_location.lon
           new_provider.geoCounty = prov_geoCounty
-    
+
           db.providers.save(new_provider)
+        }
+        else {
+          log.debug("Located provider with ID ${canonical_identifier} : ${prov_rec_test}. No need to create")
+          if ( prov_rec_test.label == null ) {
+            prov_rec_test.label = prov_title;
+            prov_rec_test.langlabel['EN_uk'] = prov_title
+          }
+          if ( prov_rec_test.url == null ) {
+            prov_rec_test.label = prov_uri;
+          }
+          if ( prov_rec_test.lat == null || prov_rec_test.lon == null ) {
+            prov_rec_test.lat = prov_location.lat
+            prov_rec_test.lon = prov_location.lon
+          }
+          if ( prov_rec_test.geoCounty == null )
+            prov_rec_test.geoCounty = prov_geoCounty
+          // Fill in any missing details
+          db.providers.save(prov_rec_test)
         }
 
         log.debug("Coreference service returns ${canonical_identifier} (${coreference_result.canonical_identifier})")

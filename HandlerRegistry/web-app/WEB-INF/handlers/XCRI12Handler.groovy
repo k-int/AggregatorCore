@@ -163,7 +163,6 @@ class XCRI12Handler {
         def coreference_result = coreference.resolve(props.owner,identifiers)
         def canonical_identifier = coreference_result.canonical_identifier?.canonicalIdentifier;
 
-        // This is no longer a safe assumption. Instead we should see if a provider with the canonical id exists: if ( coreference_result.reason == 'new' ) {
         def prov_rec_test = db.providers.findOne(identifier:canonical_identifier)
         if ( prov_rec_test == null ) {
           log.debug("New provider.. register");
@@ -182,6 +181,21 @@ class XCRI12Handler {
         }
         else {
           log.debug("Located provider with ID ${canonical_identifier} : ${prov_rec_test}. No need to create")
+          if ( prov_rec_test.label == null ) {
+            new_provider.label = prov_title;
+            prov_rec_test.langlabel['EN_uk'] = prov_title
+          }
+          if ( prov_rec_test.url == null ) {
+            prov_rec_test.label = prov_uri;
+          }
+          if ( prov_rec_test.lat == null || prov_rec_test.lon == null ) {
+            prov_rec_test.lat = prov_location.lat
+            prov_rec_test.lon = prov_location.lon
+          }
+          if ( prov_rec_test.geoCounty == null )
+            prov_rec_test.geoCounty = prov_geoCounty
+          // Fill in any missing details
+          db.providers.save(prov_rec_test)
         }
         
 
@@ -414,6 +428,7 @@ class XCRI12Handler {
                 source course_as_pojo
               }
               log.debug("Indexed respidx:$future.response.index/resptp:$future.response.type/respid:$future.response.id")
+              props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Course record sent to ES. ID ${course_as_pojo._id}"]);
             }
             catch ( Exception e ) {
               log.error("Problem indexing record ${course_as_pojo['_id'].toString()}: ${e.message}");
