@@ -14,25 +14,82 @@ class XCRI12Handler {
   private static final log = LogFactory.getLog(this)
   
   def desc_mappings = [
-                              "metadataKeywords": ["xcri:metadataKeywords","xcriterms:metadataKeywords"],
-                              "abstract": ["xcri:abstract","xcriTerms:abstract"],
-                              "careerOutcome": ["xcri:careerOutcome","xcriTerms:careerOutcome","Career Outcome"],
-                              "prerequisites": ["xcri:prerequisites","xcriTerms:prerequisites","Entry Profile", "prerequisites"],
-                              "indicativeResource": ["xcri:indicativeResource","xcriTerms:indicativeResource","Indicative Resource"],
-                              "assessmentStrategy":["xcri:assessmentStrategy","xcriTerms:assessmentStrategy","Assessment Strategy"],
-                              "aim":["xcri:aim","xcriTerms:aim","Aim","terms:topic"],
-                              "learningOutcome":["xcri:learningOutcome","xcriTerms:learningOutcome","Learning Outcome"],
-                              "syllabus": ["xcri:syllabus","xcriTerms:syllabus","Syllabus"],   
-                              "support": ["xcri:support","xcriTerms:support","Support"],
-                              "teachingStrategy": ["xcri:teachingStrategy","xcriTerms:teachingStrategy","Teaching Strategy"],
-                              "structure": ["xcri:structure","xcriTerms:structure","Structure"],
-                              "specialFeature": ["xcri:specialFeature","xcriTerms:specialFeature","Special Feature"],
-                              "leadsTo": ["xcri:leadsTo","xcriTerms:leadsTo","Leads To"],
-                              "requiredResource":["xcri:requiredResource","xcriTerms:requiredResource","Required Resource"],
-                              "providedResource":["xcri:providedResource","xcriTerms:providedResource","Provided Resource"],
-                              "policy":["xcri:policy","xcriTerms:policy","Policy"],
-                              "regulations":["xcri:regulations","xcriTerms:regulations","Policy"],
-                              "topic":["xcri:topic","xcriTerms:topic","topic"]
+                              "metadataKeywords": [
+                                   "xcri:metadataKeywords",
+                                   "xcriterms:metadataKeywords"],
+                              "abstract": [
+                                   "xcri:abstract",
+                                   "xcriTerms:abstract"],
+                              "careerOutcome": [
+                                   "xcri:careerOutcome",
+                                   "xcriTerms:careerOutcome",
+                                   "Career Outcome"],
+                              "prerequisites": [
+                                   "xcri:prerequisites",
+                                   "xcriTerms:prerequisites",
+                                   "Entry Profile", 
+                                   "prerequisites"],
+                              "indicativeResource": [
+                                   "xcri:indicativeResource",
+                                   "xcriTerms:indicativeResource",
+                                   "Indicative Resource"],
+                              "assessmentStrategy":[
+                                   "xcri:assessmentStrategy",
+                                   "xcriTerms:assessmentStrategy",
+                                   "Assessment Strategy"],
+                              "aim":[
+                                   "xcri:aim",
+                                   "xcriTerms:aim",
+                                   "Aim",
+                                   "terms:topic"],
+                              "learningOutcome":[
+                                   "xcri:learningOutcome",
+                                   "xcriTerms:learningOutcome",
+                                   "Learning Outcome"],
+                              "syllabus": [
+                                   "xcri:syllabus",
+                                   "xcriTerms:syllabus",
+                                   "Syllabus"],   
+                              "support": [
+                                   "xcri:support",
+                                   "xcriTerms:support",
+                                   "Support"],
+                              "teachingStrategy": [
+                                   "xcri:teachingStrategy",
+                                   "xcriTerms:teachingStrategy",
+                                   "Teaching Strategy"],
+                              "structure": [
+                                   "xcri:structure",
+                                   "xcriTerms:structure",
+                                   "Structure"],
+                              "specialFeature": [
+                                   "xcri:specialFeature",
+                                   "xcriTerms:specialFeature",
+                                   "Special Feature"],
+                              "leadsTo": [
+                                   "xcri:leadsTo",
+                                   "xcriTerms:leadsTo",
+                                   "Leads To"],
+                              "requiredResource":[
+                                   "xcri:requiredResource",
+                                   "xcriTerms:requiredResource",
+                                   "Required Resource"],
+                              "providedResource":[
+                                   "xcri:providedResource",
+                                   "xcriTerms:providedResource",
+                                   "Provided Resource"],
+                              "policy":[
+                                   "xcri:policy",
+                                   "xcriTerms:policy",
+                                   "Policy"],
+                              "regulations":[
+                                   "xcri:regulations",
+                                   "xcriTerms:regulations",
+                                   "Policy"],
+                              "topic":[
+                                   "xcri:topic",
+                                   "xcriTerms:topic",
+                                   "topic"]
                           ]  
 
   // This handler processes XCRI documents... After the handler is invoked, the local mongodb
