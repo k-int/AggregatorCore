@@ -108,14 +108,13 @@ class XCRI10Handler {
         
         def prov_uri = provider.'xcri:uri'.text()
         def prov_postcode = provider.'xcri:postcode'?.text()
-        def prov_lat
-        def prov_lon
+        def prov_location = [:]
         def prov_geoCounty
 
         if ( ( prov_postcode != null ) && ( prov_postcode.length() > 0 ) ) {
           def gaz_response = gazetteer.processedGeocode(prov_postcode);
-            prov_lat = gaz_response.lat;
-            prov_lon = gaz_response.lon;
+            prov_location.lat = gaz_response.lat;
+            prov_location.lon = gaz_response.lon;
             prov_geoCounty = gaz_response.county;
         }
 
@@ -159,8 +158,8 @@ class XCRI10Handler {
           new_provider.langlabel['EN_uk'] = prov_title
           new_provider.url = prov_uri
           new_provider.lastModified = System.currentTimeMillis();
-          new_provider.lat = prov_lat
-          new_provider.lon = prov_lon
+          new_provider.lat = prov_location.lat
+          new_provider.lon = prov_location.lon
           new_provider.geoCounty = prov_geoCounty
 
           db.providers.save(new_provider)
@@ -175,8 +174,8 @@ class XCRI10Handler {
             prov_rec_test.label = prov_uri;
           }
           if ( prov_rec_test.lat == null || prov_rec_test.lon == null ) {
-            prov_rec_test.lat = prov_lat
-            prov_rec_test.lon = prov_lon
+            prov_rec_test.lat = prov_location.lat
+            prov_rec_test.lon = prov_location.lon
           }
           if ( prov_rec_test.geoCounty == null )
             prov_rec_test.geoCounty = prov_geoCounty
@@ -225,8 +224,7 @@ class XCRI10Handler {
     
           course_as_pojo.provid = prov_id
           course_as_pojo.provtitle = prov_title
-          course_as_pojo.provlat = prov_lat
-          course_as_pojo.provlon = prov_lon
+          course_as_pojo.provloc = prov_location
          // log.debug("My county is: ${prov_geoCounty}");
           course_as_pojo.geoCounty = prov_geoCounty
           course_as_pojo.provuri = prov_uri
