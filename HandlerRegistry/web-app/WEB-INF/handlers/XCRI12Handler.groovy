@@ -451,7 +451,7 @@ class XCRI12Handler {
                                        serviceref:"mongo",
                                        mongoaction:mongo_action,
                                        mongodb:"xcri",
-                                       mongoindex:"courses",
+                                       mongoindex:"priv_courses",
                                        mongotype:"course",
                                        mongoid:course_as_pojo._id?.toString()]);
     
@@ -465,7 +465,7 @@ class XCRI12Handler {
           props.response.eventLog.add([ts:System.currentTimeMillis(),
                                        type:"ref",
                                        serviceref:"es",
-                                       escollection:"courses",
+                                       escollection:"priv_courses",
                                        estype:"course",
                                        esid:course_as_pojo._id?.toString()]);
     
@@ -479,7 +479,7 @@ class XCRI12Handler {
     //        log.debug("My recrd is  is: ${course_as_pojo}");
             try {
               def future = esclient.index {
-                index "courses"
+                index "priv_courses"
                 type "course"
                 id course_as_pojo['_id'].toString()
                 source course_as_pojo

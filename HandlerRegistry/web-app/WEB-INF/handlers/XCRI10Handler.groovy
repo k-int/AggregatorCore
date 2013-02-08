@@ -406,7 +406,7 @@ class XCRI10Handler {
           props.response.eventLog.add([ts:System.currentTimeMillis(),
                                        type:"ref",
                                        serviceref:"es",
-                                       escollection:"courses",
+                                       escollection:"priv_courses",
                                        estype:"course",
                                        esid:course_as_pojo._id?.toString()]);
     
@@ -420,7 +420,7 @@ class XCRI10Handler {
           //  log.debug("My recrd is  is: ${course_as_pojo}");
             try {
               def future = esclient.index {
-                index "courses"
+                index "priv_courses"
                 type "course"
                 id course_as_pojo['_id'].toString()
                 source course_as_pojo
