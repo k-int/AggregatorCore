@@ -451,7 +451,7 @@ class XCRI12Handler {
                                        serviceref:"mongo",
                                        mongoaction:mongo_action,
                                        mongodb:"xcri",
-                                       mongoindex:"priv_courses",
+                                       mongoindex:"courses",
                                        mongotype:"course",
                                        mongoid:course_as_pojo._id?.toString()]);
     
