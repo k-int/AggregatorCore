@@ -431,7 +431,7 @@ class XCRI12Handler {
               props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Course record sent to ES. ID ${course_as_pojo._id}"]);
             }
             catch ( Exception e ) {
-              log.error("Problem indexing record ${course_as_pojo['_id'].toString()}: ${e.message}");
+              log.error("Problem indexing record ${course_as_pojo['_id'].toString()}: ${e.message}",e);
               props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'error',msg:"Problem indexing record ${course_as_pojo['_id'].toString()}: ${e.message}"]);
             }
             finally {
@@ -446,7 +446,7 @@ class XCRI12Handler {
             // Take a break so we don't thrash the CPU
             synchronized(this) {
               Thread.yield();
-              Thread.sleep(500);
+              Thread.sleep(250);
             }
           }
           catch ( Exception e ) {
