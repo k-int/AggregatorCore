@@ -2,7 +2,7 @@ package com.k_int.repository.handlers
 
 @GrabResolver(name='es', root='https://oss.sonatype.org/content/repositories/releases')
 
-@Grab(group='com.gmongo', module='gmongo', version='0.9.2')
+@Grab(group='com.gmongo', module='gmongo', version='1.0')
 @Grab(group='org.elasticsearch', module='elasticsearch-lang-groovy', version='1.1.0')
 
 import com.gmongo.GMongo
@@ -406,7 +406,7 @@ class XCRI10Handler {
           props.response.eventLog.add([ts:System.currentTimeMillis(),
                                        type:"ref",
                                        serviceref:"es",
-                                       escollection:"courses",
+                                       escollection:"priv_courses",
                                        estype:"course",
                                        esid:course_as_pojo._id?.toString()]);
     
@@ -420,7 +420,7 @@ class XCRI10Handler {
           //  log.debug("My recrd is  is: ${course_as_pojo}");
             try {
               def future = esclient.index {
-                index "courses"
+                index "priv_courses"
                 type "course"
                 id course_as_pojo['_id'].toString()
                 source course_as_pojo
