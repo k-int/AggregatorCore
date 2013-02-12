@@ -503,7 +503,7 @@ class XCRI12Handler {
             // Take a break so we don't thrash the CPU
             synchronized(this) {
               Thread.yield();
-              Thread.sleep(250);
+              Thread.sleep(150);
             }
           }
           catch ( Exception e ) {
