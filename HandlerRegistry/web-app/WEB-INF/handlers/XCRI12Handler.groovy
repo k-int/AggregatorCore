@@ -545,11 +545,11 @@ class XCRI12Handler {
     def result = literal
     def colon_position = literal.indexOf(':')
     if ( colon_position > 0 ) {
-      log.debug('literal contains a possible namespace')
+      // log.debug('literal contains a possible namespace')
       def candidate_namespace = literal.substring(0,colon_position)
-      log.debug("Candidate namespace: ${candidate_namespace}")
+      // log.debug("Candidate namespace: ${candidate_namespace}")
       def expanded_namespace = doc.lookupNamespace(candidate_namespace);
-      log.debug("Expanded namespace: ${expanded_namespace}")
+      // log.debug("Expanded namespace: ${expanded_namespace}")
       if ( ( expanded_namespace != null ) && ( expanded_namespace.length() > 0 ) ) { 
         def term_part = literal.substring(colon_position+1,literal.length())
         if ( term_part.startsWith('#') || term_part.startsWith('/') ) {
@@ -560,7 +560,7 @@ class XCRI12Handler {
         }
       }
     }
-    log.debug("returning ${result}")
+    // log.debug("returning ${result}")
     result
   }
   
