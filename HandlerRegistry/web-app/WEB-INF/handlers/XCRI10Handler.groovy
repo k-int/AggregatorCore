@@ -443,7 +443,7 @@ class XCRI10Handler {
             // Take a break so we don't thrash the CPU
             synchronized(this) {
               Thread.yield();
-              Thread.sleep(500);
+              Thread.sleep(150);
             }
           }
           catch ( Exception e ) {

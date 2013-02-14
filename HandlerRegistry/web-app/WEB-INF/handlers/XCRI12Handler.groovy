@@ -276,12 +276,12 @@ class XCRI12Handler {
           log.debug("Processing course: ${crs_identifier}");
           props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Validating course entry ${crs_internal_uri} - ${crs.'xcri:title'}"]);
     
-          log.debug("looking up course with identifier ${crs_internal_uri}");
+          // log.debug("looking up course with identifier ${crs_internal_uri}");
           def course_as_pojo = db.courses.findOne(identifier: crs_internal_uri.toString())
     
           def mongo_action = "updated"
           if ( course_as_pojo != null ) {
-            log.debug("Located existing record... updating course ${crs_identifier} internal GUID is ${course_as_pojo._id}");
+            // log.debug("Located existing record... updating course ${crs_identifier} internal GUID is ${course_as_pojo._id}");
           }
           else {
             mongo_action = "created"
@@ -290,7 +290,7 @@ class XCRI12Handler {
             // course_as_pojo._id = java.util.UUID.randomUUID().toString()
             // course_as_pojo._id = new com.mongodb.ObjectId()
             course_as_pojo._id = new org.bson.types.ObjectId()
-            log.debug("No existing course information for ${crs_internal_uri}, create new record. new ID will be ${course_as_pojo._id}");
+            // log.debug("No existing course information for ${crs_internal_uri}, create new record. new ID will be ${course_as_pojo._id}");
           }
 
           course_as_pojo.lastModified = System.currentTimeMillis()
@@ -438,28 +438,28 @@ class XCRI12Handler {
           // log.debug("The course as JSON is ${course_as_json.toString()}");
           course_count++
     
-          log.debug("Saving mongo instance of course....${crs_internal_uri}, _id=${course_as_pojo['_id']?.toString()}")
+          // log.debug("Saving mongo instance of course....${crs_internal_uri}, _id=${course_as_pojo['_id']?.toString()}")
     
           // db.courses.update([identifier:crs_internal_uri.toString()],course_as_pojo, true);
           def mongo_store_result = db.courses.save(course_as_pojo)
     
-          log.debug("After call to courses.save, response was, get _id is ${course_as_pojo['_id']?.toString()}")
+          // log.debug("After call to courses.save, response was, get _id is ${course_as_pojo['_id']?.toString()}")
     
           // Add an eventLog reponse that points to the entry for this course in the mongoDB
-          props.response.eventLog.add([ts:System.currentTimeMillis(),
-                                       type:"ref",
-                                       serviceref:"mongo",
-                                       mongoaction:mongo_action,
-                                       mongodb:"xcri",
-                                       mongoindex:"courses",
-                                       mongotype:"course",
-                                       mongoid:course_as_pojo._id?.toString()]);
+          // props.response.eventLog.add([ts:System.currentTimeMillis(),
+          //                              type:"ref",
+         //                               serviceref:"mongo",
+         //                               mongoaction:mongo_action,
+        //                                mongodb:"xcri",
+         //                               mongoindex:"courses",
+          //                              mongotype:"course",
+          //                              mongoid:course_as_pojo._id?.toString()]);
     
           // Add an eventLog reponse that points to public XCRI Portal
-          props.response.eventLog.add([ts:System.currentTimeMillis(),
-                                       type:"ref",
-                                       serviceref:"xcriportal",
-                                       id:course_as_pojo._id?.toString()]);
+         //  props.response.eventLog.add([ts:System.currentTimeMillis(),
+         //                               type:"ref",
+         //                               serviceref:"xcriportal",
+         //                               id:course_as_pojo._id?.toString()]);
     
           // Add an eventLog reponse that points to the entry for this course in the mongoDB
           props.response.eventLog.add([ts:System.currentTimeMillis(),
@@ -470,12 +470,12 @@ class XCRI12Handler {
                                        esid:course_as_pojo._id?.toString()]);
     
     
-          log.debug("Saved pojo. identifier will be \"${course_as_pojo['_id'].toString()}\"");
+          // log.debug("Saved pojo. identifier will be \"${course_as_pojo['_id'].toString()}\"");
     
           if ( ( course_as_pojo != null ) && ( course_as_pojo['_id'] != null ) ) {
             // Mongo inserts an _id into the record.. we can reuse that
     
-            log.debug("Sending record to es");
+            // log.debug("Sending record to es");
     //        log.debug("My recrd is  is: ${course_as_pojo}");
             try {
               def future = esclient.index {
@@ -485,13 +485,14 @@ class XCRI12Handler {
                 source course_as_pojo
               }
               log.debug("Indexed respidx:$future.response.index/resptp:$future.response.type/respid:$future.response.id")
-              props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Course record sent to ES. ID ${course_as_pojo._id}"]);
+              // props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Course record sent to ES. ID ${course_as_pojo._id}"]);
             }
             catch ( Exception e ) {
               log.error("Problem indexing record ${course_as_pojo['_id'].toString()}: ${e.message}",e);
               props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'error',msg:"Problem indexing record ${course_as_pojo['_id'].toString()}: ${e.message}"]);
             }
             finally {
+              log.debug("Record sent to ES");
             }
           }
           else {
@@ -503,7 +504,7 @@ class XCRI12Handler {
             // Take a break so we don't thrash the CPU
             synchronized(this) {
               Thread.yield();
-              Thread.sleep(250);
+              Thread.sleep(100);
             }
           }
           catch ( Exception e ) {
@@ -511,7 +512,7 @@ class XCRI12Handler {
 
         }
 
-        log.debug("Adding title ${prov_title} and resource identifier ${prov_id}");
+        // log.debug("Adding title ${prov_title} and resource identifier ${prov_id}");
         // These properties identify the processed file (resource) back to the coordination software
         props.response.title = prov_title
         props.response.resource_identifier = prov_id
@@ -548,11 +549,11 @@ class XCRI12Handler {
     def result = literal
     def colon_position = literal.indexOf(':')
     if ( colon_position > 0 ) {
-      log.debug('literal contains a possible namespace')
+      // log.debug('literal contains a possible namespace')
       def candidate_namespace = literal.substring(0,colon_position)
-      log.debug("Candidate namespace: ${candidate_namespace}")
+      // log.debug("Candidate namespace: ${candidate_namespace}")
       def expanded_namespace = doc.lookupNamespace(candidate_namespace);
-      log.debug("Expanded namespace: ${expanded_namespace}")
+      // log.debug("Expanded namespace: ${expanded_namespace}")
       if ( ( expanded_namespace != null ) && ( expanded_namespace.length() > 0 ) ) { 
         def term_part = literal.substring(colon_position+1,literal.length())
         if ( term_part.startsWith('#') || term_part.startsWith('/') ) {
@@ -563,7 +564,7 @@ class XCRI12Handler {
         }
       }
     }
-    log.debug("returning ${result}")
+    // log.debug("returning ${result}")
     result
   }
   
