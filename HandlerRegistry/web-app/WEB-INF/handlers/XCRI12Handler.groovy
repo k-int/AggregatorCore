@@ -130,13 +130,15 @@ class XCRI12Handler {
     try {
   
       // Get hold of some services we might use ;)
-      def mongo = new com.gmongo.GMongo();
-      def db = mongo.getDB("xcri")
+      // def mongo = new com.gmongo.GMongo();
       // Object solrwrapper = ctx.getBean('SOLRWrapperService');
       Object eswrapper = ctx.getBean('ESWrapperService');
       Object gazetteer = ctx.getBean('newGazService');
       Object coreference = ctx.getBean('coReferenceService');
       Object termclient = ctx.getBean('terminologyClientService');
+      def mongo =  ctx.getBean('MongoService').getMongo();
+      def db = mongo.getDB("xcri")
+
       org.elasticsearch.groovy.node.GNode esnode = eswrapper.getNode()
       org.elasticsearch.groovy.client.GClient esclient = esnode.getClient()
   
@@ -523,7 +525,7 @@ class XCRI12Handler {
 
       // Return mongo connection to the pool...
       db.close();
-      mongo.close();
+      // mongo.close();
     }
     catch ( Exception e ) {
       log.error("Unexpected error",e);
