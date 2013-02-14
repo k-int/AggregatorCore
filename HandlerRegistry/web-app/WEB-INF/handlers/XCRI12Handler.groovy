@@ -522,6 +522,7 @@ class XCRI12Handler {
 
       // Return mongo connection to the pool...
       db.close();
+      mongo.close();
     }
     catch ( Exception e ) {
       log.error("Unexpected error",e);

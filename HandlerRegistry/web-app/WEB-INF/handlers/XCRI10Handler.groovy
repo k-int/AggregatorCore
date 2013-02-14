@@ -461,6 +461,7 @@ class XCRI10Handler {
 
       // Return mongo db to pool
       db.close();
+      mongo.close();
     }
     catch ( Exception e ) {
       log.error("Unexpected error",e);
