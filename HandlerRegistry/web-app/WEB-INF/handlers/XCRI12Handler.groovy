@@ -519,6 +519,9 @@ class XCRI12Handler {
         def elapsed = System.currentTimeMillis() - start_time
         props.response.eventLog.add([ts:System.currentTimeMillis(),type:'msg',lvl:'info',msg:"Completed processing of ${course_count} courses from catalog ${canonical_identifier} for provider ${props.owner} in ${elapsed}ms"]);
       }
+
+      // Return mongo connection to the pool...
+      db.close();
     }
     catch ( Exception e ) {
       log.error("Unexpected error",e);
