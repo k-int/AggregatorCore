@@ -136,7 +136,7 @@ class XCRI12Handler {
       Object gazetteer = ctx.getBean('newGazService');
       Object coreference = ctx.getBean('coReferenceService');
       Object termclient = ctx.getBean('terminologyClientService');
-      def mongo =  ctx.getBean('MongoService').getMongo();
+      def mongo =  ctx.getBean('mongoService').getMongo();
       def db = mongo.getDB("xcri")
 
       org.elasticsearch.groovy.node.GNode esnode = eswrapper.getNode()
