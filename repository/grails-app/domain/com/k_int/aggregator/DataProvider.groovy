@@ -2,10 +2,10 @@ package com.k_int.aggregator
 
 class DataProvider {
 
-  String code
-  String name
+    String code
+    String name
 
-  static constraints = {
-    name(blank:true,nullable:true)
-  }
+    static constraints = {
+        name(blank:true,nullable:true)
+    }
 }

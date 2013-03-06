@@ -14,57 +14,57 @@ import java.security.MessageDigest
 
 class TripleStoreService {
 
-  def fourstore_endpoint = null;
+    def fourstore_endpoint = null;
   
-  @javax.annotation.PostConstruct
-  def init() {
-    log.debug("init...");
-    fourstore_endpoint = new HTTPBuilder( 'http://localhost:9000/' )
-    // fourstore_endpoint.auth.basic feed_definition.target.identity, feed_definition.target.credentials
-    // this.updateURL = new URL(baseurl + "/data/");
-  }
+    @javax.annotation.PostConstruct
+    def init() {
+        log.debug("init...");
+        fourstore_endpoint = new HTTPBuilder( 'http://localhost:9000/' )
+        // fourstore_endpoint.auth.basic feed_definition.target.identity, feed_definition.target.credentials
+        // this.updateURL = new URL(baseurl + "/data/");
+    }
 
-  def update(graph, graph_uri, mimetype) { // throws MalformedURLException, ProtocolException, IOException {
+    def update(graph, graph_uri, mimetype) { // throws MalformedURLException, ProtocolException, IOException {
 
-    try {
-      log.debug("update ${graph_uri} - upload graph ${graph}");
+        try {
+            log.debug("update ${graph_uri} - upload graph ${graph}");
 
-      fourstore_endpoint.request(POST) { request ->
-        // requestContentType = 'multipart/form-data'
-        requestContentType = 'application/x-www-form-urlencoded'
+            fourstore_endpoint.request(POST) { request ->
+                // requestContentType = 'multipart/form-data'
+                requestContentType = 'application/x-www-form-urlencoded'
 
-        uri.path = 'data/'
+                uri.path = 'data/'
 
-        body =  [ 
+                body =  [ 
           'mime-type' : 'mimetype' , 
           'graph' : graph_uri,
           'data' : graph
-          // 'graph' : URLEncoder.encode(graph_uri, "UTF-8"),
-          // 'data' : URLEncoder.encode(graph, "UTF-8")
-        ] 
+                    // 'graph' : URLEncoder.encode(graph_uri, "UTF-8"),
+                    // 'data' : URLEncoder.encode(graph, "UTF-8")
+                ] 
 
-        response.success = { resp, data ->
-          log.debug("response status: ${resp.statusLine} ${data}")
+                response.success = { resp, data ->
+                    log.debug("response status: ${resp.statusLine} ${data}")
+                }
+
+                response.failure = { resp ->
+                    log.error("Failure - ${resp.statusLine} ${resp}");
+                }
+            }
         }
-
-        response.failure = { resp ->
-          log.error("Failure - ${resp.statusLine} ${resp}");
+        catch ( Exception e ) {
+            log.error("Error updating triple store",e);
         }
-      }
+        finally {
+            log.debug("Complete");
+        }
     }
-    catch ( Exception e ) {
-      log.error("Error updating triple store",e);
-    }
-    finally {
-      log.debug("Complete");
-    }
-  }
 
-  def removeGraph(graph_uri) {
-    // URL delete_url = new URL(baseurl + "/data/"+uri);
-    // HttpURLConnection connection = (HttpURLConnection) this.updateURL.openConnection();
-    // connection.setDoOutput(true);
-    // connection.setRequestMethod("DELETE");
-    // connection.connect();
-  }
+    def removeGraph(graph_uri) {
+        // URL delete_url = new URL(baseurl + "/data/"+uri);
+        // HttpURLConnection connection = (HttpURLConnection) this.updateURL.openConnection();
+        // connection.setDoOutput(true);
+        // connection.setRequestMethod("DELETE");
+        // connection.connect();
+    }
 }

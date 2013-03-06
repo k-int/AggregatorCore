@@ -2,9 +2,9 @@ package com.k_int.aggregator
 
 class ScriptletEventHandler extends EventHandler {
 
-  String scriptlet
+    String scriptlet
 
     static constraints = {
-      scriptlet(maxSize:1000000)
+        scriptlet(maxSize:1000000)
     }
 }

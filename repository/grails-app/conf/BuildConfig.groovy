@@ -48,9 +48,9 @@ grails.project.dependency.resolution = {
         runtime 'org.apache.tika:tika-core:0.9'
         // runtime (group:'org.apache.solr',name:'solr-solrj',version:'3.5.0', transitive:false)  // This seems to work!
         runtime (group:'org.apache.solr',name:'solr-solrj',version:'3.5.0') {
-          excludes([group:'org.slf4j',name:'slf4j-api',version:'1.5.8'],
-                   [group:'org.slf4j',name:'jcl-over-slf4j',version:'1.5.8'],
-                   [group:'org.slf4j',name:'slf4j-log4j12',version:'1.5.8'])
+            excludes([group:'org.slf4j',name:'slf4j-api',version:'1.5.8'],
+                [group:'org.slf4j',name:'jcl-over-slf4j',version:'1.5.8'],
+                [group:'org.slf4j',name:'slf4j-log4j12',version:'1.5.8'])
         }
 
         //  Special dependencies because of solrj dep conflicts.
@@ -61,9 +61,9 @@ grails.project.dependency.resolution = {
         // runtime 'org.apache.tika:tika-parsers:0.9' // this is for actually parsing files
     }
     plugins {
-      runtime ":hibernate:$grailsVersion"
-      build ":tomcat:$grailsVersion"
-    //   compile ":resources:1.0 > *"
+        runtime ":hibernate:$grailsVersion"
+        build ":tomcat:$grailsVersion"
+        //   compile ":resources:1.0 > *"
     }
 
 

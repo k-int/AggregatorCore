@@ -10,18 +10,18 @@ import grails.plugins.springsecurity.Secured
 @Secured(['IS_AUTHENTICATED_REMEMBERED'])
 class GazController {
 
-  def gazetteerService
+    def gazetteerService
 
-  def index = {
-    def gazresp = gazetteerService.resolvePlaceName(params.q)
-    def results = ["results":gazresp]
+    def index = {
+        def gazresp = gazetteerService.resolvePlaceName(params.q)
+        def results = ["results":gazresp]
 
-    if ( params.callback != null ) {
-      render "${params.callback}(${results as JSON})"
-    } else {
-      render results as JSON
+        if ( params.callback != null ) {
+            render "${params.callback}(${results as JSON})"
+        } else {
+            render results as JSON
+        }
     }
-  }
 
 
 }

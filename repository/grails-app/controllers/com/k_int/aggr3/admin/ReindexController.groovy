@@ -6,19 +6,19 @@ import grails.plugins.springsecurity.Secured
 @Secured(['IS_AUTHENTICATED_REMEMBERED'])
 class ReindexController {
 
-  def remoteHandlerRepositoryService
-  def reindexService
+    def remoteHandlerRepositoryService
+    def reindexService
 
-  def index() { 
+    def index() { 
 
-    log.debug("Reindex controller");
+        log.debug("Reindex controller");
 
-    def result = [:]
+        def result = [:]
 
-    result.sysid = remoteHandlerRepositoryService.sys_id
+        result.sysid = remoteHandlerRepositoryService.sys_id
 
-    reindexService.attemptReindex()
+        reindexService.attemptReindex()
 
-    result
-  }
+        result
+    }
 }

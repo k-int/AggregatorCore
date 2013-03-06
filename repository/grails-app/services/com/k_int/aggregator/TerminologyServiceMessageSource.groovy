@@ -7,28 +7,28 @@ import java.text.MessageFormat;
 
 class TerminologyServiceMessageSource extends AbstractMessageSource {
 
-  def messageBundleMessageSource
+    def messageBundleMessageSource
 
-  protected MessageFormat resolveCode(String code, Locale locale) { 
+    protected MessageFormat resolveCode(String code, Locale locale) { 
     
-    // Message msg = Message.findByCodeAndLocale(code, locale)
-    def format
-    // if(msg) {
-    //   format = new MessageFormat(msg.text, msg.locale)
-    // }
-    // else {
-      format = messageBundleMessageSource.resolveCode(code, locale)
-    // }
-    return format;
+        // Message msg = Message.findByCodeAndLocale(code, locale)
+        def format
+        // if(msg) {
+        //   format = new MessageFormat(msg.text, msg.locale)
+        // }
+        // else {
+        format = messageBundleMessageSource.resolveCode(code, locale)
+        // }
+        return format;
 
-    // Message msg = Message.findByCodeAndLocale(code, locale)
-    // def format
-    // if(msg) {
-    //   format = new MessageFormat(msg.text, msg.locale)
-    // }
-    // else {
-    //   format = new MessageFormat(code, locale )   
-    // }
-    // return format;
-  }
+        // Message msg = Message.findByCodeAndLocale(code, locale)
+        // def format
+        // if(msg) {
+        //   format = new MessageFormat(msg.text, msg.locale)
+        // }
+        // else {
+        //   format = new MessageFormat(code, locale )   
+        // }
+        // return format;
+    }
 }

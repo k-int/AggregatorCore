@@ -28,22 +28,22 @@ environments {
     }
     production {
         dataSource {
-           dbCreate = "update"
-           pooled=true
-           driverClassName = "com.mysql.jdbc.Driver"
-           username = "k-int"
-           password = "k-int"
-           url = "jdbc:mysql://localhost/Aggr3Live?autoReconnect=true&amp;characterEncoding=utf8"
-           properties {
-             maxActive = -1
-             minEvictableIdleTimeMillis=1800000
-             timeBetweenEvictionRunsMillis=1800000
-             numTestsPerEvictionRun=3
-             testOnBorrow=true
-             testWhileIdle=true
-             testOnReturn=true
-             validationQuery="SELECT 1"
-           }
+            dbCreate = "update"
+            pooled=true
+            driverClassName = "com.mysql.jdbc.Driver"
+            username = "k-int"
+            password = "k-int"
+            url = "jdbc:mysql://localhost/Aggr3Live?autoReconnect=true&amp;characterEncoding=utf8"
+            properties {
+                maxActive = -1
+                minEvictableIdleTimeMillis=1800000
+                timeBetweenEvictionRunsMillis=1800000
+                numTestsPerEvictionRun=3
+                testOnBorrow=true
+                testWhileIdle=true
+                testOnReturn=true
+                validationQuery="SELECT 1"
+            }
         }
     }
 }

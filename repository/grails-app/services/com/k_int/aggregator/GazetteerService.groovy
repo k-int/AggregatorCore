@@ -7,9 +7,9 @@ import static groovyx.net.http.ContentType.JSON
 
 class GazetteerService {
 
-  def ESWrapperService
-  def mongoService
-  static transactional = false;
+    def ESWrapperService
+    def mongoService
+    static transactional = false;
 
 
     def resolvePlaceName(query_input) {
@@ -152,64 +152,64 @@ class GazetteerService {
 
     def reverseGeocode(lat,lng) {
         
-      if ( lat == "0.0000000000" && lng == "0.0000000000" )
+        if ( lat == "0.0000000000" && lng == "0.0000000000" )
         return null;
 
-      def gazcache_db = mongoService.getMongo().getDB("googlegazcache")
-      def result = getCacheEntry(gazcache_db,"${lat}:${lng}");
+        def gazcache_db = mongoService.getMongo().getDB("googlegazcache")
+        def result = getCacheEntry(gazcache_db,"${lat}:${lng}");
 
       
 
         if ( result == null ) {
-          result = [:]
-          def searches = ["administrative_area_level_2","postal_code_prefix","route","locality"]
-          def geoLocation = ['county','postcode','street','locality']
-          def http = new HTTPBuilder("http://maps.googleapis.com");
-          http.request(Method.valueOf("GET"), JSON) {
-            uri.path = '/maps/api/geocode/json'
-            uri.query = [ 'latlng' : "$lat,$lng",
+            result = [:]
+            def searches = ["administrative_area_level_2","postal_code_prefix","route","locality"]
+            def geoLocation = ['county','postcode','street','locality']
+            def http = new HTTPBuilder("http://maps.googleapis.com");
+            http.request(Method.valueOf("GET"), JSON) {
+                uri.path = '/maps/api/geocode/json'
+                uri.query = [ 'latlng' : "$lat,$lng",
 'sensor' : 'false' ]
-            response.success = {resp, json ->
-                if ( ( json.results ) &&
-                     ( json.results[0].address_components ) ) {
-                  json.results[0].address_components.each { ac ->
-                      for (int i = 0; i < searches.size; i++) {
-                          if ( ac.types.contains(searches[i]) ) {
-                              result[geoLocation[i]]="${ac.long_name}"
-                          }
-                          i++
-                      }
-                  }
-                  storeCacheEntry(gazcache_db,"${lat}:${lng}",result);
-                }
-                else {
-                  log.error("Gaz lookup has no address components: ${json}");
+                response.success = {resp, json ->
+                    if ( ( json.results ) &&
+                        ( json.results[0].address_components ) ) {
+                        json.results[0].address_components.each { ac ->
+                            for (int i = 0; i < searches.size; i++) {
+                                if ( ac.types.contains(searches[i]) ) {
+                                    result[geoLocation[i]]="${ac.long_name}"
+                                }
+                                i++
+                            }
+                        }
+                        storeCacheEntry(gazcache_db,"${lat}:${lng}",result);
+                    }
+                    else {
+                        log.error("Gaz lookup has no address components: ${json}");
+                    }
                 }
             }
-          }
         }
         result
     }
 
-  def getCacheEntry(gazcache_db,key) {
-    def result = null
-    try {
-      def lookup_result = gazcache_db.reversecache.findOne(key:key)
-      if ( lookup_result )
-        result = lookup_result.entry;
-    }
-    catch ( Exception e ) {
-      log.debug("problem looking up reverse geocode entry for ${key}:",e);
-    }
+    def getCacheEntry(gazcache_db,key) {
+        def result = null
+        try {
+            def lookup_result = gazcache_db.reversecache.findOne(key:key)
+            if ( lookup_result )
+            result = lookup_result.entry;
+        }
+        catch ( Exception e ) {
+            log.debug("problem looking up reverse geocode entry for ${key}:",e);
+        }
 
-    result
+        result
     
-  }
+    }
 
-  def storeCacheEntry(gazcache_db,key,result) {
-    def store = [:]
-    store.key = key
-    store.entry = result;
-    gazcache_db.reversecache.save(store)
-  }
+    def storeCacheEntry(gazcache_db,key,result) {
+        def store = [:]
+        store.key = key
+        store.entry = result;
+        gazcache_db.reversecache.save(store)
+    }
 }

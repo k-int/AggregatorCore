@@ -5,8 +5,8 @@ package com.k_int.aggregator
  */
 class ServiceEventHandler extends EventHandler {
 
-  String targetBeanId
-  String targetMethodName
+    String targetBeanId
+    String targetMethodName
 
     static constraints = {
     }

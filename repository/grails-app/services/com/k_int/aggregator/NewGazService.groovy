@@ -6,8 +6,8 @@ import groovyx.net.http.*
 
 class NewGazService {
 
-  def mongoService
-  def geocode_count = 0;
+    def mongoService
+    def geocode_count = 0;
 
     def processedGeocode(address){
         def searches = ["administrative_area_level_2","postal_code","country","locality"]
@@ -17,52 +17,52 @@ class NewGazService {
         toProcess.address_components.each { ac ->
                     
             for (int i = 0; i < searches.size; i++) {
-                        if ( ac.types.contains(searches[i]) ) {
-                            result[geoLocation[i]]="${ac.long_name}"
-                        }
-                        i++
-                    }
+                if ( ac.types.contains(searches[i]) ) {
+                    result[geoLocation[i]]="${ac.long_name}"
                 }
-                result.lat="${toProcess.geometry.location.lat}"
-                result.lon="${toProcess.geometry.location.lng}"
-log.debug("result = ${result}");
+                i++
+            }
+        }
+        result.lat="${toProcess.geometry.location.lat}"
+        result.lon="${toProcess.geometry.location.lng}"
+        log.debug("result = ${result}");
         result
     }
     
-  def geocode(address) {
-   def gazcache_db = mongoService.getMongo().getDB("gazcache")
-    def geo_result = gazcache_db.entries.findOne(address:address)
-    if ( !geo_result ) {
-      log.debug("No cache hit for ${address}, lookup");
+    def geocode(address) {
+        def gazcache_db = mongoService.getMongo().getDB("gazcache")
+        def geo_result = gazcache_db.entries.findOne(address:address)
+        if ( !geo_result ) {
+            log.debug("No cache hit for ${address}, lookup");
       
-      geo_result = googleGeocode(address, gazcache_db);
+            geo_result = googleGeocode(address, gazcache_db);
+        }
+
+        def result = geo_result.response.results[0]
+
+        result
     }
 
-    def result = geo_result.response.results[0]
-
-    result
-  }
-
-  private googleGeocode(postcode, gazcache_db) {
-      def result =[:]
-    def http = new HTTPBuilder("http://maps.googleapis.com");
-    http.request(Method.valueOf("GET"), ContentType.JSON) {
-      uri.path = '/maps/api/geocode/json'
-      uri.query = [ 'address' : "$postcode", 'sensor' : 'false' ]
-      response.success = {resp, json ->
-log.debug("response successful");
-        def cache_entry = [ address:postcode,
-                            response:json,
-                            lastSeen: System.currentTimeMillis(),
-                            created: System.currentTimeMillis() ]
+    private googleGeocode(postcode, gazcache_db) {
+        def result =[:]
+        def http = new HTTPBuilder("http://maps.googleapis.com");
+        http.request(Method.valueOf("GET"), ContentType.JSON) {
+            uri.path = '/maps/api/geocode/json'
+            uri.query = [ 'address' : "$postcode", 'sensor' : 'false' ]
+            response.success = {resp, json ->
+                log.debug("response successful");
+                def cache_entry = [ address:postcode,
+                    response:json,
+                    lastSeen: System.currentTimeMillis(),
+                    created: System.currentTimeMillis() ]
     
   
-        gazcache_db.entries.save(cache_entry);
-        result = cache_entry
-      }
-    }
+                gazcache_db.entries.save(cache_entry);
+                result = cache_entry
+            }
+        }
 
-    geocode_count++
-    result
-  }
+        geocode_count++
+        result
+    }
 }

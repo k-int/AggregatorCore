@@ -13,14 +13,14 @@ class GazetteerServiceTests {
 
 
     void testReverseGeocode() {
-      def mongoService = new MongoService()
-      def gazetteerService = new GazetteerService()
-      gazetteerService.mongoService = mongoService
-      mongoService.startup()
-      def rev_lookup = gazetteerService.reverseGeocode('53.2281100000','-0.5499100000')
-      assertEquals 'Check Geocode of 53.2281100000,-0.5499100000 returns county Lincolnshire', 'Lincolnshire', rev_lookup.county
+        def mongoService = new MongoService()
+        def gazetteerService = new GazetteerService()
+        gazetteerService.mongoService = mongoService
+        mongoService.startup()
+        def rev_lookup = gazetteerService.reverseGeocode('53.2281100000','-0.5499100000')
+        assertEquals 'Check Geocode of 53.2281100000,-0.5499100000 returns county Lincolnshire', 'Lincolnshire', rev_lookup.county
     }
-        void testGoogleGeocode(){
+    void testGoogleGeocode(){
         def mongoService = new MongoService()
         def newgazService = new NewGazService()
         newgazService.mongoService = mongoService

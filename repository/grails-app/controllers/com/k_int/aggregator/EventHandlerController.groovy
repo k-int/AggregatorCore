@@ -98,14 +98,14 @@ class EventHandlerController {
                     else {
                         render(view: "edit", model: [eventHandlerInstance: eventHandlerInstance])
                     }
-                 }
-                 catch ( Exception e ) {
-                     //Problem occurred so do not save and return error to user
+                }
+                catch ( Exception e ) {
+                    //Problem occurred so do not save and return error to user
                     log.error("Unable to compile handler",e);
                     flash.message = "Unable to compile handler, see the console for more information."
                     flash.compilation_error = e.toString()
                     render(view: "edit", model: [eventHandlerInstance: eventHandlerInstance])
-                 }
+                }
             }
         }
         else {

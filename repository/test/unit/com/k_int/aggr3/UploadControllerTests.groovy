@@ -4,9 +4,6 @@ import grails.test.*
 import org.springframework.mock.web.MockMultipartHttpServletRequest
 import org.springframework.mock.web.MockMultipartFile
 
-
-
-
 class UploadControllerTests extends ControllerUnitTestCase {
 
     def grailsApplication
@@ -32,7 +29,7 @@ class UploadControllerTests extends ControllerUnitTestCase {
     //     mockParams.owner="fred"
     //     mockParams.on_behalf_of="fred"
     //     mockParams.owner="fred"
-        // controller.request.addFile(new MockMultipartFile('file', 'something.jpg', 'image/jpeg', "123" as byte[]))
+    // controller.request.addFile(new MockMultipartFile('file', 'something.jpg', 'image/jpeg', "123" as byte[]))
     //     def response = controller.save()             
     // } 
 }
