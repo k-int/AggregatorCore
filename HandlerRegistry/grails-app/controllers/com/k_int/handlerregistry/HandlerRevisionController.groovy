@@ -100,14 +100,14 @@ class HandlerRevisionController {
                 else {
                     render(view: "edit", model: [handlerRevisionInstance: handlerRevisionInstance])
                 }
-             }
-             catch ( Exception e ) {
-                 //Problem occurred so do not save and return error to user
+            }
+            catch ( Exception e ) {
+                //Problem occurred so do not save and return error to user
                 log.error("Unable to compile handler",e);
                 flash.message = e.toString()
                 flash.compilation_error = e.toString()
                 render(view: "edit", model: [handlerRevisionInstance: handlerRevisionInstance])
-             }
+            }
         }
         else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'handlerRevision.label', default: 'HandlerRevision'), params.id])}"
