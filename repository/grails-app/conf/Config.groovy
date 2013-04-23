@@ -1,43 +1,32 @@
-// locations to search for config files that get merged into the main config
-// config files can either be Java properties files or ConfigSlurper scripts
-
-// println("Pre locations")
-// println(grails.config);
-// println("System env version: ${System.env['companyName'].toString()}");
-// locvar = "${appName}.config.companyName".toString() 
-// println("Attempt 2: ${System.env[locvar].toString()}");
-// println("Company name: ${companyName}");
-
-// println(org.codehaus.groovy.grails.web.context.ServletContextHolder.getServletContext())
-
+import org.apache.log4j.*
 grails.config.locations = [ // "classpath:${appName}-config.properties",
-    //                             "classpath:${appName}-config.groovy",
-    //                             "file:${userHome}/.grails/${appName}-config.properties",
+// "classpath:${appName}-config.groovy",
+// "file:${userHome}/.grails/${appName}-config.properties",
                              "file:${userHome}/.grails/${appName}-config.groovy"]
 
 // println("Post locations")
 // println(grails.config);
 
 // if(System.properties["${appName}.config.location"]) {
-//    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
+// grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = false
 grails.mime.types = [ html: ['text/html','application/xhtml+xml'],
-    xml: ['text/xml', 'application/xml'],
-    text: 'text/plain',
-    js: 'text/javascript',
-    rss: 'application/rss+xml',
-    atom: 'application/atom+xml',
-    css: 'text/css',
-    csv: 'text/csv',
-    all: '*/*',
-    json: ['application/json','text/json'],
-    form: 'application/x-www-form-urlencoded',
-    multipartForm: 'multipart/form-data'
-]
+                      xml: ['text/xml', 'application/xml'],
+                      text: 'text/plain',
+                      js: 'text/javascript',
+                      rss: 'application/rss+xml',
+                      atom: 'application/atom+xml',
+                      css: 'text/css',
+                      csv: 'text/csv',
+                      all: '*/*',
+                      json: ['application/json','text/json'],
+                      form: 'application/x-www-form-urlencoded',
+                      multipartForm: 'multipart/form-data'
+                    ]
 
 // URL Mapping Cache Max Size, defaults to 5000
 //grails.urlmapping.cache.maxsize = 1000
@@ -79,23 +68,17 @@ environments {
 
 }
 
-// log4j configuration
+catalinaBase = System.properties.getProperty('catalina.base')
 log4j = {
-    // Example of changing the log pattern for the default console
-    // appender:
-    //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
 
     appenders {
-        console name: "stdout", threshold: org.apache.log4j.Level.ALL
+        console name: "stdout", threshold: org.apache.log4j.Level.WARN
+        appender new RollingFileAppender(name:"repository", maxFileSize:104857600, fileName:"${catalinaBase}/logs/repository.log", layout: pattern(conversionPattern: "[%d{HH:mm:ss:SSS}] %-5p %c{2}: %m%n"))
     }
 
-
-    error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
-           'org.codehaus.groovy.grails.web.pages', //  GSP
-           'org.codehaus.groovy.grails.web.sitemesh', //  layouts
+    error 'org.codehaus.groovy.grails.web.servlet', // controllers
+           'org.codehaus.groovy.grails.web.pages', // GSP
+           'org.codehaus.groovy.grails.web.sitemesh', // layouts
            'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
            'org.codehaus.groovy.grails.web.mapping', // URL mapping
            'org.codehaus.groovy.grails.commons', // core / classloading
@@ -105,67 +88,28 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 
-    debug  'grails.app.controllers.com.k_int',
+    debug repository:['grails.app.controllers.com.k_int',
            'grails.app.services.com.k_int',
            'grails.app.domain.com.k_int',
            'grails.app.com.k_int',
            'grails.app.conf',
-           'com.k_int', 
-           'org.elasticsearch'
+           'com.k_int',
+           'org.elasticsearch']
 
-    warn   'org.mortbay.log'
+    warn 'org.mortbay.log'
 }
 
-
-// The following config has moved to ~/.grails/repository-config.groovy
-// com {
-//  k_int {
-//    aggregator {
-//      handlers {
-//        remoteRepo='http://localhost:8090'
-//      }
-//      aggregationServices {
-//        solr {
-//          default_core_name='DefaultSolr'
-//          DefaultSolr {
-//            name='Default SOLR Server'
-//            baseUrl='http://localhost:8085/solr'
-//            adminConfig {
-//              basedir='/usr/local/solr'
-//            }
-//          }
-//        }
-//      }
-//    }
-//  }
-//}
-
-// /api/** = authcBasic 
-
-// security { 
-//     shiro { 
-//         authc.required = false 
-//         filter.config = """
-// [filters] 
-// # HTTP Basic authentication 
-// authcBasic = org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter 
-// authcBasic.applicationName = Repository
-// [urls] 
-// /upload* = authcBasic 
-// """ 
-//     } 
-// 
-// } 
-
-
-grails.plugins.springsecurity.useBasicAuth = true
-grails.plugins.springsecurity.basic.realmName = "repository"
-
-grails.plugins.springsecurity.filterChain.chainMap = [
-   '/upload*': 'JOINED_FILTERS,-exceptionTranslationFilter',
-   '/admin/coReference*': 'JOINED_FILTERS,-exceptionTranslationFilter',
-   '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
-]
+security {
+  shiro {
+    authc.required = false
+    filter {
+      basicAppName="Repository"
+      filterChainDefinitions = """
+/upload* = authcBasic
+"""
+    }
+  }
+}
 
 // Added by the Spring Security Core plugin:
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'spring.security.User'
