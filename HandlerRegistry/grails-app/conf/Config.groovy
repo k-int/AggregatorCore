@@ -66,9 +66,9 @@ environments {
 log4j = {
 
     appenders {
-        console name: "stdout", threshold: org.apache.log4j.Level.ALL
+        console name: "stdout", threshold: org.apache.log4j.Level.WARN
         if(System.properties.getProperty('catalina.base')){
-            appender new RollingFileAppender(name:"handler", maxFileSize:10485760, fileName:"${System.properties.getProperty('catalina.base')}/logs/HandlerRegistry.log", layout: pattern(conversionPattern: "[%d{HH:mm:ss:SSS}] %-5p %c{2}: %m%n"))
+            appender new RollingFileAppender(name:"handler", maxFileSize:104857600, fileName:"${System.properties.getProperty('catalina.base')}/logs/HandlerRegistry.log", layout: pattern(conversionPattern: "[%d{HH:mm:ss:SSS}] %-5p %c{2}: %m%n"))
         }
     }
 
