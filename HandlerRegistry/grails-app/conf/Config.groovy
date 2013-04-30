@@ -1,10 +1,10 @@
 import org.apache.log4j.*
-// // locations to search for config files that get merged into the main config
+// locations to search for config files that get merged into the main config
 // config files can either be Java properties files or ConfigSlurper scripts
 
 grails.config.locations = [ // "classpath:${appName}-config.properties",
-// "classpath:${appName}-config.groovy",
-// "file:${userHome}/.grails/${appName}-config.properties",
+    // "classpath:${appName}-config.groovy",
+    // "file:${userHome}/.grails/${appName}-config.properties",
                              "file:${userHome}/.grails/${appName}-config.groovy"]
 
 // if(System.properties["${appName}.config.location"]) {
@@ -15,19 +15,19 @@ grails.project.groupId = appName // change this to alter the default package nam
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = false
 grails.mime.types = [ html: ['text/html','application/xhtml+xml'],
-                      xml: ['text/xml', 'application/xml'],
-                      text: 'text/plain',
-                      js: 'text/javascript',
-                      rss: 'application/rss+xml',
-                      atom: 'application/atom+xml',
-                      css: 'text/css',
-                      csv: 'text/csv',
-                      all: '*/*',
-                      json: ['application/json','text/json'],
-                      form: 'application/x-www-form-urlencoded',
-                      multipartForm: 'multipart/form-data'
-                    ]
-
+    xml: ['text/xml', 'application/xml'],
+    text: 'text/plain',
+    js: 'text/javascript',
+    rss: 'application/rss+xml',
+    atom: 'application/atom+xml',
+    css: 'text/css',
+    csv: 'text/csv',
+    all: '*/*',
+    json: ['application/json','text/json'],
+    form: 'application/x-www-form-urlencoded',
+    multipartForm: 'multipart/form-data'
+]
+ 
 // URL Mapping Cache Max Size, defaults to 5000
 //grails.urlmapping.cache.maxsize = 1000
 
@@ -60,15 +60,16 @@ environments {
     test {
         grails.serverURL = "http://localhost:8080/${appName}"
     }
+
 }
 
-catalinaBase = System.properties.getProperty('catalina.base')
 log4j = {
 
     appenders {
-        console name: "stdout", threshold: org.apache.log4j.Level.WARN
-        appender new RollingFileAppender(name:"handler", maxFileSize:10485760, fileName:"${catalinaBase}/logs/HandlerRegistry.log", layout: pattern(conversionPattern: "[%d{HH:mm:ss:SSS}] %-5p %c{2}: %m%n"))
-
+        console name: "stdout", threshold: org.apache.log4j.Level.ALL
+        if(System.properties.getProperty('catalina.base')){
+            appender new RollingFileAppender(name:"handler", maxFileSize:10485760, fileName:"${System.properties.getProperty('catalina.base')}/logs/HandlerRegistry.log", layout: pattern(conversionPattern: "[%d{HH:mm:ss:SSS}] %-5p %c{2}: %m%n"))
+        }
     }
 
     error 'org.codehaus.groovy.grails.web.servlet', // controllers
@@ -86,25 +87,18 @@ log4j = {
     debug  handler:['grails.app.controller.com.k_int',
            'grails.app.service.com.k_int',
            'grails.app.domain.com.k_int',
-           'grails.app']
+           'grails.app',
+           'org.mortbay.log']
 
-
-    warn 'org.mortbay.log'
 }
 
-// /** = authcBasic
+grails.plugins.springsecurity.useBasicAuth = true
+grails.plugins.springsecurity.basic.realmName = "HandlerRegistry"
 
-security {
-  shiro {
-    authc.required = false
-    filter {
-      basicAppName="Repository Handler Registry"
-      filterChainDefinitions = """
-/findWhen* = authcBasic
-"""
-    }
-  }
-}
+grails.plugins.springsecurity.filterChain.chainMap = [
+   '/findWhen*': 'JOINED_FILTERS,-exceptionTranslationFilter',
+   '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
+]
 
 // Added by the Spring Security Core plugin:
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'spring.security.User'
