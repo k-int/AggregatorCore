@@ -1,7 +1,7 @@
 import org.apache.log4j.*
 grails.config.locations = [ // "classpath:${appName}-config.properties",
-// "classpath:${appName}-config.groovy",
-// "file:${userHome}/.grails/${appName}-config.properties",
+    // "classpath:${appName}-config.groovy",
+    // "file:${userHome}/.grails/${appName}-config.properties",
                              "file:${userHome}/.grails/${appName}-config.groovy"]
 
 // println("Post locations")
@@ -15,18 +15,18 @@ grails.project.groupId = appName // change this to alter the default package nam
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = false
 grails.mime.types = [ html: ['text/html','application/xhtml+xml'],
-                      xml: ['text/xml', 'application/xml'],
-                      text: 'text/plain',
-                      js: 'text/javascript',
-                      rss: 'application/rss+xml',
-                      atom: 'application/atom+xml',
-                      css: 'text/css',
-                      csv: 'text/csv',
-                      all: '*/*',
-                      json: ['application/json','text/json'],
-                      form: 'application/x-www-form-urlencoded',
-                      multipartForm: 'multipart/form-data'
-                    ]
+    xml: ['text/xml', 'application/xml'],
+    text: 'text/plain',
+    js: 'text/javascript',
+    rss: 'application/rss+xml',
+    atom: 'application/atom+xml',
+    css: 'text/css',
+    csv: 'text/csv',
+    all: '*/*',
+    json: ['application/json','text/json'],
+    form: 'application/x-www-form-urlencoded',
+    multipartForm: 'multipart/form-data'
+]
 
 // URL Mapping Cache Max Size, defaults to 5000
 //grails.urlmapping.cache.maxsize = 1000
@@ -68,12 +68,13 @@ environments {
 
 }
 
-catalinaBase = System.properties.getProperty('catalina.base')
 log4j = {
 
     appenders {
-        console name: "stdout", threshold: org.apache.log4j.Level.WARN
-        appender new RollingFileAppender(name:"repository", maxFileSize:104857600, fileName:"${catalinaBase}/logs/repository.log", layout: pattern(conversionPattern: "[%d{HH:mm:ss:SSS}] %-5p %c{2}: %m%n"))
+        console name: "stdout", threshold: org.apache.log4j.Level.ALL
+        if(System.properties.getProperty('catalina.base')){
+            appender new RollingFileAppender(name:"repository", maxFileSize:104857600, fileName:"${System.properties.getProperty('catalina.base')}/logs/repository.log", layout: pattern(conversionPattern: "[%d{HH:mm:ss:SSS}] %-5p %c{2}: %m%n"))
+        }
     }
 
     error 'org.codehaus.groovy.grails.web.servlet', // controllers
@@ -100,15 +101,15 @@ log4j = {
 }
 
 security {
-  shiro {
-    authc.required = false
-    filter {
-      basicAppName="Repository"
-      filterChainDefinitions = """
+    shiro {
+        authc.required = false
+        filter {
+            basicAppName="Repository"
+            filterChainDefinitions = """
 /upload* = authcBasic
 """
+        }
     }
-  }
 }
 
 // Added by the Spring Security Core plugin:
