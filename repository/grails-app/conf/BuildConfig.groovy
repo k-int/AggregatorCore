@@ -41,9 +41,9 @@ grails.project.dependency.resolution = {
 
         // runtime 'mysql:mysql-connector-java:5.1.13'
         // compile 'org.codehaus.groovy:groovy-all:1.8.1'
-        runtime 'mysql:mysql-connector-java:5.1.18'
-        runtime 'com.gmongo:gmongo:1.0'
-        runtime 'org.elasticsearch:elasticsearch-lang-groovy:1.3.0'
+        runtime 'mysql:mysql-connector-java:5.1.25'
+        runtime 'com.gmongo:gmongo:1.2'
+        runtime 'org.elasticsearch:elasticsearch-lang-groovy:1.2.0'
         runtime 'org.apache.tika:tika-core:0.9'
         // runtime (group:'org.apache.solr',name:'solr-solrj',version:'3.5.0', transitive:false)  // This seems to work!
         runtime (group:'org.apache.solr',name:'solr-solrj',version:'3.5.0') {

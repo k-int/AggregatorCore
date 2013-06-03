@@ -2,8 +2,8 @@ package com.k_int.repository.handlers
 
 @GrabResolver(name='es', root='https://oss.sonatype.org/content/repositories/releases')
 
-@Grab(group='com.gmongo', module='gmongo', version='1.0')
-@Grab(group='org.elasticsearch', module='elasticsearch-lang-groovy', version='1.1.0')
+@Grab(group='com.gmongo', module='gmongo', version='1.2')
+@Grab(group='org.elasticsearch', module='elasticsearch-lang-groovy', version='1.2.0')
 
 import com.gmongo.GMongo
 import org.apache.commons.logging.LogFactory

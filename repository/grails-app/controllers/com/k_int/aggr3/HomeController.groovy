@@ -1,6 +1,6 @@
 package com.k_int.aggr3
 
-@Grab(group='com.gmongo', module='gmongo', version='0.9.2')
+@Grab(group='com.gmongo', module='gmongo', version='1.2')
 
 import com.gmongo.GMongo
 import com.k_int.aggregator.*

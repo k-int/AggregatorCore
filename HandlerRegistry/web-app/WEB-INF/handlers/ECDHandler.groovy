@@ -1,4 +1,4 @@
-@Grab(group='com.gmongo', module='gmongo', version='1.0')
+@Grab(group='com.gmongo', module='gmongo', version='1.2')
 
 import com.gmongo.GMongo
 
